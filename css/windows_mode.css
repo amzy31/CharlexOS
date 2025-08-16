@@ -1,0 +1,209 @@
+i/* Windows  Mode Styles */
+
+body.windows-mode {
+    background-color: #0078D7;
+    color: black;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body.windows-mode #desktop {
+    background-color: #48589f8d;
+}
+
+body.windows-mode .window {
+    background-color: white;
+    border-radius: 0;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    border: 1px solid #3a6ea5;
+    color: black;
+    position: relative;
+}
+
+body.windows-mode .window::before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    border: 1px solid #a9c0e8;
+    pointer-events: none;
+    border-radius: 0;
+}
+
+body.windows-mode #dock {
+    background: linear-gradient(to bottom, #e1e1e1, #a6a6a6);
+    border-top: 1px solid #7a7a7a;
+    box-shadow: inset 0 1px 0 #ffffff;
+    height: 40px;
+    bottom: 0;
+    padding: 0 10px;
+    width: 100vw;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    position: fixed;
+    z-index: 1000;
+}
+
+body.windows-mode .dock-icon {
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+body.windows-mode .dock-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+body.windows-mode .dock-icon:hover {
+    background-color: #c0c0c0;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    transform: scale(1.1);
+    z-index: 1100;
+}
+
+body.windows-mode .window-header {
+    background: linear-gradient(to bottom, #4a6eb1, #1e4e8c);
+    color: white;
+    border-radius: 0;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space between title and controls */
+    padding: 0 10px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    height: 30px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.3);
+    border: 1px solid #000080;
+    border-right: none;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    user-select: none;
+}
+
+body.windows-mode .window-title {
+    font-weight: normal;
+    font-size: 16px;
+    margin-left: 10px;
+    flex-grow: 1;
+    user-select: text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.windows-mode .window-control-button {
+    width: 18px;
+    height: 18px;
+    margin-left: 6px;
+    cursor: pointer;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+    position: relative;
+    top: 0;
+}
+
+body.windows-mode .window-controls {
+    display: flex;
+    gap: 8px;
+    order: 2;
+}
+
+body.windows-mode .window-header > div[style] {
+    width: 48px;
+    order: 3; /* Spacer div to the right */
+}
+
+body.windows-mode .window-control-button.close {
+    background-color: #ff5c5c;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    border: 1px solid #bf0000;
+    border-radius: 2px;
+}
+
+body.windows-mode .window-control-button.minimize {
+    background-color: #ffbd4c;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    border: 1px solid #bfa800;
+    border-radius: 2px;
+}
+
+body.windows-mode .window-control-button.maximize {
+    background-color: #00ca00;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    border: 1px solid #008000;
+    border-radius: 2px;
+}
+
+body.windows-mode .window-control-button:hover {
+    filter: none;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+body.windows-mode #dock {
+    background-color: #333;
+    border-radius: 0;
+    box-shadow: none;
+    height: 60px;
+    bottom: 0;
+    padding: 0 20px;
+    width: 100vw;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+/* Windows mode overrides for note app inputs */
+body.windows-mode #noteFileName {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+
+body.windows-mode #noteContent {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 14px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    resize: none;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+
+body.windows-mode .dock-icon {
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    width: 40px;
+    height: 40px;
+}
+
+body.windows-mode .dock-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+body.windows-mode .dock-icon:hover {
+    transform: none;
+    background-color: #555;
+    box-shadow: none;
+    z-index: auto;
+}

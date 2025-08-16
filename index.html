@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Charlex Web OS</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/windows_mode.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+    <div id="desktop">
+        <div class="window" id="window1" style="top: 50px; left: 50px;">
+            <div class="window-header" onmousedown="startDrag(event, 'window1')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('window1')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('window1')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('window1')" title="Maximize"></div>
+                </div>
+                <div class="window-title">Welcome</div>
+                <div style="width: 48px;"></div> <!-- spacer for controls alignment -->
+            </div>
+            <div class="window-content">
+                Welcome to the Charlex Web OS!
+            </div>
+        </div>
+        <div class="window" id="noteWindow" style="top: 100px; left: 100px; display: none; flex-direction: column;">
+            <div class="window-header" onmousedown="startDrag(event, 'noteWindow')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('noteWindow')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('noteWindow')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('noteWindow')" title="Maximize"></div>
+                </div>
+                <div class="window-title">Note (Encrypted)</div>
+                <div style="width: 48px;"></div> <!-- spacer for controls alignment -->
+            </div>
+            <form method="POST" action="/note" style="flex: 1; margin: 10px; display: flex; flex-direction: column;">
+                <input id="noteFileName" name="noteFileName" type="text" placeholder="Enter filename (e.g. mynote.txt)" style="margin-bottom: 8px; padding: 6px 8px; border-radius: 8px; border: none; font-size: 14px;" />
+                <textarea id="noteContent" name="noteContent" style="flex: 1; resize: none; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 8px; padding: 8px; font-size: 14px;" placeholder="Type your note here..."></textarea>
+                <button type="button" id="saveDownloadBtn" style="margin-top: 8px; padding: 6px 12px; border: none; border-radius: 8px; background-color: #1e90ff; color: white; font-weight: bold; cursor: pointer;">Save Encrypted</button>
+                <input type="file" id="loadEncryptedFile" accept=".txt" style="margin-top: 8px; padding: 6px 12px; border: none; border-radius: 8px; background-color: #28a745; color: white; font-weight: bold; cursor: pointer;" />
+                <button type="button" id="loadBtn" style="margin-top: 8px; padding: 6px 12px; border: none; border-radius: 8px; background-color: #28a745; color: white; font-weight: bold; cursor: pointer;">Load Encrypted</button>
+            </form>
+        </div>
+        <!-- CPU Monitor Window -->
+        <div class="window" id="cpuWindow" style="top: 150px; left: 150px; display: none;">
+            <div class="window-header" onmousedown="startDrag(event, 'cpuWindow')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('cpuWindow')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('cpuWindow')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('cpuWindow')" title="Maximize"></div>
+                </div>
+                <div class="window-title">CPU Monitor</div>
+                <div style="width: 48px;"></div>
+            </div>
+            <div class="window-content" id="cpuContent">
+                <h3>CPU Usage</h3>
+                <div id="cpuUsage">Loading...</div>
+                <canvas id="cpuChart" width="250" height="150"></canvas>
+            </div>
+        </div>
+        <!-- Shell Window -->
+        <div class="window" id="shellWindow" style="top: 200px; left: 200px; display: none;">
+            <div class="window-header" onmousedown="startDrag(event, 'shellWindow')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('shellWindow')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('shellWindow')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('shellWindow')" title="Maximize"></div>
+                </div>
+                <div class="window-title">Linux Shell</div>
+                <div style="width: 48px;"></div>
+            </div>
+            <div class="window-content" id="shellContent" style="background: black; color: green; font-family: monospace; padding: 10px; height: 300px; overflow-y: auto;">
+                <div>Welcome to Charlex WebOS Shell</div>
+                <div>$ <input id="shellInput" type="text" style="background: transparent; border: none; color: green; outline: none; width: 90%;" /></div>
+            </div>
+        </div>
+        <!-- Network Window -->
+        <div class="window" id="networkWindow" style="top: 250px; left: 250px; display: none;">
+            <div class="window-header" onmousedown="startDrag(event, 'networkWindow')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('networkWindow')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('networkWindow')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('networkWindow')" title="Maximize"></div>
+                </div>
+                <div class="window-title">Distributed Network</div>
+                <div style="width: 48px;"></div>
+            </div>
+            <div class="window-content" id="networkContent">
+                <h3>Connected Nodes</h3>
+                <ul id="nodeList"></ul>
+                <button id="addNodeBtn">Add Node</button>
+                <button id="connectBtn">Connect to Network</button>
+            </div>
+        </div>
+        <!-- WebDisk Window -->
+        <div class="window" id="webdiskWindow" style="top: 350px; left: 350px; display: none;">
+            <div class="window-header" onmousedown="startDrag(event, 'webdiskWindow')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('webdiskWindow')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('webdiskWindow')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('webdiskWindow')" title="Maximize"></div>
+                </div>
+                <div class="window-title">WebDisk</div>
+                <div style="width: 48px;"></div>
+            </div>
+            <div class="window-content" id="webdiskContent" style="padding: 10px; height: 400px; overflow-y: auto;">
+                <div style="margin-bottom: 10px;">
+                    <button id="newFileBtn" style="padding: 5px 10px; margin-right: 5px;">New File</button>
+                    <button id="newFolderBtn" style="padding: 5px 10px; margin-right: 5px;">New Folder</button>
+                    <button id="deleteBtn" style="padding: 5px 10px;">Delete</button>
+                </div>
+                <div id="fileList" style="display: flex; flex-wrap: wrap;"></div>
+            </div>
+        </div>
+    </div>
+        <div id="dock">
+            <div class="dock-icon" title="Welcome Window" onclick="openWindow('window1')">
+                <img src="img/logo.jpg" alt="LOGO" />
+            </div>
+        <div class="dock-icon" title="Note Window" onclick="openWindow('noteWindow')">
+            <img src="img/note.png" alt="Note" />
+        </div>
+        <div class="dock-icon" title="CPU Monitor" onclick="openCPUWindow()">
+            <span style="font-size: 20px;">📊</span>
+        </div>
+        <div class="dock-icon" title="Linux Shell" onclick="openShellWindow()">
+            <span style="font-size: 20px;">💻</span>
+        </div>
+        <div class="dock-icon" title="Distributed Network" onclick="openNetworkWindow()">
+            <span style="font-size: 20px;">🌐</span>
+        </div>
+        <div class="dock-icon" title="WebDisk" onclick="openWebDiskWindow()">
+            <span style="font-size: 20px;">💾</span>
+        </div>
+            <!-- Power icons added via JS -->
+        </div>
+    <script src="js/window_manager.js"></script>
+    <script src="js/note.js"></script>
+    <script src="js/mode_toggle.js"></script>
+    <script src="js/cpu_monitor.js"></script>
+    <script src="js/shell.js"></script>
+    <script src="js/power.js"></script>
+    <script src="js/network.js"></script>
+    <script src="js/webdisk.js"></script>
+</body>
+</html>
