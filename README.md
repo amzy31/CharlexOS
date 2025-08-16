@@ -1,92 +1,37 @@
+# Charlex Web OS
 
+This project is a frontend web application that acts like a real operating system based on the web.
 
-# charleX OS logo :
+## Requirements
 
+- A modern Chrome browser is all you need to experience the magic.
+- No extra dependencies or installations are required.
 
-                  %%  %%                      %%  %%      
-                 %%      %%                  %%      %%   
-                 %%        %%              %%        %%   
-                 %%          %%%%%%%%%%%%%%          %%   
-                 %%                                  %%   
-                 %%                                  %%   
-               %%        %%%%              %%%%        %% 
-             %%          %%%%%%          %%%%%%          %%
-             %%                                          %%
-             %%                  %%%%%%                  %%
-             %%            %%      %%      %%            %%
-               %%            %%%%%%%%%%%%%%            %%  
-                %%                                    %%  
-                   %%                              %%      
-                     %%%%%%%%              %%%%%%%%     
-                             %%%%%%%%%%%%%%               
+## How to Use
 
+1. Open `index.html` in your Chrome browser.
+2. Interact with the windows, dock icons, and note-taking features as if you were using a real OS.
+3. Enjoy the smooth and responsive UI powered by JavaScript and CSS.
 
+## Features
 
-# charleX OS
+- Draggable and resizable windows.
+- Dock with interactive icons.
+- Note window with save and download functionality.
+- Stylish and modern UI with blurred backgrounds and smooth animations.
 
-CharleX is a simple OS.
-The kernel is written in the C and the reference is  codeproject.com.
-I am still working on the source code to make a better kernel. Many features will be added.
-I want to create a free and open-source operating system like Linux, FreeBSD, etc. 
-You can support us with contribute and making better code to this project or giving stars.
+## Development
 
+- All JavaScript files are located in the `js/` directory.
+- CSS styles are separated into the `css/style.css` file.
+- The app runs entirely in the browser without any backend dependencies.
 
-![screenshots](screenshots/charleXGrub.png)
+## License
 
-![screenshots](screenshots/charleXLoadingAndLogo.png)
+This project is licensed under the MIT License.
 
-![screenshots](screenshots/charleXPrompt.png)
+Copyright (c) 2024 Pyshwaa
 
-
-# compile and run :
-
-$ as --32 boot.s -o boot.o
-
-$ gcc -m32 -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
-
-$ gcc -m32 -c about.c -o about.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
-
-$ gcc -m32 -c utils.c -o utils.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
-
-$ gcc -m32 -c char.c -o char.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
-
-$ gcc -m32 -c logo.c -o logo.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
-
-$ ld -m elf_i386 -T linker.ld kernel.o utils.o char.o logo.o boot.o -o charleX.bin -nostdlib
-
-$ ld -m elf_i386 -T linker.ld about.o  utils.o char.o logo.o boot.o -o about.bin -nostdlib
-
-$ grub-file --is-x86-multiboot charleX.bin
-
-$ mkdir -p iso/boot/grub
-
-$ mkdir -p iso/about/
-
-$ cp charleX.bin iso/boot/charleX.bin
-
-$ cp about.bin iso/about/about.bin
-
-$ cp grub.cfg iso/boot/grub/grub.cfg
-
-$ grub-mkrescue -o charleX.iso iso
-
-$ rm *.bin *.o 
-
-$sudo qemu-system-i386 ./charleX.iso
-
-
-
-
-# Automatic compile and run
-
-$ chmod +x run.sh
-
-$ ./run.sh
-
-
-# GCC Cross Compiler :
-
-$ chmod +x ./gccCrossCompiler
-
-$./gccCrossComplier
-
+### screenshot
+![Screenshot](screenshots/charlex.png)
+![Screenshot](screenshots/charlex-webos-windows-inspire.png)
