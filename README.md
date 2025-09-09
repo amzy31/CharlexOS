@@ -1,92 +1,85 @@
+# 🖥️ Charlex Web OS
 
+A simple web-based operating system simulation. Built with Python 🐍 and Flask 🌐. Easy to use, open source, and focused on simplicity and libertarian liberty. A simple UNIX management panel with shell, created with love for the open-source GNU/Linux community!
 
-# charleX OS logo :
+Creator: Amin Azimi (AMZY31)
 
+## ✨ Features
 
-                  %%  %%                      %%  %%      
-                 %%      %%                  %%      %%   
-                 %%        %%              %%        %%   
-                 %%          %%%%%%%%%%%%%%          %%   
-                 %%                                  %%   
-                 %%                                  %%   
-               %%        %%%%              %%%%        %% 
-             %%          %%%%%%          %%%%%%          %%
-             %%                                          %%
-             %%                  %%%%%%                  %%
-             %%            %%      %%      %%            %%
-               %%            %%%%%%%%%%%%%%            %%  
-                %%                                    %%  
-                   %%                              %%      
-                     %%%%%%%%              %%%%%%%%     
-                             %%%%%%%%%%%%%%               
+- Free and open source 📖
+- Web-based – no install needed 🌐
+- Simple and fast ⚡
+- Secure login and file storage 🔐💾
+- Built-in WebDisk for encrypted file management 💾
+- Interactive Shell Terminal for command execution 🖥️
+- Network Tools for ping and status monitoring 🌐
+- System Monitor for CPU, memory, and disk usage 📊
+- Window-based desktop interface with drag, minimize, maximize 🪟
+- Dock with quick access to applications ⚓
+- Easy to add new features 🧩
 
+## 🖥️ Shell Terminal
 
+The Charlex Web OS includes an interactive shell terminal accessible via the web UI. You can execute shell commands directly from the browser, view outputs, and manage command history. This feature allows for quick system interactions without leaving the application.
 
-# charleX OS
+To use the shell terminal:
+1. Open the Shell Terminal window from the menu or dock.
+2. Enter commands in the input field and press Enter or click Execute.
+3. View the output in the terminal area.
+4. Use the Clear button to reset the output.
 
-CharleX is a simple OS.
-The kernel is written in the C and the reference is  codeproject.com.
-I am still working on the source code to make a better kernel. Many features will be added.
-I want to create a free and open-source operating system like Linux, FreeBSD, etc. 
-You can support us with contribute and making better code to this project or giving stars.
+**Note:** Commands are executed on the server-side, so ensure proper security measures are in place for production use.
 
+## 📋 What You Need
 
-![screenshots](screenshots/charleXGrub.png)
+- Python 3.6 or newer 🐍
+- Flask (install with pip) 🌐
 
-![screenshots](screenshots/charleXLoadingAndLogo.png)
+## 🚀 Get Started
 
-![screenshots](screenshots/charleXPrompt.png)
+1. Create a virtual environment:
+   ```
+   python3 -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
+   ```
 
+2. Install packages:
+   ```
+   pip install -r requirements.txt
+   ```
 
-# compile and run :
+3. Run the app:
+   ```
+   python app.py
+   ```
 
-$ as --32 boot.s -o boot.o
+4. Open http://localhost:5000 in your browser. 🎉
 
-$ gcc -m32 -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+## 📁 Project Files
 
-$ gcc -m32 -c about.c -o about.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+- app.py: Main app 🖥️
+- models.py: Database stuff 🗄️
+- webdisk.py: File storage 💾
+- ui_components.py: UI components and window management 🪟
+- shell.py: Shell terminal functionality 🖥️
+- templates/: HTML pages 🎨
+- static/: CSS, JS, images 📦
+- requirements.txt: Needed packages 📋
 
-$ gcc -m32 -c utils.c -o utils.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+## 🤝 Contributing
 
-$ gcc -m32 -c char.c -o char.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+Fork the repo, make changes, and send a pull request. Keep it simple! 🚀
 
-$ gcc -m32 -c logo.c -o logo.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+## 📄 License
 
-$ ld -m elf_i386 -T linker.ld kernel.o utils.o char.o logo.o boot.o -o charleX.bin -nostdlib
+See LICENSE file. 📜
 
-$ ld -m elf_i386 -T linker.ld about.o  utils.o char.o logo.o boot.o -o about.bin -nostdlib
+## 🎯 Why Charlex Web OS?
 
-$ grub-file --is-x86-multiboot charleX.bin
+We believe in simplicity and libertarian liberty. Avoids unnecessary complexity and restrictions. Users have full control over their experience. Inspired by free software and libertarian principles – freedom to use, modify, and share without limits. 🕊️
 
-$ mkdir -p iso/boot/grub
+### Screenshots
 
-$ mkdir -p iso/about/
-
-$ cp charleX.bin iso/boot/charleX.bin
-
-$ cp about.bin iso/about/about.bin
-
-$ cp grub.cfg iso/boot/grub/grub.cfg
-
-$ grub-mkrescue -o charleX.iso iso
-
-$ rm *.bin *.o 
-
-$sudo qemu-system-i386 ./charleX.iso
-
-
-
-
-# Automatic compile and run
-
-$ chmod +x run.sh
-
-$ ./run.sh
-
-
-# GCC Cross Compiler :
-
-$ chmod +x ./gccCrossCompiler
-
-$./gccCrossComplier
+![Desktop](screenshots/1.png)  
+![Desktop](screenshots/2.png)
 
