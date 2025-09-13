@@ -172,6 +172,9 @@
         <div class="dock-icon" title="Note Window" onclick="openWindow('noteWindow')">
             <img src="/static/images/note.jpg" style="background-color:balck;"  alt="Note" />
         </div>
+        <div class="dock-icon" title="WebDisk" onclick="openWebDisk()">
+            <img src="/static/images/logo.jpg" alt="WebDisk" />
+        </div>
         <!-- Add more dock icons here -->
     </div>
     <script src="/window_manager.js"></script>
@@ -203,6 +206,24 @@
                 alert('Error saving and downloading note: ' + error.message);
             }
         });
+
+        function openWebDisk() {
+            // Open the webdisk window by fetching its content and injecting into the desktop
+            fetch('/webdisk')
+                .then(response => response.text())
+                .then(html => {
+                    let existing = document.getElementById('webdiskWindow');
+                    if (existing) {
+                        existing.style.display = 'flex';
+                        existing.style.zIndex = 1000;
+                    } else {
+                        const desktop = document.getElementById('desktop');
+                        const div = document.createElement('div');
+                        div.innerHTML = html;
+                        desktop.appendChild(div.firstElementChild);
+                    }
+                });
+        }
     </script>
 </body>
 </html>
