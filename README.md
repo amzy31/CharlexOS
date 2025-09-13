@@ -70,4 +70,4 @@ Thanks to the Gnu/Linux community for inspiration.
 
 # Screenshots
 
-![Charlex OS Screenshot](screenshots/charlex2.png)
+![Charlex OS Screenshot](screenshots/1.png)
