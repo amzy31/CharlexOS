@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Charlex Management Panel (CharleX MP)</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+    <button id="toggle-sidebar">☰ Menu</button>
+    <div id="sidebar">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="#" onclick="openWindow('window1')">Home</a></li>
+            <li><a href="#" onclick="openWindow('noteWindow')">Notes</a></li>
+            <li><a href="#" onclick="openWebDisk()">WebDisk</a></li>
+            <li><a href="#" onclick="openWindow('calculatorWindow')">Calculator</a></li>
+            <!-- Add more menu items here -->
+        </ul>
+    </div>
+    <div id="desktop">
+        <div class="window" id="window1" style="top: 50px; left: 50px;">
+            <div class="window-header" onmousedown="startDrag(event, 'window1')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('window1')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('window1')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('window1')" title="Maximize"></div>
+                </div>
+                <div class="window-title">Welcome</div>
+                <div style="width: 48px;"></div> <!-- spacer for controls alignment -->
+            </div>
+            <div class="window-content">
+                Welcome to the Charlex Management Panel (CharleX MP)!
+            </div>
+        </div>
+        <div class="window" id="noteWindow" style="top: 100px; left: 100px; display: none; flex-direction: column;">
+            <div class="window-header" onmousedown="startDrag(event, 'noteWindow')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('noteWindow')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('noteWindow')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('noteWindow')" title="Maximize"></div>
+                </div>
+                <div class="window-title">Note</div>
+                <div style="width: 48px;"></div> <!-- spacer for controls alignment -->
+            </div>
+            <form method="POST" action="/note" style="flex: 1; margin: 10px; display: flex; flex-direction: column;">
+                <textarea id="noteContent" name="noteContent" style="flex: 1; resize: none; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 8px; padding: 8px; font-size: 14px;" placeholder="Type your note here...">{{ note_content }}</textarea>
+                <button type="button" id="saveDownloadBtn" style="margin-top: 8px; padding: 6px 12px; border: none; border-radius: 8px; background-color: #1e90ff; color: white; font-weight: bold; cursor: pointer;">Save</button>
+            </form>
+        </div>
+        <div class="window" id="webdiskWindow" style="top: 150px; left: 150px; display: none; flex-direction: column;">
+            <div class="window-header" onmousedown="startDrag(event, 'webdiskWindow')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('webdiskWindow')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('webdiskWindow')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('webdiskWindow')" title="Maximize"></div>
+                </div>
+                <div class="window-title">WebDisk</div>
+                <div style="width: 48px;"></div> <!-- spacer for controls alignment -->
+            </div>
+            <div class="window-content" id="webdiskContent" style="flex: 1; padding: 0; display: flex; flex-direction: column;">
+                <div id="webdiskLogin">
+                    <div id="loginMessage" style="color: red; margin-bottom: 10px;"></div>
+                    <input type="text" id="username" placeholder="Username" style="width: 100%; margin-bottom: 10px; padding: 8px;"><br>
+                    <input type="password" id="password" placeholder="Password" style="width: 100%; margin-bottom: 10px; padding: 8px;"><br>
+                    <button onclick="webdiskLogin()" style="width: 100%; padding: 8px; background: #1e90ff; color: white; border: none;">Login</button>
+                    <button onclick="showRegister()" style="width: 100%; margin-top: 10px; padding: 8px; background: #28a745; color: white; border: none;">Register</button>
+                </div>
+                <div id="webdiskRegister" style="display: none;">
+                    <div id="registerMessage" style="color: red; margin-bottom: 10px;"></div>
+                    <input type="text" id="regUsername" placeholder="Username" style="width: 100%; margin-bottom: 10px; padding: 8px;"><br>
+                    <input type="password" id="regPassword" placeholder="Password" style="width: 100%; margin-bottom: 10px; padding: 8px;"><br>
+                    <button onclick="webdiskRegister()" style="width: 100%; padding: 8px; background: #28a745; color: white; border: none;">Register</button>
+                    <button onclick="showLogin()" style="width: 100%; margin-top: 10px; padding: 8px; background: #6c757d; color: white; border: none;">Back to Login</button>
+                </div>
+                <div id="webdiskUnlock" style="display: none;">
+                    <div id="unlockMessage" style="color: red; margin-bottom: 10px;"></div>
+                    <input type="password" id="passphrase" placeholder="Passphrase" style="width: 100%; margin-bottom: 10px; padding: 8px;"><br>
+                    <button onclick="webdiskUnlock()" style="width: 100%; padding: 8px; background: #1e90ff; color: white; border: none;">Unlock</button>
+                </div>
+                <div id="webdiskFiles" style="display: none; flex: 1; display: flex; flex-direction: column;">
+                    <div id="readonlyBadge" style="display: none; color: red; padding: 10px; font-weight: bold; background: rgba(255,0,0,0.1);">User passphrase is not valid (ReadOnly files/directory)</div>
+                    <div class="toolbar" style="display: flex; align-items: center; padding: 10px; background: rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <button id="backBtn" onclick="navigateFolder('root')" style="padding: 5px 10px; margin-right: 10px; background: rgba(255,255,255,0.2); border: none; border-radius: 4px; color: white;">← Back</button>
+                        <div id="pathBar" style="flex: 1; color: white;">Root</div>
+                        <input type="text" id="folderName" placeholder="New folder name" style="margin-right: 10px; padding: 5px; width: 150px;">
+                        <button onclick="createFolder()" style="padding: 5px 10px; background: #28a745; color: white; border: none; border-radius: 4px;">New Folder</button>
+                        <label for="fileInput" style="margin-left: 10px; padding: 5px 10px; background: #1e90ff; color: white; border: none; border-radius: 4px; cursor: pointer;">Upload File</label>
+                        <input type="file" id="fileInput" style="display: none;" onchange="webdiskUpload()">
+                        <button onclick="webdiskLogout()" style="margin-left: 10px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 4px;">Logout</button>
+                    </div>
+                    <div class="main-area" style="flex: 1; padding: 10px; overflow-y: auto;">
+                        <div id="itemsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="window" id="calculatorWindow" style="top: 200px; left: 200px; display: none; flex-direction: column;">
+            <div class="window-header" onmousedown="startDrag(event, 'calculatorWindow')">
+                <div class="window-controls">
+                    <div class="window-control-button close" onclick="closeWindow('calculatorWindow')" title="Close"></div>
+                    <div class="window-control-button minimize" onclick="minimizeWindow('calculatorWindow')" title="Minimize"></div>
+                    <div class="window-control-button maximize" onclick="maximizeWindow('calculatorWindow')" title="Maximize"></div>
+                </div>
+                <div class="window-title">Calculator</div>
+                <div style="width: 48px;"></div> <!-- spacer for controls alignment -->
+            </div>
+            <div class="window-content" style="padding: 10px;">
+                <div id="calculator">
+                    <input type="text" id="calc-display" readonly>
+                    <div class="buttons">
+                        <button onclick="appendToDisplay('7')">7</button>
+                        <button onclick="appendToDisplay('8')">8</button>
+                        <button onclick="appendToDisplay('9')">9</button>
+                        <button onclick="appendToDisplay('+')">+</button>
+                        <button onclick="appendToDisplay('4')">4</button>
+                        <button onclick="appendToDisplay('5')">5</button>
+                        <button onclick="appendToDisplay('6')">6</button>
+                        <button onclick="appendToDisplay('-')">-</button>
+                        <button onclick="appendToDisplay('1')">1</button>
+                        <button onclick="appendToDisplay('2')">2</button>
+                        <button onclick="appendToDisplay('3')">3</button>
+                        <button onclick="appendToDisplay('*')">*</button>
+                        <button onclick="appendToDisplay('0')">0</button>
+                        <button onclick="appendToDisplay('.')">.</button>
+                        <button onclick="calculate()">=</button>
+                        <button onclick="appendToDisplay('/')">/</button>
+                        <button onclick="clearDisplay()">C</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dock">
+        <div class="dock-icon" title="Welcome Window" onclick="openWindow('window1')">
+            <img src="/static/images/logo.jpg" alt="LOGO" />
+        </div>
+        <div class="dock-icon" title="Note Window" onclick="openWindow('noteWindow')">
+            <img src="/static/images/note.svg" style="background-color:balck;"  alt="Note" />
+        </div>
+        <div class="dock-icon" title="WebDisk" onclick="openWebDisk()">
+            <img src="/static/images/webdisk.svg" alt="WebDisk" />
+        </div>
+        <div class="dock-icon" title="Calculator" onclick="openWindow('calculatorWindow')">
+            <img src="/static/images/calc.svg" alt="Calculator" />
+        </div>
+        <!-- Add more dock icons here -->
+    </div>
+    <script src="/window_manager.js"></script>
+    <script>
+        document.getElementById('toggle-sidebar').addEventListener('click', () => {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        });
+
+        document.getElementById('saveDownloadBtn').addEventListener('click', async () => {
+            const content = document.getElementById('noteContent').value;
+            try {
+                const response = await fetch('/note/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ noteContent: content }),
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to save note');
+                }
+                const data = await response.json();
+                const noteId = data.note_id;
+                const downloadUrl = `/note/download/${noteId}`;
+                // Trigger download
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = `${noteId}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (error) {
+                alert('Error saving and downloading note: ' + error.message);
+            }
+        });
+
+        // WebDisk UI and API interaction
+        function showLogin() {
+            document.getElementById('webdiskLogin').style.display = 'block';
+            document.getElementById('webdiskRegister').style.display = 'none';
+            document.getElementById('webdiskUnlock').style.display = 'none';
+            document.getElementById('webdiskFiles').style.display = 'none';
+        }
+
+        function showRegister() {
+            document.getElementById('webdiskLogin').style.display = 'none';
+            document.getElementById('webdiskRegister').style.display = 'block';
+            document.getElementById('webdiskUnlock').style.display = 'none';
+            document.getElementById('webdiskFiles').style.display = 'none';
+        }
+
+        function showUnlock() {
+            document.getElementById('webdiskLogin').style.display = 'none';
+            document.getElementById('webdiskRegister').style.display = 'none';
+            document.getElementById('webdiskUnlock').style.display = 'block';
+            document.getElementById('webdiskFiles').style.display = 'none';
+        }
+
+        function showFiles() {
+            document.getElementById('webdiskLogin').style.display = 'none';
+            document.getElementById('webdiskRegister').style.display = 'none';
+            document.getElementById('webdiskUnlock').style.display = 'none';
+            document.getElementById('webdiskFiles').style.display = 'block';
+        }
+
+        async function webdiskLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const response = await fetch('/webdisk/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                showUnlock();
+            } else {
+                document.getElementById('loginMessage').textContent = data.message || 'Login failed';
+            }
+        }
+
+        async function webdiskRegister() {
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const response = await fetch('/webdisk/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                showLogin();
+                alert('Registration successful, please login.');
+            } else {
+                document.getElementById('registerMessage').textContent = data.message || 'Registration failed';
+            }
+        }
+
+        async function webdiskUnlock() {
+            const passphrase = document.getElementById('passphrase').value;
+            const response = await fetch('/webdisk/unlock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ passphrase }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                loadFiles();
+                showFiles();
+            } else {
+                document.getElementById('unlockMessage').textContent = data.message || 'Unlock failed';
+            }
+        }
+
+        async function loadFiles() {
+            const response = await fetch('/webdisk/files');
+            const data = await response.json();
+            if (data.success) {
+                const itemsContainer = document.getElementById('itemsContainer');
+                itemsContainer.innerHTML = '';
+                // Folders
+                data.folders.forEach(folder => {
+                    const item = document.createElement('div');
+                    item.className = 'item folder-item';
+                    item.innerHTML = `
+                        <div class="item-icon">📁</div>
+                        <div class="item-name">${folder.name}</div>
+                    `;
+                    item.onclick = () => navigateFolder(folder.id);
+                    itemsContainer.appendChild(item);
+                });
+                // Files
+                data.files.forEach(file => {
+                    const item = document.createElement('div');
+                    item.className = 'item file-item';
+                    item.innerHTML = `
+                        <div class="item-icon">📄</div>
+                        <div class="item-name">${file.filename}</div>
+                    `;
+                    item.onclick = () => window.open(`/webdisk/download/${file.id}`, '_blank');
+                    itemsContainer.appendChild(item);
+                });
+                // Update path
+                document.getElementById('pathBar').textContent = data.folder_name || 'Root';
+                // Readonly
+                if (data.readonly) {
+                    document.getElementById('readonlyBadge').style.display = 'block';
+                } else {
+                    document.getElementById('readonlyBadge').style.display = 'none';
+                }
+            } else {
+                alert(data.message || 'Failed to load files');
+            }
+        }
+
+        async function createFolder() {
+            const folderName = document.getElementById('folderName').value;
+            if (!folderName) {
+                alert('Please enter a folder name');
+                return;
+            }
+            const response = await fetch('/webdisk/create_folder_api', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: folderName }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                loadFiles();
+                document.getElementById('folderName').value = '';
+            } else {
+                alert(data.message || 'Failed to create folder');
+            }
+        }
+
+        function navigateFolder(folderId) {
+            window.location.href = `/webdisk/navigate/${folderId}`;
+        }
+
+        async function webdiskUpload() {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            const response = await fetch('/webdisk/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            if (data.success) {
+                loadFiles();
+                fileInput.value = '';
+            } else {
+                alert(data.message || 'Upload failed');
+            }
+        }
+
+        async function webdiskLogout() {
+            const response = await fetch('/webdisk/logout', {
+                method: 'POST',
+            });
+            const data = await response.json();
+            if (data.success) {
+                showLogin();
+            } else {
+                alert('Logout failed');
+            }
+        }
+
+        function openWebDisk() {
+            const win = document.getElementById('webdiskWindow');
+            win.style.display = 'flex';
+            win.style.zIndex = 1000;
+            showLogin();
+        }
+
+        let calcDisplay = document.getElementById('calc-display');
+        function appendToDisplay(value) {
+            calcDisplay.value += value;
+        }
+        function clearDisplay() {
+            calcDisplay.value = '';
+        }
+        async function calculate() {
+            const expression = calcDisplay.value;
+            try {
+                const response = await fetch('/calculator', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ expression: expression }),
+                });
+                const data = await response.json();
+                if (data.result) {
+                    calcDisplay.value = data.result;
+                } else {
+                    calcDisplay.value = 'Error';
+                }
+            } catch (error) {
+                calcDisplay.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>

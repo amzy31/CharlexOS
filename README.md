@@ -1,92 +1,67 @@
+# 🖥️ Charlex Management Panel (CharleX MP)
 
+A simple web-based operating system simulation. Built with Python 🐍 and Flask 🌐. Easy to use, open source, and focused on simplicity and libertarian liberty. SIMPLE UNIX MANAGMENT PANEL WITH shell without any waranty just made with <Love Sticker> for open-source fucking GNU/Linux community!
 
-# charleX OS logo :
+Creator: amin azimi (AMZY31)
 
+## ✨ Features
 
-                  %%  %%                      %%  %%      
-                 %%      %%                  %%      %%   
-                 %%        %%              %%        %%   
-                 %%          %%%%%%%%%%%%%%          %%   
-                 %%                                  %%   
-                 %%                                  %%   
-               %%        %%%%              %%%%        %% 
-             %%          %%%%%%          %%%%%%          %%
-             %%                                          %%
-             %%                  %%%%%%                  %%
-             %%            %%      %%      %%            %%
-               %%            %%%%%%%%%%%%%%            %%  
-                %%                                    %%  
-                   %%                              %%      
-                     %%%%%%%%              %%%%%%%%     
-                             %%%%%%%%%%%%%%               
+- Free and open source 📖
+- Web-based – no install needed 🌐
+- Simple and fast ⚡
+- Secure login and file storage 🔐💾
+- Built-in WebDisk for encrypted file management 💾
+- Easy to add new features 🧩
 
+## 📋 What You Need
 
+- Python 3.6 or newer 🐍
+- Flask (install with pip) 🌐
 
-# charleX OS
+## 🚀 Get Started
 
-CharleX is a simple OS.
-The kernel is written in the C and the reference is  codeproject.com.
-I am still working on the source code to make a better kernel. Many features will be added.
-I want to create a free and open-source operating system like Linux, FreeBSD, etc. 
-You can support us with contribute and making better code to this project or giving stars.
+1. Create a virtual environment:
+   ```
+   python3 -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
+   ```
 
+2. Install packages:
+   ```
+   pip install -r requirements.txt
+   ```
 
-![screenshots](screenshots/charleXGrub.png)
+3. Run the app:
+   ```
+   python app.py
+   ```
 
-![screenshots](screenshots/charleXLoadingAndLogo.png)
+4. Open http://localhost:5000 in your browser. 🎉
 
-![screenshots](screenshots/charleXPrompt.png)
+## 📁 Project Files
 
+- app.py: Main app 🖥️
+- models.py: Database stuff 🗄️
+- webdisk.py: File storage 💾
+- window_manager.py: Window handling 🪟
+- templates/: HTML pages 🎨
+- static/: CSS, JS, images 📦
+- requirements.txt: Needed packages 📋
 
-# compile and run :
+## 🤝 Contributing
 
-$ as --32 boot.s -o boot.o
+Fork the repo, make changes, and send a pull request. Keep it simple! 🚀
 
-$ gcc -m32 -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+## 📄 License
 
-$ gcc -m32 -c about.c -o about.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+See LICENSE file. 📜
 
-$ gcc -m32 -c utils.c -o utils.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+## 🎯 Why Charlex Management Panel (CharleX MP)?
 
-$ gcc -m32 -c char.c -o char.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+We believe in simplicity and libertarian liberty. Avoids unnecessary complexity and restrictions. Users have full control over their experience. Inspired by free software and libertarian principles – freedom to use, modify, and share without limits. 🕊️
 
-$ gcc -m32 -c logo.c -o logo.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+### Screenshots
 
-$ ld -m elf_i386 -T linker.ld kernel.o utils.o char.o logo.o boot.o -o charleX.bin -nostdlib
-
-$ ld -m elf_i386 -T linker.ld about.o  utils.o char.o logo.o boot.o -o about.bin -nostdlib
-
-$ grub-file --is-x86-multiboot charleX.bin
-
-$ mkdir -p iso/boot/grub
-
-$ mkdir -p iso/about/
-
-$ cp charleX.bin iso/boot/charleX.bin
-
-$ cp about.bin iso/about/about.bin
-
-$ cp grub.cfg iso/boot/grub/grub.cfg
-
-$ grub-mkrescue -o charleX.iso iso
-
-$ rm *.bin *.o 
-
-$sudo qemu-system-i386 ./charleX.iso
-
-
-
-
-# Automatic compile and run
-
-$ chmod +x run.sh
-
-$ ./run.sh
-
-
-# GCC Cross Compiler :
-
-$ chmod +x ./gccCrossCompiler
-
-$./gccCrossComplier
+![Desktop](screenshots/1.png)  
+![Desktop](screenshots/2.png)
 
