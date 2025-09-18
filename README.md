@@ -1,6 +1,6 @@
 # 🖥️ Charlex Management Panel (CharleX MP)
 
-A simple web-based managment system simulation. Built with Python 🐍 and Flask 🌐. Easy to use, open source, and focused on simplicity and libertarian liberty. SIMPLE UNIX MANAGMENT PANEL WITH shell without any waranty just made with <3 for open-source fucking GNU/Linux community!
+A simple web-based management system simulation. Built with Python 🐍 and Flask 🌐. Easy to use, open source, and focused on simplicity and libertarian liberty. A simple UNIX management panel with shell, created with love for the open-source GNU/Linux community!
 
 Creator: Aamin Azimi (AMZY31)
 
