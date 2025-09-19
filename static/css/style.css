@@ -13,7 +13,6 @@ body {
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     background-color: #1a1a1a;
     color: white;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 24 24"><path fill="white" d="M2 2l20 10-20 10z"/></svg>') 0 0, auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     user-select: none;

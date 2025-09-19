@@ -1,19 +1,26 @@
-from flask import Blueprint, request, jsonify, render_template_string, session, redirect, url_for, flash, get_flashed_messages
+"""
+WebDisk Blueprint for Charlex-MP.
+Handles user authentication, file management, and UI rendering.
+"""
+
+from flask import Blueprint, request, jsonify, session, redirect, url_for, flash, send_file
 from flask_login import login_user, logout_user, login_required, current_user
 from models import db, User, File, Folder
-from werkzeug.security import generate_password_hash, check_password_hash
 from cryptography.fernet import Fernet
 import base64
 import hashlib
+import io
 from ui_components import Window, Form, Input, Button, List
 
 webdisk_bp = Blueprint('webdisk', __name__)
 
 def derive_key(passphrase):
+    """Derive encryption key from passphrase."""
     return base64.urlsafe_b64encode(hashlib.sha256(passphrase.encode()).digest())
 
 @webdisk_bp.route('/webdisk/login', methods=['POST'])
 def login():
+    """Handle user login via API."""
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
@@ -25,6 +32,7 @@ def login():
 
 @webdisk_bp.route('/webdisk/register', methods=['POST'])
 def register_api():
+    """Handle user registration via API."""
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
@@ -39,6 +47,7 @@ def register_api():
 @webdisk_bp.route('/webdisk/unlock', methods=['POST'])
 @login_required
 def unlock_api():
+    """Unlock WebDisk with passphrase via API."""
     data = request.get_json()
     passphrase = data.get('passphrase')
     session['passphrase'] = passphrase
@@ -49,6 +58,7 @@ def unlock_api():
 @webdisk_bp.route('/webdisk/files', methods=['GET'])
 @login_required
 def files_api():
+    """Retrieve files and folders via API."""
     current_folder = session.get('current_folder')
     files = File.query.filter_by(user_id=current_user.id, folder_id=current_folder).all()
     folders = Folder.query.filter_by(user_id=current_user.id).all() if not current_folder else []
@@ -65,6 +75,7 @@ def files_api():
 @webdisk_bp.route('/webdisk/upload', methods=['POST'])
 @login_required
 def upload_api():
+    """Upload file via API."""
     if 'passphrase' not in session:
         return jsonify({'success': False, 'message': 'Not unlocked'})
     file = request.files['file']
@@ -81,6 +92,7 @@ def upload_api():
 @webdisk_bp.route('/webdisk/create_folder', methods=['POST'])
 @login_required
 def create_folder_api():
+    """Create a new folder via API."""
     data = request.get_json()
     name = data.get('name')
     if not name:
@@ -95,6 +107,7 @@ def create_folder_api():
 @webdisk_bp.route('/webdisk/navigate/<folder_id>', methods=['POST'])
 @login_required
 def navigate_api(folder_id):
+    """Navigate to a folder via API."""
     if folder_id == 'root':
         session['current_folder'] = None
     else:
@@ -107,6 +120,7 @@ def navigate_api(folder_id):
 @webdisk_bp.route('/webdisk/logout', methods=['POST'])
 @login_required
 def logout_api():
+    """Logout user via API."""
     logout_user()
     session.pop('passphrase', None)
     session.pop('current_folder', None)
@@ -117,6 +131,7 @@ def logout_api():
 @webdisk_bp.route('/webdisk/unlock', methods=['GET', 'POST'])
 @login_required
 def unlock():
+    """Render unlock page for WebDisk."""
     if request.method == 'POST':
         passphrase = request.form.get('passphrase')
         session['passphrase'] = passphrase

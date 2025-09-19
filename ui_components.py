@@ -1,14 +1,20 @@
-# Merged UI Components and Window Manager
-from flask import Blueprint, Response, request, render_template_string, jsonify, send_from_directory
+"""
+UI Components and Window Manager for Charlex-MP.
+Provides reusable UI components and window management functionality.
+"""
+
+from flask import Blueprint, Response, request, jsonify, send_from_directory
 import os
 import uuid
 
 # UI Component Classes
 class UIComponent:
+    """Base class for UI components."""
     def render(self):
-        pass
+        raise NotImplementedError("Render method must be implemented by subclasses.")
 
 class Window(UIComponent):
+    """Window UI component with draggable functionality."""
     def __init__(self, id, title, top=250, left=250):
         self.id = id
         self.title = title
@@ -17,6 +23,7 @@ class Window(UIComponent):
         self.content = []
 
     def add(self, component):
+        """Add a child component to the window."""
         self.content.append(component)
 
     def render(self):

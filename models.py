@@ -1,3 +1,8 @@
+"""
+Database models for Charlex-MP application.
+Defines User, Folder, and File models using SQLAlchemy.
+"""
+
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -5,23 +10,28 @@ from flask_login import UserMixin
 db = SQLAlchemy()
 
 class User(db.Model, UserMixin):
+    """User model for authentication."""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
 
     def set_password(self, password):
+        """Hash and set the user's password."""
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
+        """Verify the user's password."""
         return check_password_hash(self.password_hash, password)
 
 class Folder(db.Model):
+    """Folder model for organizing files."""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('folders', lazy=True))
 
 class File(db.Model):
+    """File model for storing encrypted file data."""
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(255), nullable=False)
     data = db.Column(db.LargeBinary, nullable=False)
