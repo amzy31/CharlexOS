@@ -1,37 +1,53 @@
+
 # Charlex WebOS
 
-A web-based operating system built with pure JavaScript, running entirely in the browser. Features real file system access via browser APIs and real system monitoring via backend. Charlex-Rail framework translates bash-like commands into JavaScript for real-time HTML updates. Built using the Charlex-DOM micro-framework for just UI management.
+Charlex WebOS is a small web desktop that runs in your browser. You can open windows, run apps, and use a dock.
+
+You can host the site on any static host. If you want more features, you can run the optional server on Linux.
 
 ## Requirements
 
-- A modern web browser (Chrome recommended).
-- GNU/Linux system required to run Charlex WebOS for real CPU monitoring.
-- Linux kernel for real machine communication and file system access.
-- Node.js and npm for running the backend server.
+- A modern web browser (Chrome or Firefox).
+- For real CPU monitoring you need a Linux host and Node.js.
 
-## How to Use
+## Quick notes
 
-Interact with the desktop, windows, and dock.
+- Dock: styled in `css/style.css` with a skeuomorphic look.
+- Notes app: the dock icon uses an inline glyph. No `img/note.png` is needed.
+- Window manager: code is in `js/chrlex-dom.js` (no separate `window_manager.js`).
 
-## Features
+## Optional sysmon server (Linux only)
 
-- Draggable windows.
-- Dock with icons.
-- Note-taking with encryption.
-- File explorer for encrypted files.
-- Real-time CPU monitoring using top command.
-- Linux shell simulation.
-- Web browser with navigation.
-- WebDisk with real file system access.
-- Power controls (simulated).
-- Mode toggle (macOS/Windows styles).
+The `server/` folder has a small server that returns `top` output.
 
-## Development
+To run the server on a Linux host:
 
-- JavaScript files in `js/` directory.
-- CSS in `css/` directory.
-- Backend server in `server.js`.
-- Bash scripts in `charlex-bash-kernel-rail/` directory.
+1. Open a terminal in the `server/` folder.
+2. Run `npm install`.
+3. Run `npm start` or `node sysmon.js`.
+
+Endpoints:
+
+- GET /sysmon — plain text output of `top -b -n 1`.
+- POST /execute { "command": "top -b -n 1" } — JSON { output: string }.
+
+The server only runs `top` and is for Linux only.
+
+## Run the site locally
+
+Start a simple static server and open the site in your browser:
+
+```
+python3 -m http.server
+```
+
+Open `http://localhost:8000` in your browser.
+
+## Development notes
+
+- Code: see the `js/` folder.
+- Styles: `css/style.css`.
+- Optional backend: `server/`.
 
 ## License
 
@@ -39,5 +55,3 @@ MIT License.
 
 Copyright (c) 2020-2025 Amin Azimi AKA AMZY31
 
-### Screenshots
-![](./screenshots/1.png)

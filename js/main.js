@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Ensure dock exists and is centered before creating icons
+    if (window.Charlex && window.Charlex.DOM && typeof window.Charlex.DOM.createModernDock === 'function') {
+        try { window.Charlex.DOM.createModernDock(); } catch (err) { /* ignore */ }
+    }
     // Create Welcome Window
     Charlex.DOM.createWindow('window1', 'Welcome', 'Welcome to the Charlex Web OS!', '50px', '50px');
 
@@ -67,11 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `, '350px', '350px', 'none');
 
-    // Create Dock Icons
-    Charlex.DOM.createDockIcon('Welcome Window', () => openWindow('window1'), '<img src="img/logo.jpg" alt="LOGO" />');
-    Charlex.DOM.createDockIcon('Note Window', () => openWindow('noteWindow'), '<img src="img/note.png" alt="Note" />');
-    Charlex.DOM.createDockIcon('CPU Monitor', () => openCPUWindow(), '<span style="font-size: 20px;">📊</span>');
-    Charlex.DOM.createDockIcon('Linux Shell', () => openShellWindow(), '<span style="font-size: 20px;">💻</span>');
-    Charlex.DOM.createDockIcon('Web Browser', () => openBrowserWindow(), '<span style="font-size: 20px;">🌐</span>');
-    Charlex.DOM.createDockIcon('WebDisk', () => openWebDiskWindow(), '<span style="font-size: 20px;">💾</span>');
+    // Create Dock Icons (use Charlex.DOM.showWindow wrapper where possible)
+    Charlex.DOM.createDockIcon('Welcome Window', () => Charlex.DOM.showWindow('window1'), '<img src="img/logo.jpg" alt="LOGO" />', {tooltip: 'Welcome'});
+    // Use an inline glyph for Notes (remove dependency on img/note.png)
+    Charlex.DOM.createDockIcon('Note Window', () => Charlex.DOM.showWindow('noteWindow'), '<span style="font-size:20px;">📝</span>', {tooltip: 'Notes'});
+    Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('cpuWindow'), '<span style="font-size: 20px;">📊</span>', {tooltip: 'CPU'});
+    Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<span style="font-size: 20px;">💻</span>', {tooltip: 'Shell'});
+    Charlex.DOM.createDockIcon('Web Browser', () => Charlex.DOM.showWindow('browserWindow'), '<span style="font-size: 20px;">🌐</span>', {tooltip: 'Browser'});
+    Charlex.DOM.createDockIcon('WebDisk', () => Charlex.DOM.showWindow('webdiskWindow'), '<span style="font-size: 20px;">💾</span>', {tooltip: 'WebDisk'});
 });

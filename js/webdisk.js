@@ -8,20 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteBtn = document.getElementById('deleteBtn');
     const renameBtn = document.createElement('button');
     renameBtn.textContent = 'Rename';
-    renameBtn.style.padding = '5px 10px';
+    // Apply Bootstrap button classes for consistent UI
+    const applyBtn = (el, cls) => { try { el.classList.add(...cls.split(' ')); } catch(e) {} };
+    applyBtn(backBtn, 'btn btn-sm btn-secondary');
+    applyBtn(openDirBtn, 'btn btn-sm btn-info');
+    applyBtn(newFileBtn, 'btn btn-sm btn-primary');
+    applyBtn(newFolderBtn, 'btn btn-sm btn-success');
+    applyBtn(deleteBtn, 'btn btn-sm btn-danger');
+    applyBtn(renameBtn, 'btn btn-sm btn-warning');
     renameBtn.style.marginLeft = '5px';
     document.getElementById('webdiskContent').querySelector('div').appendChild(renameBtn);
 
-    // Add disk usage display
-    const diskUsageDiv = document.createElement('div');
-    diskUsageDiv.style.marginBottom = '10px';
-    diskUsageDiv.innerHTML = `
-        <div>Disk Usage: <span id="diskUsageText">0% used</span></div>
-        <div style="width: 100%; height: 20px; background: #ccc; border-radius: 10px; overflow: hidden;">
-            <div id="diskUsageBar" style="width: 0%; height: 100%; background: #28a745;"></div>
-        </div>
-    `;
-    document.getElementById('webdiskContent').insertBefore(diskUsageDiv, document.getElementById('webdiskContent').firstElementChild);
+    // Disk usage display removed per UX request
 
     // Initialize FS
     if (!window.Charlex) window.Charlex = {};
@@ -73,13 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         touch: async function(name, content = '') {
+            // create a file in current dir; store inline content when available
             const dir = this.getDir(this.currentDir);
             if (dir && !dir.children[name]) {
-                let url = '';
+                const file = { type: 'file' };
                 if (content) {
-                    url = await uploadToGofile(content, name);
+                    // store content directly to keep this offline-first
+                    file.content = String(content);
+                } else {
+                    file.content = '';
                 }
-                dir.children[name] = { type: 'file', url: url };
+                dir.children[name] = file;
                 this.saveFS();
             }
         },
@@ -93,7 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
         readFile: async function(name) {
             const dir = this.getDir(this.currentDir);
             if (dir && dir.children[name] && dir.children[name].type === 'file') {
-                const url = dir.children[name].url;
+                const item = dir.children[name];
+                if (typeof item.content === 'string') return item.content;
+                const url = item.url;
                 if (url) {
                     const response = await fetch(url);
                     return await response.text();
@@ -103,12 +107,27 @@ document.addEventListener('DOMContentLoaded', () => {
             return null;
         },
         writeFile: async function(name, content) {
+            // create file if missing, then write inline content (and optionally upload)
             const dir = this.getDir(this.currentDir);
-            if (dir && dir.children[name] && dir.children[name].type === 'file') {
-                const url = await uploadToGofile(content, name);
-                dir.children[name].url = url;
+            if (!dir) return;
+            if (!dir.children[name]) {
+                dir.children[name] = { type: 'file', content: String(content) };
                 this.saveFS();
+                return;
             }
+            const item = dir.children[name];
+            if (item.type !== 'file') return;
+            // store inline content
+            item.content = String(content);
+            // keep URL-based upload as optional background action (do not require)
+            try {
+                // small best-effort upload; do not block
+                uploadToGofile(content, name).then(url => {
+                    if (url) item.url = url;
+                    this.saveFS();
+                }).catch(() => {});
+            } catch (e) {}
+            this.saveFS();
         },
         rename: function(oldName, newName) {
             const dir = this.getDir(this.currentDir);
@@ -122,9 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const dir = this.getDir(this.currentDir);
             if (dir && dir.children[name]) {
                 const item = dir.children[name];
+                let size = '0';
+                if (typeof item.content === 'string') size = String(item.content.length);
+                else if (item.url) size = 'remote';
                 return {
                     type: item.type,
-                    size: item.url ? 'remote' : '0',
+                    size: size,
                     modified: 'N/A'
                 };
             }
@@ -163,12 +185,36 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = document.createElement('tr');
             row.style.cursor = 'pointer';
             const isDir = stats.type === 'dir';
-            row.innerHTML = `
-                <td style="padding: 5px;">${isDir ? '📁' : '📄'}</td>
-                <td style="padding: 5px;">${name}</td>
-                <td style="padding: 5px;">${stats.size}</td>
-                <td style="padding: 5px;">${stats.modified}</td>
-            `;
+            // Colorize rows: directories get a blue tint, files a neutral tint
+            if (isDir) {
+                row.classList.add('table-primary');
+            } else {
+                row.classList.add('table-light');
+            }
+            const iconCell = document.createElement('td');
+            iconCell.style.padding = '5px';
+            iconCell.textContent = isDir ? '📁' : '📄';
+
+            const nameCell = document.createElement('td');
+            nameCell.style.padding = '5px';
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+            if (isDir) nameSpan.classList.add('text-primary');
+            nameCell.appendChild(nameSpan);
+
+            const sizeCell = document.createElement('td');
+            sizeCell.style.padding = '5px';
+            sizeCell.textContent = stats.size;
+
+            const modCell = document.createElement('td');
+            modCell.style.padding = '5px';
+            modCell.textContent = stats.modified;
+
+            row.appendChild(iconCell);
+            row.appendChild(nameCell);
+            row.appendChild(sizeCell);
+            row.appendChild(modCell);
+
             row.onclick = () => selectItem(name, row);
             row.ondblclick = () => isDir ? openSubDir(name) : openFile(name);
             fileList.appendChild(row);
@@ -211,6 +257,9 @@ document.addEventListener('DOMContentLoaded', () => {
     async function createFile() {
         const name = prompt('Enter file name:');
         if (name) {
+            // Prevent overwrite
+            const dir = Charlex.FS.getDir(Charlex.FS.currentDir);
+            if (dir && dir.children && dir.children[name]) { alert('file/directory exist'); return; }
             const content = prompt('Enter file content (leave empty for empty file):') || '';
             await Charlex.FS.touch(name, content);
             loadFiles();
@@ -220,6 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function createFolder() {
         const name = prompt('Enter folder name:');
         if (name) {
+            const dir = Charlex.FS.getDir(Charlex.FS.currentDir);
+            if (dir && dir.children && dir.children[name]) { alert('file/directory exist'); return; }
             Charlex.FS.mkdir(name);
             loadFiles();
         }
@@ -245,6 +296,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const newName = prompt('Enter new name:', selectedItem);
         if (newName && newName !== selectedItem) {
+            const dir = Charlex.FS.getDir(Charlex.FS.currentDir);
+            if (dir && dir.children && dir.children[newName]) { alert('file/directory exist'); return; }
             Charlex.FS.rename(selectedItem, newName);
             loadFiles();
             selectedItem = null;
@@ -255,8 +308,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateDiskUsage() {
         const fsSize = JSON.stringify(Charlex.FS.fs).length;
         const usage = Math.min((fsSize / 5000000) * 100, 100); // Assume 5MB limit
-        document.getElementById('diskUsageText').textContent = usage.toFixed(1) + '% used';
-        document.getElementById('diskUsageBar').style.width = usage + '%';
+        // The disk usage UI was removed; only update if elements exist to avoid errors
+        const txt = document.getElementById('diskUsageText');
+        const bar = document.getElementById('diskUsageBar');
+        if (txt) txt.textContent = usage.toFixed(1) + '% used';
+        if (bar) bar.style.width = usage + '%';
     }
 
     backBtn.onclick = goBack;

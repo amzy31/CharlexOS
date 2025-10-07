@@ -20,27 +20,36 @@ body {
     position: relative;
     overflow: hidden;
 }
-.window {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 10px;
-    margin-bottom: 10px;
-    width: 300px;
-    min-width: 250px;
-    max-width: 100vw;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+.dock-container, #dock {
+    /* Skeuomorphic dock base: glossy, beveled, subtle inner shadow */
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    height: auto;
+    min-height: 64px;
+    padding: 10px 16px;
+    width: auto;
+    overflow: visible;
+    user-select: none;
+    z-index: 1000;
+    transition: transform 240ms cubic-bezier(.2,.8,.2,1), box-shadow 240ms;
+
+    /* background with subtle bevel and glassy reflection */
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border-radius: 36px;
+    box-shadow:
+        inset 0 2px 6px rgba(255,255,255,0.06), /* top inner highlight */
+        inset 0 -8px 18px rgba(0,0,0,0.45),     /* bottom inner shadow */
+        0 12px 30px rgba(0,0,0,0.55);           /* outer drop shadow */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    user-select: text;
-    display: flex;
-    flex-direction: column;
-    max-height: 80vh;
-    overflow: hidden;
-    transition: all 0.3s ease, transform 0.3s ease;
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.45s ease;
 }
 @keyframes fadeIn {
     from {
@@ -51,6 +60,31 @@ body {
         opacity: 1;
         transform: scale(1);
     }
+}
+.window {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, rgba(30,30,30,0.9), rgba(18,18,18,0.95));
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    min-width: 320px;
+    min-height: 160px;
+    width: auto;
+    max-width: calc(100vw - 40px);
+    overflow: hidden; /* keep children inside */
+    color: #fff;
+}
+
+.window-content {
+    padding: 12px;
+    flex: 1 1 auto;
+    overflow: auto; /* scroll inside window */
+    box-sizing: border-box;
+}
+
+.window .window-header {
+    border-radius: 12px 12px 0 0;
 }
 .window-header {
     display: flex;
@@ -70,21 +104,40 @@ body {
 .window-controls {
     display: flex;
     gap: 8px;
+    align-items: center;
+    margin-right: auto; /* push title to center */
+    margin-left: 6px; /* left-side controls like macOS */
 }
 .window-control-button {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: #ff5f57; /* close - red */
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
     cursor: pointer;
     position: relative;
+    display: inline-block;
+    margin: 0 6px;
+    flex: 0 0 auto;
 }
 .window-control-button.minimize {
     background-color: #ffbd2e; /* yellow */
 }
 .window-control-button.maximize {
     background-color: #28c840; /* green */
+}
+.window-control-button.close { background-color: #ff5f57; }
+
+/* larger hit targets for touch */
+.window-controls [role="button"] {
+    padding: 8px;
+    margin: 0 2px;
+    border-radius: 50%;
+}
+
+/* center title and reserve space on the right */
+.window-header .window-title {
+    margin: 0 auto;
+    text-align: center;
 }
 .window-control-button:hover::after {
     content: '';
@@ -98,47 +151,86 @@ body {
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
-#dock {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 64px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 32px;
-    padding: 0 20px;
-    display: flex;
-    align-items: flex-end;
-    gap: 12px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    user-select: none;
-    z-index: 1000;
-}
 .dock-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background-color: rgba(255,255,255,0.2);
-    display: flex;
+    width: 64px;
+    height: 64px;
+    border-radius: 14px; /* squircle-ish for skeuomorphic look */
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms, background 220ms;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05);
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.04);
+    overflow: visible;
+    position: relative;
 }
 .dock-icon img {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     pointer-events: none;
     user-select: none;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.45));
 }
+
+/* Strong override to ensure dock is horizontal and centered (helps if other styles conflict) */
+#dock, .dock-container {
+    position: fixed !important;
+    left: 50% !important;
+    bottom: 20px !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 8px 14px !important;
+    z-index: 9999 !important;
+    width: auto !important;
+    min-height: 56px !important;
+    background: rgba(255,255,255,0.04) !important;
+    border-radius: 28px !important;
+}
+
+/* accessible focus styles for dock icons */
+.dock-icon:focus {
+    outline: 2px solid rgba(255,255,255,0.2);
+    outline-offset: 3px;
+}
+
+.dock-icon .badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ff3b30;
+    color: white;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 999px;
+}
+
 .dock-icon:hover {
-    transform: scale(1.5);
-    background-color: rgba(255,255,255,0.4);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    z-index: 10;
+    transform: translateY(-8px) scale(1.14);
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+    box-shadow: 0 18px 36px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+    z-index: 11;
+}
+
+/* subtle glossy reflection for the dock - uses pseudo-element */
+.dock-container::before, #dock::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 6px;
+    height: 24px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.9;
 }
 
 #noteFileName {
@@ -177,7 +269,7 @@ body {
         top: 20px !important;
         left: 5vw !important;
     }
-    #dock {
+    .dock-container {
         bottom: 10px;
         height: 50px;
         padding: 0 10px;
@@ -205,7 +297,7 @@ body {
     .window-title {
         font-size: 12px;
     }
-    #dock {
+    .dock-container {
         height: 45px;
         gap: 6px;
     }
