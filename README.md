@@ -35,7 +35,7 @@ Interact with the desktop, windows, and dock.
 
 ## License
 
-GPL2 License.
+MIT License.
 
 Copyright (c) 2020-2025 AMZY31 (Amin Azimi)
 

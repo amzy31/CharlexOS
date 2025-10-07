@@ -16,188 +16,257 @@ document.addEventListener('DOMContentLoaded', () => {
     const diskUsageDiv = document.createElement('div');
     diskUsageDiv.style.marginBottom = '10px';
     diskUsageDiv.innerHTML = `
-        <div>Disk Usage: <span id="diskUsageText">50% used</span></div>
+        <div>Disk Usage: <span id="diskUsageText">0% used</span></div>
         <div style="width: 100%; height: 20px; background: #ccc; border-radius: 10px; overflow: hidden;">
-            <div id="diskUsageBar" style="width: 50%; height: 100%; background: #28a745;"></div>
+            <div id="diskUsageBar" style="width: 0%; height: 100%; background: #28a745;"></div>
         </div>
     `;
     document.getElementById('webdiskContent').insertBefore(diskUsageDiv, document.getElementById('webdiskContent').firstElementChild);
 
-    let dirHandle = null;
-    let selectedHandle = null;
-    let selectedRow = null;
-    let dirStack = [];
-
-    async function openDirectory() {
-        try {
-            dirHandle = await window.showDirectoryPicker();
-            dirStack = [dirHandle];
-            currentDir.textContent = `Current Directory: ${dirHandle.name}`;
-            backBtn.disabled = true;
-            await loadFiles();
-        } catch (e) {
-            alert('Failed to open directory: ' + e.message);
-        }
-    }
-
-    async function loadFiles() {
-        if (!dirHandle) return;
-        fileList.innerHTML = '';
-        for await (const [name, handle] of dirHandle.entries()) {
-            const row = document.createElement('tr');
-            row.style.cursor = 'pointer';
-            const isDir = handle.kind === 'directory';
-            let size = '-';
-            let modified = '-';
-            if (!isDir) {
-                try {
-                    const file = await handle.getFile();
-                    size = formatSize(file.size);
-                    modified = new Date(file.lastModified).toLocaleString();
-                } catch (e) {
-                    // ignore
+    // Initialize FS
+    if (!window.Charlex) window.Charlex = {};
+    Charlex.FS = {
+        fs: JSON.parse(localStorage.getItem('charlexFS') || '{"/":{"type":"dir","children":{}}}'),
+        currentDir: '/',
+        saveFS: function() {
+            localStorage.setItem('charlexFS', JSON.stringify(this.fs));
+        },
+        getDir: function(path) {
+            const parts = path.split('/').filter(p => p);
+            let dir = this.fs['/'];
+            for (const part of parts) {
+                if (dir.children && dir.children[part] && dir.children[part].type === 'dir') {
+                    dir = dir.children[part];
+                } else {
+                    return null;
                 }
             }
+            return dir;
+        },
+        ls: function(dirPath = this.currentDir) {
+            const dir = this.getDir(dirPath);
+            if (!dir) return [];
+            return Object.keys(dir.children || {});
+        },
+        cd: function(path) {
+            if (path === '..') {
+                const parts = this.currentDir.split('/').filter(p => p);
+                parts.pop();
+                this.currentDir = '/' + parts.join('/');
+                if (this.currentDir === '') this.currentDir = '/';
+            } else if (path.startsWith('/')) {
+                if (this.getDir(path)) {
+                    this.currentDir = path;
+                }
+            } else {
+                const newPath = this.currentDir === '/' ? '/' + path : this.currentDir + '/' + path;
+                if (this.getDir(newPath)) {
+                    this.currentDir = newPath;
+                }
+            }
+        },
+        mkdir: function(name) {
+            const dir = this.getDir(this.currentDir);
+            if (dir && !dir.children[name]) {
+                dir.children[name] = { type: 'dir', children: {} };
+                this.saveFS();
+            }
+        },
+        touch: async function(name, content = '') {
+            const dir = this.getDir(this.currentDir);
+            if (dir && !dir.children[name]) {
+                let url = '';
+                if (content) {
+                    url = await uploadToGofile(content, name);
+                }
+                dir.children[name] = { type: 'file', url: url };
+                this.saveFS();
+            }
+        },
+        rm: function(name) {
+            const dir = this.getDir(this.currentDir);
+            if (dir && dir.children[name]) {
+                delete dir.children[name];
+                this.saveFS();
+            }
+        },
+        readFile: async function(name) {
+            const dir = this.getDir(this.currentDir);
+            if (dir && dir.children[name] && dir.children[name].type === 'file') {
+                const url = dir.children[name].url;
+                if (url) {
+                    const response = await fetch(url);
+                    return await response.text();
+                }
+                return '';
+            }
+            return null;
+        },
+        writeFile: async function(name, content) {
+            const dir = this.getDir(this.currentDir);
+            if (dir && dir.children[name] && dir.children[name].type === 'file') {
+                const url = await uploadToGofile(content, name);
+                dir.children[name].url = url;
+                this.saveFS();
+            }
+        },
+        rename: function(oldName, newName) {
+            const dir = this.getDir(this.currentDir);
+            if (dir && dir.children[oldName] && !dir.children[newName]) {
+                dir.children[newName] = dir.children[oldName];
+                delete dir.children[oldName];
+                this.saveFS();
+            }
+        },
+        getStats: function(name) {
+            const dir = this.getDir(this.currentDir);
+            if (dir && dir.children[name]) {
+                const item = dir.children[name];
+                return {
+                    type: item.type,
+                    size: item.url ? 'remote' : '0',
+                    modified: 'N/A'
+                };
+            }
+            return null;
+        }
+    };
+
+    async function uploadToGofile(content, filename) {
+        const formData = new FormData();
+        const blob = new Blob([content], { type: 'text/plain' });
+        formData.append('file', blob, filename);
+
+        try {
+            const response = await fetch('https://store1.gofile.io/uploadFile', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (data.status === 'ok') {
+                return data.data.downloadPage;
+            }
+        } catch (e) {
+            console.error('Upload failed:', e);
+        }
+        return '';
+    }
+
+    let selectedItem = null;
+    let selectedRow = null;
+
+    function loadFiles() {
+        fileList.innerHTML = '';
+        const items = Charlex.FS.ls();
+        items.forEach(name => {
+            const stats = Charlex.FS.getStats(name);
+            const row = document.createElement('tr');
+            row.style.cursor = 'pointer';
+            const isDir = stats.type === 'dir';
             row.innerHTML = `
                 <td style="padding: 5px;">${isDir ? '📁' : '📄'}</td>
                 <td style="padding: 5px;">${name}</td>
-                <td style="padding: 5px;">${size}</td>
-                <td style="padding: 5px;">${modified}</td>
+                <td style="padding: 5px;">${stats.size}</td>
+                <td style="padding: 5px;">${stats.modified}</td>
             `;
-            row.onclick = () => selectItem(handle, row);
-            row.ondblclick = () => isDir ? openSubDir(handle) : openFile(handle);
+            row.onclick = () => selectItem(name, row);
+            row.ondblclick = () => isDir ? openSubDir(name) : openFile(name);
             fileList.appendChild(row);
-        }
+        });
+        currentDir.textContent = `Current Directory: ${Charlex.FS.currentDir}`;
+        updateDiskUsage();
     }
 
-    function formatSize(bytes) {
-        if (bytes === 0) return '0 B';
-        const k = 1024;
-        const sizes = ['B', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-    }
-
-    function selectItem(handle, row) {
+    function selectItem(name, row) {
         if (selectedRow) {
             selectedRow.style.backgroundColor = '';
         }
         selectedRow = row;
         selectedRow.style.backgroundColor = 'rgba(0,123,255,0.3)';
-        selectedHandle = handle;
+        selectedItem = name;
     }
 
-    async function openFile(handle) {
-        try {
-            const file = await handle.getFile();
-            const content = await file.text();
+    async function openFile(name) {
+        const content = await Charlex.FS.readFile(name);
+        if (content !== null) {
             // Open in note window
-            document.getElementById('noteFileName').value = handle.name;
+            document.getElementById('noteFileName').value = name;
             document.getElementById('noteContent').value = content;
             openWindow('noteWindow');
-        } catch (e) {
-            alert('Failed to open file: ' + e.message);
         }
     }
 
-    async function openSubDir(handle) {
-        dirStack.push(dirHandle);
-        dirHandle = handle;
-        currentDir.textContent = `Current Directory: ${handle.name}`;
-        backBtn.disabled = false;
-        await loadFiles();
+    function openSubDir(name) {
+        Charlex.FS.cd(name);
+        loadFiles();
+        backBtn.disabled = Charlex.FS.currentDir === '/';
     }
 
     function goBack() {
-        if (dirStack.length > 1) {
-            dirHandle = dirStack.pop();
-            currentDir.textContent = `Current Directory: ${dirHandle.name}`;
-            if (dirStack.length === 1) backBtn.disabled = true;
+        Charlex.FS.cd('..');
+        loadFiles();
+        backBtn.disabled = Charlex.FS.currentDir === '/';
+    }
+
+    async function createFile() {
+        const name = prompt('Enter file name:');
+        if (name) {
+            const content = prompt('Enter file content (leave empty for empty file):') || '';
+            await Charlex.FS.touch(name, content);
             loadFiles();
         }
     }
 
-    async function createFile() {
-        if (!dirHandle) {
-            alert('No directory open.');
-            return;
-        }
-        const name = prompt('Enter file name:');
-        if (name) {
-            try {
-                const handle = await dirHandle.getFileHandle(name, { create: true });
-                const writable = await handle.createWritable();
-                await writable.write('');
-                await writable.close();
-                await loadFiles();
-            } catch (e) {
-                alert('Failed to create file: ' + e.message);
-            }
-        }
-    }
-
-    async function createFolder() {
-        if (!dirHandle) {
-            alert('No directory open.');
-            return;
-        }
+    function createFolder() {
         const name = prompt('Enter folder name:');
         if (name) {
-            try {
-                await dirHandle.getDirectoryHandle(name, { create: true });
-                await loadFiles();
-            } catch (e) {
-                alert('Failed to create folder: ' + e.message);
-            }
+            Charlex.FS.mkdir(name);
+            loadFiles();
         }
     }
 
-    async function deleteItem() {
-        if (!selectedHandle) {
+    function deleteItem() {
+        if (!selectedItem) {
             alert('No item selected.');
             return;
         }
-        const name = selectedHandle.name;
-        if (confirm(`Delete ${name}?`)) {
-            try {
-                if (selectedHandle.kind === 'file') {
-                    await dirHandle.removeEntry(name);
-                } else {
-                    await dirHandle.removeEntry(name, { recursive: true });
-                }
-                await loadFiles();
-                selectedHandle = null;
-                selectedRow = null;
-            } catch (e) {
-                alert('Failed to delete: ' + e.message);
-            }
+        if (confirm(`Delete ${selectedItem}?`)) {
+            Charlex.FS.rm(selectedItem);
+            loadFiles();
+            selectedItem = null;
+            selectedRow = null;
         }
     }
 
-    async function renameItem() {
-        if (!selectedHandle) {
+    function renameItem() {
+        if (!selectedItem) {
             alert('No item selected.');
             return;
         }
-        const newName = prompt('Enter new name:', selectedHandle.name);
-        if (newName && newName !== selectedHandle.name) {
-            try {
-                await selectedHandle.move(newName);
-                await loadFiles();
-                selectedHandle = null;
-                selectedRow = null;
-            } catch (e) {
-                alert('Failed to rename: ' + e.message);
-            }
+        const newName = prompt('Enter new name:', selectedItem);
+        if (newName && newName !== selectedItem) {
+            Charlex.FS.rename(selectedItem, newName);
+            loadFiles();
+            selectedItem = null;
+            selectedRow = null;
         }
+    }
+
+    function updateDiskUsage() {
+        const fsSize = JSON.stringify(Charlex.FS.fs).length;
+        const usage = Math.min((fsSize / 5000000) * 100, 100); // Assume 5MB limit
+        document.getElementById('diskUsageText').textContent = usage.toFixed(1) + '% used';
+        document.getElementById('diskUsageBar').style.width = usage + '%';
     }
 
     backBtn.onclick = goBack;
-    openDirBtn.onclick = openDirectory;
+    openDirBtn.style.display = 'none'; // Hide open dir button as it's virtual
     newFileBtn.onclick = createFile;
     newFolderBtn.onclick = createFolder;
     deleteBtn.onclick = deleteItem;
     renameBtn.onclick = renameItem;
+
+    loadFiles();
 });
 
 // Function to open WebDisk window

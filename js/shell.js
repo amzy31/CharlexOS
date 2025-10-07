@@ -2,18 +2,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const shellContent = document.getElementById('shellContent');
     const shellInput = document.getElementById('shellInput');
 
-    shellInput.addEventListener('keydown', (e) => {
+    shellInput.addEventListener('keydown', async (e) => {
         if (e.key === 'Enter') {
             const command = shellInput.value.trim();
             shellInput.value = '';
-            executeCommand(command);
+            await executeCommand(command);
         }
     });
 
-    let currentDir = '/home/user';
     let connected = false;
 
-    function executeCommand(cmd) {
+    async function executeCommand(cmd) {
         let output = '';
         const parts = cmd.split(' ');
         const command = parts[0].toLowerCase();
@@ -21,14 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         switch (command) {
             case 'ls':
+                const items = Charlex.FS.ls();
                 if (args.includes('-l')) {
-                    output = 'drwxr-xr-x 2 user user 4096 Jan 1 12:00 Desktop\ndrwxr-xr-x 2 user user 4096 Jan 1 12:00 Documents\ndrwxr-xr-x 2 user user 4096 Jan 1 12:00 Downloads\ndrwxr-xr-x 2 user user 4096 Jan 1 12:00 Pictures\ndrwxr-xr-x 2 user user 4096 Jan 1 12:00 Videos';
+                    output = items.map(name => {
+                        const stats = Charlex.FS.getStats(name);
+                        const type = stats.type === 'dir' ? 'd' : '-';
+                        return `${type}rwxr-xr-x 1 user user 0 Jan 1 12:00 ${name}`;
+                    }).join('\n');
                 } else {
-                    output = 'Desktop  Documents  Downloads  Pictures  Videos';
+                    output = items.join(' ');
                 }
                 break;
             case 'pwd':
-                output = currentDir;
+                output = Charlex.FS.currentDir;
                 break;
             case 'whoami':
                 output = 'user';
@@ -37,35 +41,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 output = new Date().toString();
                 break;
             case 'echo':
-                output = args.join(' ');
+                const gtIndex = args.indexOf('>');
+                if (gtIndex > 0 && args.length > gtIndex + 1) {
+                    const content = args.slice(0, gtIndex).join(' ');
+                    const filename = args[gtIndex + 1];
+                    await Charlex.FS.writeFile(filename, content);
+                    output = '';
+                } else {
+                    output = args.join(' ');
+                }
                 break;
             case 'mkdir':
                 if (args.length > 0) {
-                    output = `Directory '${args[0]}' created.`;
+                    Charlex.FS.mkdir(args[0]);
+                    output = '';
                 } else {
                     output = 'mkdir: missing operand';
                 }
                 break;
             case 'touch':
                 if (args.length > 0) {
-                    output = `File '${args[0]}' created.`;
+                    await Charlex.FS.touch(args[0]);
+                    output = '';
                 } else {
                     output = 'touch: missing operand';
                 }
                 break;
             case 'rm':
                 if (args.length > 0) {
-                    output = `File '${args[0]}' removed.`;
+                    Charlex.FS.rm(args[0]);
+                    output = '';
                 } else {
                     output = 'rm: missing operand';
                 }
                 break;
             case 'cd':
                 if (args.length > 0) {
-                    currentDir = args[0].startsWith('/') ? args[0] : currentDir + '/' + args[0];
+                    Charlex.FS.cd(args[0]);
                     output = '';
                 } else {
-                    currentDir = '/home/user';
+                    Charlex.FS.cd('/home/user');
+                }
+                break;
+            case 'cat':
+                if (args.length > 0) {
+                    const content = await Charlex.FS.readFile(args[0]);
+                    output = content !== null ? content : `cat: ${args[0]}: No such file or directory`;
+                } else {
+                    output = 'cat: missing operand';
                 }
                 break;
             case 'ssh':
@@ -85,41 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case 'top':
-                // Simulate top command output
-                let currentUsage = Math.floor(Math.random() * 100);
-                const idle = 100 - currentUsage;
-                const now = new Date();
-                const time = now.toTimeString().split(' ')[0];
-                const up = '1 day, 1:00';
-                const load = '0.00, 0.01, 0.05';
-                output = `top - ${time} up ${up},  1 user,  load average: ${load}
-Tasks: 100 total,   1 running,  99 sleeping,   0 stopped,   0 zombie
-%Cpu(s): ${currentUsage}.0 us,  0.0 sy,  0.0 ni, ${idle}.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
-MiB Mem :   1024.0 total,    512.0 free,    256.0 used,    256.0 buff/cache
-MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.    768.0 avail Mem
-
-    PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
-      1 root      20   0  123456   1234   1234 S   ${currentUsage}.0  0.0   0:00.00 systemd
-      2 root      20   0  123456   1234   1234 S   0.0  0.0   0:00.00 kthreadd
-      3 root       0 -20  123456   1234   1234 S   0.0  0.0   0:00.00 rcu_gp
-      4 root       0 -20  123456   1234   1234 S   0.0  0.0   0:00.00 rcu_par_gp
-      5 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/0
-      6 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H
-      7 root      20   0       0      0      0 S   0.0  0.0   0:00.00 mm_percpu_wq
-      8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 ksoftirqd/0
-      9 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_sched
-     10 root      20   0       0      0      0 S   0.0  0.0   0:00.00 migration/0
-     11 root      20   0       0      0      0 S   0.0  0.0   0:00.00 watchdog/0
-     12 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/1
-     13 root      20   0       0      0      0 S   0.0  0.0   0:00.00 watchdog/1
-     14 root      20   0       0      0      0 S   0.0  0.0   0:00.00 migration/1
-     15 root      20   0       0      0      0 S   0.0  0.0   0:00.00 ksoftirqd/1
-     16 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H
-     17 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/2
-     18 root      20   0       0      0      0 S   0.0  0.0   0:00.00 watchdog/2
-     19 root      20   0       0      0      0 S   0.0  0.0   0:00.00 migration/2
-     20 root      20   0       0      0      0 S   0.0  0.0   0:00.00 ksoftirqd/2
-`;
+                output = Charlex.topOutput;
                 break;
             case 'uname':
                 output = 'Linux charlex-webos 5.15.0-91-generic #101-Ubuntu SMP Tue Nov 14 13:30:33 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux';
@@ -133,15 +122,22 @@ MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.    768.0 avail Mem
             case 'clear':
                 shellContent.innerHTML = '<div>$ <input id="shellInput" type="text" style="background: transparent; border: none; color: green; outline: none; width: 90%;" /></div>';
                 const newShellInput = document.getElementById('shellInput');
-                newShellInput.addEventListener('keydown', (e) => {
+                newShellInput.addEventListener('keydown', async (e) => {
                     if (e.key === 'Enter') {
                         const command = newShellInput.value.trim();
                         newShellInput.value = '';
-                        executeCommand(command);
+                        await executeCommand(command);
                     }
                 });
                 newShellInput.focus();
                 return;
+            case 'webdisk':
+                openWebDiskWindow();
+                output = 'Opening WebDisk...';
+                break;
+            case 'help':
+                output = 'Available commands: ls, pwd, whoami, date, echo, mkdir, touch, rm, cd, cat, ssh, exit, top, uname, ps, df, clear, webdisk, help';
+                break;
             default:
                 output = `Command not found: ${cmd}`;
         }
