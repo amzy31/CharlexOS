@@ -37,7 +37,7 @@ Interact with the desktop, windows, and dock.
 
 MIT License.
 
-Copyright (c) 2020-2025 AMZY31 (Amin Azimi)
+Copyright (c) 2020-2025 Amin Azimi AKA AMZY31
 
 ### Screenshots
 ![](./screenshots/1.png)
