@@ -1,129 +1,206 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Create WebDisk Window
-    const webdiskWindow = document.createElement('div');
-    webdiskWindow.className = 'window';
-    webdiskWindow.id = 'webdiskWindow';
-    webdiskWindow.style.top = '300px';
-    webdiskWindow.style.left = '300px';
-    webdiskWindow.style.display = 'none';
-    webdiskWindow.innerHTML = `
-        <div class="window-header" onmousedown="startDrag(event, 'webdiskWindow')">
-            <div class="window-controls">
-                <div class="window-control-button close" onclick="closeWindow('webdiskWindow')" title="Close"></div>
-                <div class="window-control-button minimize" onclick="minimizeWindow('webdiskWindow')" title="Minimize"></div>
-                <div class="window-control-button maximize" onclick="maximizeWindow('webdiskWindow')" title="Maximize"></div>
-            </div>
-            <div class="window-title">WebDisk</div>
-            <div style="width: 48px;"></div>
-        </div>
-        <div class="window-content" id="webdiskContent" style="padding: 10px; height: 400px; overflow-y: auto;">
-            <div style="margin-bottom: 10px;">
-                <button id="newFileBtn" style="padding: 5px 10px; margin-right: 5px;">New File</button>
-                <button id="newFolderBtn" style="padding: 5px 10px; margin-right: 5px;">New Folder</button>
-                <button id="deleteBtn" style="padding: 5px 10px;">Delete</button>
-            </div>
-            <div id="fileList" style="display: flex; flex-wrap: wrap;"></div>
-        </div>
-    `;
-    document.getElementById('desktop').appendChild(webdiskWindow);
-
-    const fileList = document.getElementById('fileList');
+    const fileList = document.getElementById('fileList').querySelector('tbody');
+    const currentDir = document.getElementById('currentDir');
+    const backBtn = document.getElementById('backBtn');
+    const openDirBtn = document.getElementById('openDirBtn');
     const newFileBtn = document.getElementById('newFileBtn');
     const newFolderBtn = document.getElementById('newFolderBtn');
     const deleteBtn = document.getElementById('deleteBtn');
+    const renameBtn = document.createElement('button');
+    renameBtn.textContent = 'Rename';
+    renameBtn.style.padding = '5px 10px';
+    renameBtn.style.marginLeft = '5px';
+    document.getElementById('webdiskContent').querySelector('div').appendChild(renameBtn);
 
-    function loadFiles() {
-        fileList.innerHTML = '';
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key.startsWith('webdisk_')) {
-                const name = key.replace('webdisk_', '');
-                const item = document.createElement('div');
-                item.className = 'file-item';
-                item.style.width = '80px';
-                item.style.height = '80px';
-                item.style.margin = '5px';
-                item.style.display = 'flex';
-                item.style.flexDirection = 'column';
-                item.style.alignItems = 'center';
-                item.style.cursor = 'pointer';
-                item.innerHTML = `
-                    <div style="font-size: 40px;">📄</div>
-                    <div style="font-size: 12px; text-align: center;">${name}</div>
-                `;
-                item.onclick = () => selectItem(key);
-                item.ondblclick = () => openFile(key);
-                fileList.appendChild(item);
-            }
-        }
-    }
+    // Add disk usage display
+    const diskUsageDiv = document.createElement('div');
+    diskUsageDiv.style.marginBottom = '10px';
+    diskUsageDiv.innerHTML = `
+        <div>Disk Usage: <span id="diskUsageText">50% used</span></div>
+        <div style="width: 100%; height: 20px; background: #ccc; border-radius: 10px; overflow: hidden;">
+            <div id="diskUsageBar" style="width: 50%; height: 100%; background: #28a745;"></div>
+        </div>
+    `;
+    document.getElementById('webdiskContent').insertBefore(diskUsageDiv, document.getElementById('webdiskContent').firstElementChild);
 
-    let selectedItem = null;
-    let selectedKey = null;
+    let dirHandle = null;
+    let selectedHandle = null;
+    let selectedRow = null;
+    let dirStack = [];
 
-    function selectItem(key) {
-        if (selectedItem) {
-            selectedItem.style.backgroundColor = '';
-        }
-        selectedItem = event.target.closest('.file-item');
-        selectedItem.style.backgroundColor = 'rgba(0,123,255,0.3)';
-        selectedKey = key;
-    }
-
-    function openFile(key) {
-        const encrypted = localStorage.getItem(key);
-        if (!encrypted) return;
-        const password = prompt('Enter password to open file:');
-        if (!password) return;
+    async function openDirectory() {
         try {
-            const decrypted = CryptoJS.AES.decrypt(encrypted, password).toString(CryptoJS.enc.Utf8);
-            if (!decrypted) throw new Error('Decryption failed');
+            dirHandle = await window.showDirectoryPicker();
+            dirStack = [dirHandle];
+            currentDir.textContent = `Current Directory: ${dirHandle.name}`;
+            backBtn.disabled = true;
+            await loadFiles();
+        } catch (e) {
+            alert('Failed to open directory: ' + e.message);
+        }
+    }
+
+    async function loadFiles() {
+        if (!dirHandle) return;
+        fileList.innerHTML = '';
+        for await (const [name, handle] of dirHandle.entries()) {
+            const row = document.createElement('tr');
+            row.style.cursor = 'pointer';
+            const isDir = handle.kind === 'directory';
+            let size = '-';
+            let modified = '-';
+            if (!isDir) {
+                try {
+                    const file = await handle.getFile();
+                    size = formatSize(file.size);
+                    modified = new Date(file.lastModified).toLocaleString();
+                } catch (e) {
+                    // ignore
+                }
+            }
+            row.innerHTML = `
+                <td style="padding: 5px;">${isDir ? '📁' : '📄'}</td>
+                <td style="padding: 5px;">${name}</td>
+                <td style="padding: 5px;">${size}</td>
+                <td style="padding: 5px;">${modified}</td>
+            `;
+            row.onclick = () => selectItem(handle, row);
+            row.ondblclick = () => isDir ? openSubDir(handle) : openFile(handle);
+            fileList.appendChild(row);
+        }
+    }
+
+    function formatSize(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function selectItem(handle, row) {
+        if (selectedRow) {
+            selectedRow.style.backgroundColor = '';
+        }
+        selectedRow = row;
+        selectedRow.style.backgroundColor = 'rgba(0,123,255,0.3)';
+        selectedHandle = handle;
+    }
+
+    async function openFile(handle) {
+        try {
+            const file = await handle.getFile();
+            const content = await file.text();
             // Open in note window
-            document.getElementById('noteFileName').value = key.replace('webdisk_', '');
-            document.getElementById('noteContent').value = decrypted;
+            document.getElementById('noteFileName').value = handle.name;
+            document.getElementById('noteContent').value = content;
             openWindow('noteWindow');
         } catch (e) {
-            alert('Failed to open file. Wrong password.');
+            alert('Failed to open file: ' + e.message);
         }
     }
 
-    newFileBtn.onclick = () => {
+    async function openSubDir(handle) {
+        dirStack.push(dirHandle);
+        dirHandle = handle;
+        currentDir.textContent = `Current Directory: ${handle.name}`;
+        backBtn.disabled = false;
+        await loadFiles();
+    }
+
+    function goBack() {
+        if (dirStack.length > 1) {
+            dirHandle = dirStack.pop();
+            currentDir.textContent = `Current Directory: ${dirHandle.name}`;
+            if (dirStack.length === 1) backBtn.disabled = true;
+            loadFiles();
+        }
+    }
+
+    async function createFile() {
+        if (!dirHandle) {
+            alert('No directory open.');
+            return;
+        }
         const name = prompt('Enter file name:');
         if (name) {
-            const content = prompt('Enter content:');
-            const password = prompt('Enter encryption password:');
-            if (password) {
-                const encrypted = CryptoJS.AES.encrypt(content, password).toString();
-                localStorage.setItem('webdisk_' + name, encrypted);
-                loadFiles();
+            try {
+                const handle = await dirHandle.getFileHandle(name, { create: true });
+                const writable = await handle.createWritable();
+                await writable.write('');
+                await writable.close();
+                await loadFiles();
+            } catch (e) {
+                alert('Failed to create file: ' + e.message);
             }
         }
-    };
+    }
 
-    newFolderBtn.onclick = () => {
-        alert('Folders not implemented yet. (Simulated)');
-    };
-
-    deleteBtn.onclick = () => {
-        if (selectedKey) {
-            const name = selectedKey.replace('webdisk_', '');
-            if (confirm(`Delete ${name}?`)) {
-                localStorage.removeItem(selectedKey);
-                loadFiles();
-                selectedItem = null;
-                selectedKey = null;
+    async function createFolder() {
+        if (!dirHandle) {
+            alert('No directory open.');
+            return;
+        }
+        const name = prompt('Enter folder name:');
+        if (name) {
+            try {
+                await dirHandle.getDirectoryHandle(name, { create: true });
+                await loadFiles();
+            } catch (e) {
+                alert('Failed to create folder: ' + e.message);
             }
-        } else {
+        }
+    }
+
+    async function deleteItem() {
+        if (!selectedHandle) {
             alert('No item selected.');
+            return;
         }
-    };
+        const name = selectedHandle.name;
+        if (confirm(`Delete ${name}?`)) {
+            try {
+                if (selectedHandle.kind === 'file') {
+                    await dirHandle.removeEntry(name);
+                } else {
+                    await dirHandle.removeEntry(name, { recursive: true });
+                }
+                await loadFiles();
+                selectedHandle = null;
+                selectedRow = null;
+            } catch (e) {
+                alert('Failed to delete: ' + e.message);
+            }
+        }
+    }
 
-    loadFiles();
+    async function renameItem() {
+        if (!selectedHandle) {
+            alert('No item selected.');
+            return;
+        }
+        const newName = prompt('Enter new name:', selectedHandle.name);
+        if (newName && newName !== selectedHandle.name) {
+            try {
+                await selectedHandle.move(newName);
+                await loadFiles();
+                selectedHandle = null;
+                selectedRow = null;
+            } catch (e) {
+                alert('Failed to rename: ' + e.message);
+            }
+        }
+    }
+
+    backBtn.onclick = goBack;
+    openDirBtn.onclick = openDirectory;
+    newFileBtn.onclick = createFile;
+    newFolderBtn.onclick = createFolder;
+    deleteBtn.onclick = deleteItem;
+    renameBtn.onclick = renameItem;
 });
 
 // Function to open WebDisk window
 function openWebDiskWindow() {
-    const win = document.getElementById('webdiskWindow');
-    win.style.display = 'flex';
-    win.style.zIndex = 1000;
+    Charlex.DOM.showWindow('webdiskWindow');
 }
