@@ -1,28 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Create Shell Window
-    const shellWindow = document.createElement('div');
-    shellWindow.className = 'window';
-    shellWindow.id = 'shellWindow';
-    shellWindow.style.top = '200px';
-    shellWindow.style.left = '200px';
-    shellWindow.style.display = 'none';
-    shellWindow.innerHTML = `
-        <div class="window-header" onmousedown="startDrag(event, 'shellWindow')">
-            <div class="window-controls">
-                <div class="window-control-button close" onclick="closeWindow('shellWindow')" title="Close"></div>
-                <div class="window-control-button minimize" onclick="minimizeWindow('shellWindow')" title="Minimize"></div>
-                <div class="window-control-button maximize" onclick="maximizeWindow('shellWindow')" title="Maximize"></div>
-            </div>
-            <div class="window-title">Linux Shell</div>
-            <div style="width: 48px;"></div>
-        </div>
-        <div class="window-content" id="shellContent" style="background: black; color: green; font-family: monospace; padding: 10px; height: 300px; overflow-y: auto;">
-            <div>Welcome to Charlex WebOS Shell</div>
-            <div>$ <input id="shellInput" type="text" style="background: transparent; border: none; color: green; outline: none; width: 90%;" /></div>
-        </div>
-    `;
-    document.getElementById('desktop').appendChild(shellWindow);
-
     const shellContent = document.getElementById('shellContent');
     const shellInput = document.getElementById('shellInput');
 
@@ -108,6 +84,52 @@ document.addEventListener('DOMContentLoaded', () => {
                     output = 'Not connected.';
                 }
                 break;
+            case 'top':
+                // Simulate top command output
+                let currentUsage = Math.floor(Math.random() * 100);
+                const idle = 100 - currentUsage;
+                const now = new Date();
+                const time = now.toTimeString().split(' ')[0];
+                const up = '1 day, 1:00';
+                const load = '0.00, 0.01, 0.05';
+                output = `top - ${time} up ${up},  1 user,  load average: ${load}
+Tasks: 100 total,   1 running,  99 sleeping,   0 stopped,   0 zombie
+%Cpu(s): ${currentUsage}.0 us,  0.0 sy,  0.0 ni, ${idle}.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   1024.0 total,    512.0 free,    256.0 used,    256.0 buff/cache
+MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.    768.0 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+      1 root      20   0  123456   1234   1234 S   ${currentUsage}.0  0.0   0:00.00 systemd
+      2 root      20   0  123456   1234   1234 S   0.0  0.0   0:00.00 kthreadd
+      3 root       0 -20  123456   1234   1234 S   0.0  0.0   0:00.00 rcu_gp
+      4 root       0 -20  123456   1234   1234 S   0.0  0.0   0:00.00 rcu_par_gp
+      5 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/0
+      6 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H
+      7 root      20   0       0      0      0 S   0.0  0.0   0:00.00 mm_percpu_wq
+      8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 ksoftirqd/0
+      9 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_sched
+     10 root      20   0       0      0      0 S   0.0  0.0   0:00.00 migration/0
+     11 root      20   0       0      0      0 S   0.0  0.0   0:00.00 watchdog/0
+     12 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/1
+     13 root      20   0       0      0      0 S   0.0  0.0   0:00.00 watchdog/1
+     14 root      20   0       0      0      0 S   0.0  0.0   0:00.00 migration/1
+     15 root      20   0       0      0      0 S   0.0  0.0   0:00.00 ksoftirqd/1
+     16 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H
+     17 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/2
+     18 root      20   0       0      0      0 S   0.0  0.0   0:00.00 watchdog/2
+     19 root      20   0       0      0      0 S   0.0  0.0   0:00.00 migration/2
+     20 root      20   0       0      0      0 S   0.0  0.0   0:00.00 ksoftirqd/2
+`;
+                break;
+            case 'uname':
+                output = 'Linux charlex-webos 5.15.0-91-generic #101-Ubuntu SMP Tue Nov 14 13:30:33 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux';
+                break;
+            case 'ps':
+                output = 'PID TTY          TIME CMD\n  1 ?        00:00:00 systemd\n  2 ?        00:00:00 kthreadd\n  3 ?        00:00:00 rcu_gp\n  4 ?        00:00:00 rcu_par_gp';
+                break;
+            case 'df':
+                output = 'Filesystem     1K-blocks    Used Available Use% Mounted on\n/dev/sda1       10000000 5000000  5000000  50% /';
+                break;
             case 'clear':
                 shellContent.innerHTML = '<div>$ <input id="shellInput" type="text" style="background: transparent; border: none; color: green; outline: none; width: 90%;" /></div>';
                 const newShellInput = document.getElementById('shellInput');
@@ -134,8 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to open Shell window
 function openShellWindow() {
-    const win = document.getElementById('shellWindow');
-    win.style.display = 'flex';
-    win.style.zIndex = 1000;
+    Charlex.DOM.showWindow('shellWindow');
     document.getElementById('shellInput').focus();
 }
