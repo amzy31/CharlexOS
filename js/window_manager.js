@@ -133,7 +133,7 @@
             win.style.left = '0px';
             win.style.top = '0px';
             win.style.width = window.innerWidth + 'px';
-            win.style.height = (window.innerHeight - 80) + 'px';
+            win.style.height = window.innerHeight + 'px';
             win.classList.add('maximized');
         }
         focusWindow(win);
