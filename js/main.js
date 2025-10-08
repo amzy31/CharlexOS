@@ -72,11 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
     `, '350px', '350px', 'none');
 
     // Create Dock Icons (use Charlex.DOM.showWindow wrapper where possible)
-    Charlex.DOM.createDockIcon('Welcome Window', () => Charlex.DOM.showWindow('window1'), '<img src="img/logo.jpg" alt="LOGO" />', {tooltip: 'Welcome'});
-    // Use an inline glyph for Notes (remove dependency on img/note.png)
-    Charlex.DOM.createDockIcon('Note Window', () => Charlex.DOM.showWindow('noteWindow'), '<span style="font-size:20px;">📝</span>', {tooltip: 'Notes'});
-    Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('cpuWindow'), '<span style="font-size: 20px;">📊</span>', {tooltip: 'CPU'});
-    Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<span style="font-size: 20px;">💻</span>', {tooltip: 'Shell'});
-    Charlex.DOM.createDockIcon('Web Browser', () => Charlex.DOM.showWindow('browserWindow'), '<span style="font-size: 20px;">🌐</span>', {tooltip: 'Browser'});
-    Charlex.DOM.createDockIcon('WebDisk', () => Charlex.DOM.showWindow('webdiskWindow'), '<span style="font-size: 20px;">💾</span>', {tooltip: 'WebDisk'});
+    Charlex.DOM.createDockIcon('Welcome Window', () => Charlex.DOM.showWindow('window1'), '<i class="fas fa-info-circle"></i>', {tooltip: 'Welcome'});
+    Charlex.DOM.createDockIcon('Note Window', () => Charlex.DOM.showWindow('noteWindow'), '<i class="fas fa-sticky-note"></i>', {tooltip: 'Notes'});
+    Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('cpuWindow'), '<i class="fas fa-chart-line"></i>', {tooltip: 'CPU'});
+    Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<i class="fas fa-terminal"></i>', {tooltip: 'Shell'});
+    Charlex.DOM.createDockIcon('Web Browser', () => Charlex.DOM.showWindow('browserWindow'), '<i class="fas fa-globe"></i>', {tooltip: 'Browser'});
+    Charlex.DOM.createDockIcon('WebDisk', () => Charlex.DOM.showWindow('webdiskWindow'), '<i class="fas fa-hdd"></i>', {tooltip: 'WebDisk'});
 });

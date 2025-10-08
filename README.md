@@ -1,53 +1,51 @@
-
 # Charlex WebOS
 
-Charlex WebOS is a small web desktop that runs in your browser. You can open windows, run apps, and use a dock.
+Charlex WebOS is a small web desktop. It runs in the browser.
+It uses only HTML, CSS, and plain JavaScript. You can open windows and use a dock.
 
-You can host the site on any static host. If you want more features, you can run the optional server on Linux.
+## Simple requirements
 
-## Requirements
+- A modern web browser (Chrome or Firefox is good).
+- For real CPU monitoring you need a Linux host and Node.js to run the server.
 
-- A modern web browser (Chrome or Firefox).
-- For real CPU monitoring you need a Linux host and Node.js.
+## New notes (short)
 
-## Quick notes
+- Dock: the dock now has a skeuomorphic look. It is styled in `css/style.css`.
+- Notes app: the dock icon uses an inline glyph (emoji). The project no longer needs `img/note.png`.
+- Window manager: code is merged into `js/chrlex-dom.js` (no separate `window_manager.js`).
 
-- Dock: styled in `css/style.css` with a skeuomorphic look.
-- Notes app: the dock icon uses an inline glyph. No `img/note.png` is needed.
-- Window manager: code is in `js/chrlex-dom.js` (no separate `window_manager.js`).
+## Sysmon server (optional, Linux only)
 
-## Optional sysmon server (Linux only)
+There is a small optional server in the `server/` folder. It can return the output of `top`.
 
-The `server/` folder has a small server that returns `top` output.
+To run the server on Linux:
 
-To run the server on a Linux host:
-
-1. Open a terminal in the `server/` folder.
+1. Open a terminal in `server/` folder.
 2. Run `npm install`.
 3. Run `npm start` or `node sysmon.js`.
 
-Endpoints:
+The server provides:
 
-- GET /sysmon — plain text output of `top -b -n 1`.
-- POST /execute { "command": "top -b -n 1" } — JSON { output: string }.
+- GET /sysmon -> plain text output of `top -b -n 1`.
+- POST /execute { "command": "top -b -n 1" } -> JSON { output: string }.
 
-The server only runs `top` and is for Linux only.
+The server is safe by default. It only runs `top` and it only works on Linux.
 
-## Run the site locally
+## How to open the site
 
-Start a simple static server and open the site in your browser:
+Use a static file server or open `index.html` in a browser. For local testing you can use:
 
 ```
 python3 -m http.server
 ```
 
-Open `http://localhost:8000` in your browser.
+Then open `http://localhost:8000` in your browser.
 
 ## Development notes
 
-- Code: see the `js/` folder.
-- Styles: `css/style.css`.
-- Optional backend: `server/`.
+- Code: `js/` folder contains main scripts.
+- Styles: `css/style.css` contains dock and window styles.
+- Optional backend: `server/` folder.
 
 ## License
 

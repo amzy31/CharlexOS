@@ -68,7 +68,7 @@
     window.Charlex.DOM.createDockIcon = function(title, onclick, innerHTML, opts = {}) {
         const dock = window.Charlex.DOM.createModernDock();
         const icon = document.createElement('button');
-        icon.className = 'dock-icon';
+        icon.className = 'dock-icon btn';
         icon.type = 'button';
         icon.title = opts.tooltip || title || '';
         icon.setAttribute('aria-label', title || 'dock-icon');
@@ -323,20 +323,11 @@
                     width: win.offsetWidth,
                     height: win.offsetHeight
                 };
-                // Compute a half-screen maximized state so windows never fully cover the dock
-                try {
-                    const dock = document.getElementById('dock');
-                    const dockHeight = dock ? (parseInt(window.getComputedStyle(dock).height) || 80) : 80;
-                    win.style.left = '0px';
-                    win.style.top = '0px';
-                    win.style.width = window.innerWidth + 'px';
-                    win.style.height = Math.floor((window.innerHeight - dockHeight) / 2) + 'px';
-                } catch (err) {
-                    win.style.left = '0px';
-                    win.style.top = '0px';
-                    win.style.width = window.innerWidth + 'px';
-                    win.style.height = Math.floor((window.innerHeight - 80) / 2) + 'px';
-                }
+                // Maximize to full screen covering the dock
+                win.style.left = '0px';
+                win.style.top = '0px';
+                win.style.width = window.innerWidth + 'px';
+                win.style.height = window.innerHeight + 'px';
                 win.classList.add('maximized');
             }
             focusWindow(win);
