@@ -31,7 +31,7 @@
     window.Charlex.DOM.createDockIcon = function(title, onclick, innerHTML, opts = {}) {
         const dock = window.Charlex.DOM.createModernDock();
         const icon = document.createElement('button');
-        icon.className = 'dock-icon btn';
+        icon.className = 'dock-icon btn rounded-circle';
         icon.type = 'button';
         icon.title = opts.tooltip || title || '';
         icon.setAttribute('aria-label', title || 'dock-icon');

@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `, '350px', '350px', 'none');
 
     // Create Dock Icons (use Charlex.DOM.showWindow wrapper where possible)
-    Charlex.DOM.createDockIcon('Welcome Window', () => Charlex.DOM.showWindow('window1'), '<i class="fas fa-info-circle"></i>', {tooltip: 'Welcome'});
+    Charlex.DOM.createDockIcon('Welcome Window', () => Charlex.DOM.showWindow('window1'), '<img src="img/logo.jpg" alt="LOGO" class="rounded-circle" />', {tooltip: 'Welcome'});
     Charlex.DOM.createDockIcon('Note Window', () => Charlex.DOM.showWindow('noteWindow'), '<i class="fas fa-sticky-note"></i>', {tooltip: 'Notes'});
     Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('cpuWindow'), '<i class="fas fa-chart-line"></i>', {tooltip: 'CPU'});
     Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<i class="fas fa-terminal"></i>', {tooltip: 'Shell'});
