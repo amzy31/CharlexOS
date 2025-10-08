@@ -77,6 +77,16 @@ body {
     max-width: calc(100vw - 40px);
     overflow: hidden; /* keep children inside */
     color: #fff;
+    transition: all 0.3s ease;
+}
+
+.window.maximized {
+    width: 100vw !important;
+    height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 .window-content {
@@ -219,7 +229,7 @@ body {
     transform: translateY(-8px) scale(1.14);
     background: linear-gradient(180deg, rgba(0,255,255,0.2), rgba(255,0,255,0.1), rgba(0,255,255,0.05));
     box-shadow: 0 0 15px rgba(0,255,255,0.5), 0 0 30px rgba(255,0,255,0.3), 0 18px 36px rgba(0,0,0,0.6), inset 0 1px 0 rgba(0,255,255,0.1);
-B2    z-index: 11;
+    z-index: 11;
 }
 
 /* subtle glossy reflection for the dock - uses pseudo-element */

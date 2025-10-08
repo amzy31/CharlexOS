@@ -133,7 +133,14 @@
             win.style.left = '0px';
             win.style.top = '0px';
             win.style.width = window.innerWidth + 'px';
-            win.style.height = window.innerHeight + 'px';
+            // Adjust height for mobile and desktop separately
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                // On mobile, maximize to full height (touch friendly)
+                win.style.height = window.innerHeight + 'px';
+            } else {
+                // On desktop, leave space for dock
+                win.style.height = (window.innerHeight - 80) + 'px';
+            }
             win.classList.add('maximized');
         }
         focusWindow(win);
@@ -172,6 +179,12 @@
                     }
                 } catch (err) {
                     // ignore
+                }
+            }, {passive: true});
+            // Add touchmove listener to enable dragging on mobile
+            win.addEventListener('touchmove', (ev) => {
+                if (dragData.dragging && dragData.targetId === win.id) {
+                    window.Charlex.WindowManager.startDrag(ev, win.id);
                 }
             }, {passive: true});
             // Double-click header toggles maximize

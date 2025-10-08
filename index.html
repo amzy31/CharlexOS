@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Charlex Web OS</title>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link rel="stylesheet" href="css/style.css" />
     <script src="js/crypto.js" defer></script>
 </head>
@@ -18,7 +19,7 @@
     <script src="js/main.js"></script>
     <script src="js/note.js"></script>
     <!-- Windows mode removed to keep macOS-like theme consistent -->
-    <script src="js/sysmon.js"></script>
+    <script src="js/sysinfo.js"></script>
     <script src="js/shell.js"></script>
     <script src="js/reboot.js"></script>
     <script src="js/browser.js"></script>
