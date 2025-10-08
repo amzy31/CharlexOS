@@ -1,4 +1,4 @@
-liedocument.addEventListener('DOMContentLoaded', () =    // Ensure dock exists and is centered before creating icons
+document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists and is centered before creating icons
     if (window.Charlex && window.Charlex.DOM && typeof window.Charlex.DOM.createModernDock === 'function') {
         try { window.Charlex.DOM.createModernDock(); } catch (err) { /* ignore */ }
     }
@@ -73,7 +73,12 @@ liedocument.addEventListener('DOMContentLoaded', () =    // Ensure dock exists a
     // Create Dock Icons (use Charlex.DOM.showWindow wrapper where possible)
     Charlex.DOM.createDockIcon('Welcome Window', () => Charlex.DOM.showWindow('window1'), '<img src="img/logo.jpg" alt="LOGO" class="rounded-circle" style="width: 32px; height: 32px;" />', {tooltip: 'Welcome'});
     Charlex.DOM.createDockIcon('Note Window', () => Charlex.DOM.showWindow('noteWindow'), '<i class="fas fa-sticky-note" style="font-size: 32px;"></i>', {tooltip: 'Notes'});
-    Charlex.DOM.createDockIcon('Libertarian Project', () => Charlex.DOM.showWindow('libertarianWindow'), '<i class="fas fa-balance-scale" style="font-size: 32px;"></i>', {tooltip: 'Libertarian Project'});
+    Charlex.DOM.createDockIcon('Libertarian Project', () => {
+        if (!document.getElementById('libertarianWindow')) {
+            window.Charlex.LibertarianApp.create();
+        }
+        Charlex.DOM.showWindow('libertarianWindow');
+    }, '<i class="fas fa-balance-scale" style="font-size: 32px;"></i>', {tooltip: 'Libertarian Project'});
     Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('cpuWindow'), '<i class="fas fa-chart-line" style="font-size: 32px;"></i>', {tooltip: 'SYSTEM INFO'});
     Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<i class="fas fa-terminal" style="font-size: 32px;"></i>', {tooltip: 'Shell'});
     Charlex.DOM.createDockIcon('Web Browser', () => Charlex.DOM.showWindow('browserWindow'), '<i class="fas fa-globe" style="font-size: 32px;"></i>', {tooltip: 'Browser'});
