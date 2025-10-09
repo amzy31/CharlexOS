@@ -120,6 +120,8 @@
                 win.style.top = prev.top + 'px';
                 win.style.width = prev.width + 'px';
                 win.style.height = prev.height + 'px';
+                win.style.maxWidth = '';
+                win.style.maxHeight = '';
             }
             win.classList.remove('maximized');
         } else {
@@ -133,13 +135,16 @@
             win.style.left = '0px';
             win.style.top = '0px';
             win.style.width = window.innerWidth + 'px';
+            win.style.maxWidth = '100vw';
             // Adjust height for mobile and desktop separately
             if (/Mobi|Android/i.test(navigator.userAgent)) {
                 // On mobile, maximize to full height (touch friendly)
                 win.style.height = window.innerHeight + 'px';
+                win.style.maxHeight = '100vh';
             } else {
                 // On desktop, leave space for dock
-                win.style.height = (window.innerHeight - 80) + 'px';
+                win.style.height = (window.innerHeight - 40) + 'px';
+                win.style.maxHeight = 'calc(100vh - 40px)';
             }
             win.classList.add('maximized');
         }

@@ -2,6 +2,9 @@
 
 A fun web-based operating system simulation built with **Vanilla JavaScript** (no frameworks, no Java!). I'm a Googler who loves JavaScript for its simplicity and power in the browser.
 
+![screenshot](./screenshots/1.png)
+
+
 ## Quick Start
 
 1. Download or clone this repo.
@@ -23,14 +26,18 @@ A fun web-based operating system simulation built with **Vanilla JavaScript** (n
 - **Backendless System**: Runs entirely in the browser - no server, no backend, no dependencies!
 - Pure JavaScript (Vanilla JS all the way!)
 - CSS for styling
-- Uses modern web APIs for encryption and storage
+- Uses modern web APIs forencryption and storage
 
 ## Why Vanilla JS?
+#### First I'm Googler but dont do java when I can do JavaScript! - No frameworks, no build!
+- const JavaScript = require('javascript');
+- const CSS = require('css');
+- const HTML = require('html');
 
-Because JavaScript is awesome! No complex setups, just open the HTML file and you're good to go. Perfect for learning and experimenting.
 
 ## License
 
 MIT - Feel free to fork and play around!
 
 © 2020-2025 AMZY31
+

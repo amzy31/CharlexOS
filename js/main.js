@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
         try { window.Charlex.DOM.createModernDock(); } catch (err) { /* ignore */ }
     }
     // Create Welcome Window
-    Charlex.DOM.createWindow('window1', 'Welcome', 'Welcome to the Charlex Web OS!', '50px', '50px');
+    Charlex.DOM.createWindow('window1', 'Welcome', 'Welcome to the CharleX WebOS!', '50px', '50px');
 
     // Create Note Window
     Charlex.DOM.createWindow('noteWindow', 'Note (Encrypted)', `
@@ -40,11 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
                 <button id="forwardBtn">→</button>
                 <button id="refreshBtn">↻</button>
                 <input id="urlInput" type="text" placeholder="Enter URL" style="flex: 1; padding: 5px;" />
-
+                <button id="goBtn" style="padding: 5px 10px;">Go</button>
             </div>
             <iframe id="browserFrame" src="" style="flex: 1; border: 1px solid #ccc;"></iframe>
         </div>
     `, '250px', '250px', 'none');
+    // Initialize browser functionality
+    if (window.Charlex && window.Charlex.Browser && typeof window.Charlex.Browser.init === 'function') {
+        window.Charlex.Browser.init();
+    }
     // Create WebDisk Window
     Charlex.DOM.createWindow('webdiskWindow', 'WebDisk', `
         <div id="webdiskContent" style="padding: 10px; height: 400px; display: flex; flex-direction: column;">
@@ -74,10 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
     Charlex.DOM.createDockIcon('Welcome Window', () => Charlex.DOM.showWindow('window1'), '<img src="img/logo.jpg" alt="LOGO" class="rounded-circle" style="width: 32px; height: 32px;" />', {tooltip: 'Welcome'});
     Charlex.DOM.createDockIcon('Note Window', () => Charlex.DOM.showWindow('noteWindow'), '<i class="fas fa-sticky-note" style="font-size: 32px;"></i>', {tooltip: 'Notes'});
     Charlex.DOM.createDockIcon('Libertarian Project', () => {
+        console.log('Libertarian dock icon clicked');
         if (!document.getElementById('libertarianWindow')) {
+            console.log('Creating Libertarian window');
             window.Charlex.LibertarianApp.create();
+            console.log('Libertarian window created');
         }
         Charlex.DOM.showWindow('libertarianWindow');
+        console.log('Libertarian window shown');
     }, '<i class="fas fa-balance-scale" style="font-size: 32px;"></i>', {tooltip: 'Libertarian Project'});
     Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('cpuWindow'), '<i class="fas fa-chart-line" style="font-size: 32px;"></i>', {tooltip: 'SYSTEM INFO'});
     Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<i class="fas fa-terminal" style="font-size: 32px;"></i>', {tooltip: 'Shell'});
