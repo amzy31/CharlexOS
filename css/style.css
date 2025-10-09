@@ -13,13 +13,118 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+/* Added styles for window titlebar and controls for mobile and touchpad friendliness */
+.window-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px 12px 0 0;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    background-color: #222;
+    color: white;
+}
+
+.window-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-right: auto;
+    margin-left: 6px;
+}
+
+.window-control-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 6px;
+    flex: 0 0 auto;
+    -webkit-app-region: no-drag;
+}
+
+.window-control-button.minimize {
+    background-color: #ffbd2e; /* yellow */
+}
+
+.window-control-button.maximize {
+    background-color: #28c840; /* green */
+}
+
+.window-control-button.close {
+    background-color: #ff5f57; /* red */
+}
+
+.window-control-button:hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 600px) {
+    .window-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8px 10px;
+    }
+    .window-controls {
+        width: 100%;
+        justify-content: space-around;
+        margin-bottom: 6px;
+    }
+    .window-control-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        margin: 0 4px;
+    }
+    .window-title {
+        font-size: 1.1em;
+        padding-left: 4px;
+    }
+}
+
 #desktop {
     flex: 1;
     padding: 20px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+    background: linear-gradient(45deg, #1a1a1a, #222222, #1a1a1a, #222222);
+    background-size: 400% 400%;
+    animation: shuffleBackground 20s ease infinite;
 }
+
+@keyframes shuffleBackground {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 .dock-container, #dock {
     /* macOS Sci-Fi Neon Dock: glossy, beveled, neon glow */
     position: fixed;
@@ -54,6 +159,7 @@ body {
     animation: fadeIn 0.45s ease;
     border: 1px solid rgba(0,255,255,0.3);
 }
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -64,6 +170,7 @@ body {
         transform: scale(1);
     }
 }
+
 .window {
     position: absolute;
     display: flex;
@@ -89,6 +196,22 @@ body {
     box-shadow: none !important;
 }
 
+.window.maximized .window-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 10001;
+    border-radius: 0;
+    cursor: grab;
+    background-color: #222;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+}
+
 .window-content {
     padding: 12px;
     flex: 1 1 auto;
@@ -99,6 +222,7 @@ body {
 .window .window-header {
     border-radius: 12px 12px 0 0;
 }
+
 .window-header {
     display: flex;
     align-items: center;
@@ -109,11 +233,13 @@ body {
     cursor: grab;
     user-select: none;
 }
+
 .window-title {
     font-weight: 600;
     font-size: 14px;
     color: white;
 }
+
 .window-controls {
     display: flex;
     gap: 8px;
@@ -121,6 +247,7 @@ body {
     margin-right: auto; /* push title to center */
     margin-left: 6px; /* left-side controls like macOS */
 }
+
 .window-control-button {
     width: 12px;
     height: 12px;
@@ -132,12 +259,15 @@ body {
     margin: 0 6px;
     flex: 0 0 auto;
 }
+
 .window-control-button.minimize {
     background-color: #ffbd2e; /* yellow */
 }
+
 .window-control-button.maximize {
     background-color: #28c840; /* green */
 }
+
 .window-control-button.close { background-color: #ff5f57; }
 
 /* larger hit targets for touch */
@@ -152,6 +282,7 @@ body {
     margin: 0 auto;
     text-align: center;
 }
+
 .window-control-button:hover::after {
     content: '';
     position: absolute;
@@ -164,6 +295,7 @@ body {
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
+
 .dock-icon {
     width: 64px;
     height: 64px;
@@ -181,6 +313,7 @@ body {
     position: relative;
     color: #00ffff; /* cyan text for icons */
 }
+
 .dock-icon img {
     width: 30px;
     height: 30px;
