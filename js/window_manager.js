@@ -137,10 +137,11 @@
             win.style.width = window.innerWidth + 'px';
             win.style.maxWidth = '100vw';
             // Adjust height for mobile and desktop separately
+            const dockHeight = 80; // Approximate dock height including margin
             if (/Mobi|Android/i.test(navigator.userAgent)) {
-                // On mobile, maximize to full height (touch friendly)
-                win.style.height = window.innerHeight + 'px';
-                win.style.maxHeight = '100vh';
+                // On mobile, maximize to full height minus dock (touch friendly)
+                win.style.height = (window.innerHeight - dockHeight) + 'px';
+                win.style.maxHeight = `calc(100vh - ${dockHeight}px)`;
             } else {
                 // On desktop, leave space for dock
                 win.style.height = (window.innerHeight - 40) + 'px';

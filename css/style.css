@@ -1,10 +1,33 @@
+:root {
+    --macos-blue: #007aff;
+    --macos-gray: #8e8e93;
+    --macos-light-gray: #c7c7cc;
+    --macos-dark-gray: #1c1c1e;
+    --macos-white: #ffffff;
+    --macos-black: #000000;
+    --macos-red: #ff3b30;
+    --macos-green: #34c759;
+    --macos-yellow: #ffcc00;
+    --macos-orange: #ff9500;
+    --macos-purple: #af52de;
+    --macos-pink: #ff2d55;
+    --macos-teal: #5ac8fa;
+    --macos-indigo: #5856d6;
+    --macos-accent: var(--macos-blue);
+    --macos-bg-primary: #000000;
+    --macos-bg-secondary: #1c1c1e;
+    --macos-text-primary: #ffffff;
+    --macos-text-secondary: #8e8e93;
+    --macos-border: rgba(255,255,255,0.2);
+    --macos-shadow: rgba(0, 0, 0, 0.6);
+    --macos-blur: blur(20px);
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    background-color: #282c34;
-    color: white;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 24 24"><path fill="white" d="M2 2l20 10-20 10z"/></svg>') 0 0, auto;
+    color: var(--macos-text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     user-select: none;
@@ -12,6 +35,7 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    background: linear-gradient(180deg, var(--macos-bg-primary), var(--macos-bg-secondary));
 }
 
 /* Added styles for window titlebar and controls for mobile and touchpad friendliness */
@@ -20,14 +44,14 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 6px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid var(--macos-border);
     border-radius: 12px 12px 0 0;
     cursor: grab;
     user-select: none;
     -webkit-user-select: none;
     -webkit-app-region: drag;
-    background-color: #222;
-    color: white;
+    background-color: var(--macos-bg-secondary);
+    color: var(--macos-text-primary);
 }
 
 .window-controls {
@@ -108,16 +132,20 @@ body {
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(45deg, #1a1a1a, #222222, #1a1a1a, #222222);
-    background-size: 400% 400%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: auto;
+    background-attachment: fixed;
+    margin: 0;
     animation: shuffleBackground 20s ease infinite;
+    background-attachment: fixed;
 }
 
 @keyframes shuffleBackground {
     0% {
         background-position: 0% 50%;
-    }
-    50% {
+    }50% {
         background-position: 100% 50%;
     }
     100% {
@@ -175,15 +203,16 @@ body {
     position: absolute;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(180deg, rgba(30,30,30,0.9), rgba(18,18,18,0.95));
+    background: var(--macos-bg-secondary);
+    border: 1px solid var(--macos-border);
     border-radius: 12px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    box-shadow: 0 4px 16px var(--macos-shadow);
     min-width: 320px;
     min-height: 160px;
     width: auto;
     max-width: calc(100vw - 40px);
     overflow: hidden; /* keep children inside */
-    color: #fff;
+    color: var(--macos-text-primary);
     transition: all 0.3s ease;
 }
 
@@ -194,6 +223,10 @@ body {
     left: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
+}
+
+.window.maximized .window-content {
+    padding-top: 40px;
 }
 
 .window.maximized .window-header {
@@ -213,7 +246,7 @@ body {
 }
 
 .window-content {
-    padding: 12px;
+    padding: 60px 12px 12px;
     flex: 1 1 auto;
     overflow: auto; /* scroll inside window */
     box-sizing: border-box;
@@ -337,7 +370,7 @@ body {
     z-index: 9999 !important;
     width: auto !important;
     min-height: 56px !important;
-    background: rgba(255,255,255,0.04) !important;
+    background: rgba(33, 132, 143, 0.04) !important;
     border-radius: 28px !important;
 }
 
@@ -416,6 +449,13 @@ body {
         top: 20px !important;
         left: 5vw !important;
     }
+    .window.maximized .window-header {
+        height: 48px;
+        padding: 8px 12px;
+    }
+.window.maximized .window-content {
+    padding-top: 60px;
+}
     .dock-container {
         bottom: 10px;
         height: 50px;
@@ -437,6 +477,13 @@ body {
         width: 95vw;
         max-width: 95vw;
         padding: 5px;
+    }
+    .window.maximized .window-header {
+        height: 52px;
+        padding: 10px 12px;
+    }
+    .window.maximized .window-content {
+        padding-top: 60px;
     }
     .window-header {
         padding: 4px 8px;

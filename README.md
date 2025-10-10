@@ -8,7 +8,7 @@ A fun web-based operating system simulation built with **Vanilla JavaScript** (n
 ## Quick Start
 
 1. Download or clone this repo.
-2. Open `index.html` in your favorite browser (Chrome works best).
+2. Open `index.html` in your favorite browser (BRAVE/Chrome works best).
 3. Enjoy your mini OS!
 
 ## What You Can Do

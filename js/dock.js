@@ -12,7 +12,7 @@
         }
         // remove legacy classes that may interfere
         dock.classList.remove('fixed-bottom', 'some-legacy-dock');
-        dock.classList.add('dock-container');
+        dock.classList.add('dock-container', 'bg-dark', 'container-fluid', 'd-flex', 'justify-content-center', 'align-items-center');
         // Rely on CSS for visual appearance. Only adjust small-screen bottom offset.
         try {
             if (window.innerWidth <= 480) dock.style.bottom = '10px';
