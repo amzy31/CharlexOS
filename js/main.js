@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
         try { window.Charlex.DOM.createModernDock(); } catch (err) { /* ignore */ }
     }
     // Create Welcome Window
-    Charlex.DOM.createWindow('window1', 'Welcome', 'Welcome to the CharleX WebOS!', '50px', '50px');
+    Charlex.DOM.createWindow('window1', 'Welcome', `
+        Welcome to the <span class="text-info"> CharleX WebOS!</span>`, '50px', '50px');
 
     // Create Note Window
     Charlex.DOM.createWindow('noteWindow', 'Note (Encrypted)', `
@@ -17,10 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
     `, '100px', '100px', 'none');
 
     // Create CPU Monitor Window
-    Charlex.DOM.createWindow('cpuWindow', 'CPU Monitor', `
-        <div id="cpuContent">
+    Charlex.DOM.createWindow('sysInfo', 'SYSINFO', `
+        <div id="sysContent">
             <h3>CPU Usage</h3>
-            <pre id="topOutput">Loading top command...</pre>
+            <pre id="topOutput">Loading...</pre>
         </div>
     `, '150px', '150px', 'none');
 
@@ -60,16 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
                 <button id="deleteBtn" style="padding: 5px 10px;">Delete</button>
             </div>
             <div id="currentDir" style="margin-bottom: 10px; font-weight: bold; padding: 5px; background: #f0f0f0;"></div>
-            <table id="fileList" style="width: 100%; border-collapse: collapse;">
+            <table id="fileList" style="width: 100%; border-collapse: collapse;"
                 <thead>
-                    <tr style="background: #e0e0e0;">
+                    <tr lclass="table-header">
                         <th style="padding: 5px; text-align: left; width: 50px;"></th>
                         <th style="padding: 5px; text-align: left;">Name</th>
                         <th style="padding: 5px; text-align: left;">Size</th>
                         <th style="padding: 5px; text-align: left;">Modified</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody class="bg-dark text-light"></tbody>
             </table>
         </div>
     `, '350px', '350px', 'none');
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
         Charlex.DOM.showWindow('libertarianWindow');
         console.log('Libertarian window shown');
     }, '<i class="fas fa-balance-scale" style="font-size: 32px;"></i>', {tooltip: 'Libertarian Project'});
-    Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('cpuWindow'), '<i class="fas fa-chart-line" style="font-size: 32px;"></i>', {tooltip: 'SYSTEM INFO'});
+    Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('sysInfo'), '<i class="fas fa-chart-line" style="font-size: 32px;"></i>', {tooltip: 'SYSTEM INFO'});
     Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<i class="fas fa-terminal" style="font-size: 32px;"></i>', {tooltip: 'Shell'});
     Charlex.DOM.createDockIcon('Web Browser', () => Charlex.DOM.showWindow('browserWindow'), '<i class="fas fa-globe" style="font-size: 32px;"></i>', {tooltip: 'Browser'});
     Charlex.DOM.createDockIcon('WebDisk', () => Charlex.DOM.showWindow('webdiskWindow'), '<i class="fas fa-hdd" style="font-size: 32px;"></i>', {tooltip: 'WebDisk'});

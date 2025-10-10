@@ -14,12 +14,13 @@
         try {
             const dock = document.getElementById('dock');
             const dockHeight = dock ? (parseInt(window.getComputedStyle(dock).height) || 80) : 80;
-            windowEl.style.width = '80%';
-            windowEl.style.maxWidth = Math.max(360, Math.min(window.innerWidth - 40, 1100)) + 'px';
-            windowEl.style.height = Math.floor((window.innerHeight - dockHeight) / 2) + 'px';
+            // Remove inline width and height styles to use Bootstrap responsiveness
+            // windowEl.style.width = '80%';
+            // windowEl.style.maxWidth = Math.max(360, Math.min(window.innerWidth - 40, 1100)) + 'px';
+            // windowEl.style.height = Math.floor((window.innerHeight - dockHeight) / 2) + 'px';
         } catch (err) {
             // Fallback to CSS defaults if anything fails
-            windowEl.style.width = '80%';
+            // windowEl.style.width = '80%';
         }
         windowEl.innerHTML = `
             <div class="window-header" onmousedown="window.Charlex.WindowManager.startDrag(event, '${id}')">
@@ -28,10 +29,10 @@
                     <div class="window-control-button minimize" onclick="window.Charlex.WindowManager.minimizeWindow('${id}')" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Minimize" role="button" tabindex="0"></div>
                     <div class="window-control-button maximize" onclick="window.Charlex.WindowManager.maximizeWindow('${id}')" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Maximize" role="button" tabindex="0"></div>
                 </div>
-                <div class="window-title">${title}</div>
+                <div class="window-title bg-dark container">${title}</div>
                 <div style="width: 48px;"></div>
             </div>
-            <div class="window-content">
+            <div class="window-content container p-5">
                 ${contentHTML}
             </div>
         `;
