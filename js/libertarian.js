@@ -2,6 +2,7 @@
     // Create Libertarian Donate App UI
     function createLibertarianApp() {
         const container = document.createElement('div');
+        container.style.width='auto';
         container.style.padding = '20px';
         container.style.fontFamily = 'Arial, sans-serif';
         container.style.color = '#fff';
@@ -89,13 +90,9 @@
     window.Charlex = window.Charlex || {};
     window.Charlex.LibertarianApp = {
         create: function() {
-            console.log('LibertarianApp.create called');
             const appWindow = window.Charlex.DOM.createWindow('libertarianWindow', 'Libertarian Project', '', '100px', '100px', 'none');
-            console.log('Window created:', appWindow);
             const appContent = createLibertarianApp();
-            console.log('App content created:', appContent);
             const contentDiv = appWindow.querySelector('.window-content');
-            console.log('Content div found:', contentDiv);
             contentDiv.innerHTML = '';
             contentDiv.appendChild(appContent);
             return appWindow;

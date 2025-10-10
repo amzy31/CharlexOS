@@ -29,7 +29,7 @@
                     <div class="window-control-button minimize" onclick="window.Charlex.WindowManager.minimizeWindow('${id}')" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Minimize" role="button" tabindex="0"></div>
                     <div class="window-control-button maximize" onclick="window.Charlex.WindowManager.maximizeWindow('${id}')" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Maximize" role="button" tabindex="0"></div>
                 </div>
-                <div class="window-title bg-dark container">${title}</div>
+                <div class="window-title bg-dark container-fluid">${title}</div>
                 <div style="width: 48px;"></div>
             </div>
             <div class="window-content container p-5">

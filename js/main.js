@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
     // Create CPU Monitor Window
     Charlex.DOM.createWindow('sysInfo', 'SYSINFO', `
         <div id="sysContent">
-            <h3>CPU Usage</h3>
+            <h3>System informations: </h3>
             <pre id="topOutput">Loading...</pre>
         </div>
     `, '150px', '150px', 'none');
@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
                 <button id="newFolderBtn" style="padding: 5px 10px; margin-right: 5px;">New Folder</button>
                 <button id="deleteBtn" style="padding: 5px 10px;">Delete</button>
             </div>
-            <div id="currentDir" style="margin-bottom: 10px; font-weight: bold; padding: 5px; background: #f0f0f0;"></div>
-            <table id="fileList" style="width: 100%; border-collapse: collapse;"
+            <div id="currentDir" class="" style="margin-bottom: 10px; font-weight: bold; padding: 5px; text-align: center;"></div>
+            <table id="fileList" style="width: 100%; border-collapse: collapse;">
                 <thead>
                     <tr lclass="table-header">
                         <th style="padding: 5px; text-align: left; width: 50px;"></th>

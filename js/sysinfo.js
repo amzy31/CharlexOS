@@ -8,9 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const hardwareConcurrency = navigator.hardwareConcurrency || 'Unknown';
 
     const info = `
-System Information:
 - User-Agent: ${ua}
-- Platform: ${platform}
+- Platform: ${platform.toUpperCase()}
 - Language: ${language}
 - Cookies Enabled: ${cookieEnabled}
 - Online: ${onLine}
