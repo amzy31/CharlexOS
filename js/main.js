@@ -75,6 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
         </div>
     `, '350px', '350px', 'none');
 
+    // Re-initialize window manager after creating windows
+    if (window.Charlex && window.Charlex.WindowManager && typeof window.Charlex.WindowManager.initWindowManager === 'function') {
+        window.Charlex.WindowManager.initWindowManager();
+    }
+
     // Create Dock Icons (use Charlex.DOM.showWindow wrapper where possible)
     Charlex.DOM.createDockIcon('Welcome Window', () => Charlex.DOM.showWindow('window1'), '<img src="img/logo.jpg" alt="LOGO" class="rounded-circle" style="width: 32px; height: 32px;" />', {tooltip: 'Welcome'});
     Charlex.DOM.createDockIcon('Note Window', () => Charlex.DOM.showWindow('noteWindow'), '<i class="fas fa-sticky-note" style="font-size: 32px;"></i>', {tooltip: 'Notes'});

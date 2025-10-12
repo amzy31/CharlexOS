@@ -52,6 +52,8 @@
 
     // Start drag (mouse or touch) from header. e is a MouseEvent or Touch
     window.Charlex.WindowManager.startDrag = function(e, id) {
+        // Don't start drag if clicking on controls
+        if (e.target.closest('.window-controls')) return;
         const target = document.getElementById(id);
         if (!target) return;
         focusWindow(target);
@@ -253,6 +255,9 @@
     } else {
         initWindowManager();
     }
+
+    // Expose for re-initialization after dynamic window creation
+    window.Charlex.WindowManager.initWindowManager = initWindowManager;
 
     // Backward compatibility
     window.startDrag = window.Charlex.WindowManager.startDrag;
