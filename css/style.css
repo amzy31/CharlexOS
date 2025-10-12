@@ -157,7 +157,7 @@ body {
     overflow: visible;
     user-select: none;
     z-index: 1000;
-    transition: transform 240ms cubic-bezier(.2,.8,.2,1), box-shadow 240ms;
+    transition: all 0.3s cubic-bezier(.2,.8,.2,1);
 
     /* neon background with glassy reflection */
     background: linear-gradient(180deg, rgba(0,255,255,0.1), rgba(255,0,255,0.05), rgba(0,255,255,0.02));
@@ -320,7 +320,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms, background 220ms;
+    transition: all 0.3s cubic-bezier(.2,.8,.2,1);
     cursor: pointer;
     box-shadow: 0 0 10px rgba(0,255,255,0.3), 0 0 20px rgba(255,0,255,0.2), 0 10px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(0,255,255,0.1);
     padding: 8px;

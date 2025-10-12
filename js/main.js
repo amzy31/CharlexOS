@@ -1,3 +1,41 @@
+// DEV CTRL!!
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+if (isMobile) {
+  const orientationMsg = document.createElement('div');
+  orientationMsg.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.8); color: white; display: flex; 
+    flex-direction: column; justify-content: center; align-items: center; 
+    font-size: 24px; z-index: 9999; text-align: center; padding: 20px;
+    display: none;
+  `;
+  orientationMsg.innerHTML = `
+    <p>Please rotate your device to landscape mode</p>
+    <button id="closeRotateBtn" style="margin-top: 20px; padding: 10px 20px; 
+      font-size: 18px; cursor: pointer;">Continue Anyway</button>
+  `;
+  document.body.appendChild(orientationMsg);
+
+  const closeBtn = document.getElementById('closeRotateBtn');
+  closeBtn.addEventListener('click', () => {
+    orientationMsg.style.display = 'none';
+  });
+
+  const checkOrientation = () => {
+    if (window.matchMedia("(orientation: portrait)").matches) {
+      orientationMsg.style.display = 'flex';
+    } else {
+      orientationMsg.style.display = 'none';
+    }
+  };
+
+  window.addEventListener('load', checkOrientation);
+  window.matchMedia("(orientation: portrait)").addEventListener('change', checkOrientation);
+}
+
+// DEV CTRL!!
+
 document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists and is centered before creating icons
     if (window.Charlex && window.Charlex.DOM && typeof window.Charlex.DOM.createModernDock === 'function') {
         try { window.Charlex.DOM.createModernDock(); } catch (err) { /* ignore */ }
