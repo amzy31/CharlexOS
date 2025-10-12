@@ -129,12 +129,13 @@
                 win.style.height = prev.height;
                 win.style.maxWidth = '';
                 win.style.maxHeight = '';
-                win.style.setProperty('transform', prev.transform || '', 'important');
+                win.style.transform = prev.transform;
             }
             win.classList.remove('maximized');
-            // Show dock
-            if (dock) dock.style.display = '';
-            win.style.zIndex = '';
+            // Show dock if mobile
+            if (isMobile && dock) {
+                dock.style.display = '';
+            }
         } else {
             // Store previous geometry
             win._prevRect = {
@@ -142,21 +143,28 @@
                 top: win.style.top,
                 width: win.style.width || win.offsetWidth + 'px',
                 height: win.style.height || win.offsetHeight + 'px',
-                transform: win.style.transform
+                transform: getComputedStyle(win).transform
             };
             // Remove transform for maximizing
-            win.style.setProperty('transform', '', 'important');
+            win.style.transform = 'none';
             // Add smooth transition for maximizing
             win.style.transition = 'all 0.5s ease-out';
             win.style.setProperty('left', '0px', 'important');
             win.style.setProperty('top', '0px', 'important');
             win.style.width = window.innerWidth + 'px';
             win.style.maxWidth = '100vw';
-            win.style.height = window.innerHeight + 'px';
-            win.style.maxHeight = '100vh';
-            win.style.zIndex = '10002';
-            // Hide dock for maximized windows
-            if (dock) dock.style.display = 'none';
+            // Adjust height for mobile and desktop separately, considering orientation
+            if (isMobile) {
+                // On mobile, maximize to full height minus dock (touch friendly), adjust for orientation
+                let adjustedDockHeight = isLandscape ? 60 : 80; // smaller dock space in landscape
+                win.style.height = (window.innerHeight - adjustedDockHeight) + 'px';
+                win.style.maxHeight = `calc(100vh - ${adjustedDockHeight}px)`;
+                // Do not hide dock, ensure window does not cover it
+            } else {
+                // On desktop, leave space for dock
+                win.style.height = (window.innerHeight - 40) + 'px';
+                win.style.maxHeight = 'calc(100vh - 40px)';
+            }
             win.classList.add('maximized');
         }
         focusWindow(win);
