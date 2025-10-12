@@ -5,7 +5,7 @@
     let dragData = {
         dragging: false,
         targetId: null,
-        offsetX: 0,
+        offsetX: 0,ng 
         offsetY: 0,
         mouseX: 0,
         mouseY: 0,
@@ -112,6 +112,9 @@
     window.Charlex.WindowManager.maximizeWindow = function(id) {
         const win = document.getElementById(id);
         if (!win) return;
+        const dock = document.getElementById('dock');
+        const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+        const isLandscape = window.innerWidth > window.innerHeight;
         if (win.classList.contains('maximized')) {
             // Restore using stored values
             const prev = win._prevRect;
@@ -124,6 +127,10 @@
                 win.style.maxHeight = '';
             }
             win.classList.remove('maximized');
+            // Show dock if mobile
+            if (isMobile && dock) {
+                dock.style.display = '';
+            }
         } else {
             // Store previous geometry
             win._prevRect = {
@@ -132,16 +139,22 @@
                 width: win.offsetWidth,
                 height: win.offsetHeight
             };
+            // Add smooth transition for maximizing
+            win.style.transition = 'all 0.5s ease-out';
             win.style.left = '0px';
             win.style.top = '0px';
             win.style.width = window.innerWidth + 'px';
             win.style.maxWidth = '100vw';
-            // Adjust height for mobile and desktop separately
-            const dockHeight = 80; // Approximate dock height including margin
-            if (/Mobi|Android/i.test(navigator.userAgent)) {
-                // On mobile, maximize to full height minus dock (touch friendly)
-                win.style.height = (window.innerHeight - dockHeight) + 'px';
-                win.style.maxHeight = `calc(100vh - ${dockHeight}px)`;
+            // Adjust height for mobile and desktop separately, considering orientation
+            if (isMobile) {
+                // On mobile, maximize to full height minus dock (touch friendly), adjust for orientation
+                let adjustedDockHeight = isLandscape ? 60 : 80; // smaller dock space in landscape
+                win.style.height = (window.innerHeight - adjustedDockHeight) + 'px';
+                win.style.maxHeight = `calc(100vh - ${adjustedDockHeight}px)`;
+                // Hide dock to ensure accessibility
+                if (dock) {
+                    dock.style.display = 'none';
+                }
             } else {
                 // On desktop, leave space for dock
                 win.style.height = (window.innerHeight - 40) + 'px';

@@ -504,3 +504,30 @@ body {
         height: 20px;
     }
 }
+
+/* Orientation-specific adjustments for mobile */
+@media (orientation: landscape) and (max-width: 768px) {
+    .window {
+        max-width: 85vw;
+        max-height: 75vh;
+    }
+    .window.maximized {
+        max-height: calc(100vh - 60px); /* leave more space for dock */
+    }
+    .window.maximized .window-content {
+        padding-top: 50px;
+    }
+    .dock-container {
+        bottom: 5px;
+        z-index: 10001; /* ensure dock is above maximized windows */
+    }
+}
+
+@media (orientation: portrait) and (max-width: 768px) {
+    .window {
+        max-width: 90vw;
+    }
+    .window.maximized {
+        max-height: calc(100vh - 80px);
+    }
+}
