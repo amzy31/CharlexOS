@@ -113,7 +113,9 @@
 
     window.Charlex.WindowManager.maximizeWindow = function(id) {
         const win = document.getElementById(id);
-        if (!win) return;
+        if (!win || win._maximizing) return;
+        win._maximizing = true;
+        setTimeout(() => win._maximizing = false, 300); // prevent multiple calls
         const dock = document.getElementById('dock');
         const isMobile = /Mobi|Android/i.test(navigator.userAgent);
         const isLandscape = window.innerWidth > window.innerHeight;

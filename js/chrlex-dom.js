@@ -40,11 +40,20 @@
 
         // Attach event listeners for control buttons
         const closeBtn = windowEl.querySelector('.window-control-button.close');
-        if (closeBtn) closeBtn.addEventListener('click', () => windowEl.style.display = 'none');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => windowEl.style.display = 'none');
+            closeBtn.addEventListener('touchstart', () => windowEl.style.display = 'none');
+        }
         const minBtn = windowEl.querySelector('.window-control-button.minimize');
-        if (minBtn) minBtn.addEventListener('click', () => windowEl.style.display = 'none');
+        if (minBtn) {
+            minBtn.addEventListener('click', () => windowEl.style.display = 'none');
+            minBtn.addEventListener('touchstart', () => windowEl.style.display = 'none');
+        }
         const maxBtn = windowEl.querySelector('.window-control-button.maximize');
-        if (maxBtn) maxBtn.addEventListener('click', () => window.Charlex.WindowManager.maximizeWindow(windowEl.id));
+        if (maxBtn) {
+            maxBtn.addEventListener('click', () => window.Charlex.WindowManager.maximizeWindow(windowEl.id));
+            maxBtn.addEventListener('touchstart', () => window.Charlex.WindowManager.maximizeWindow(windowEl.id));
+        }
         return windowEl;
     };
 
