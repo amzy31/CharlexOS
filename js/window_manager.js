@@ -5,7 +5,7 @@
     let dragData = {
         dragging: false,
         targetId: null,
-        offsetX: 0,ng 
+        offsetX: 0,
         offsetY: 0,
         mouseX: 0,
         mouseY: 0,
@@ -153,10 +153,7 @@
                 let adjustedDockHeight = isLandscape ? 60 : 80; // smaller dock space in landscape
                 win.style.height = (window.innerHeight - adjustedDockHeight) + 'px';
                 win.style.maxHeight = `calc(100vh - ${adjustedDockHeight}px)`;
-                // Hide dock to ensure accessibility
-                if (dock) {
-                    dock.style.display = 'none';
-                }
+                // Do not hide dock, ensure window does not cover it
             } else {
                 // On desktop, leave space for dock
                 win.style.height = (window.innerHeight - 40) + 'px';

@@ -25,9 +25,9 @@
         windowEl.innerHTML = `
             <div class="window-header">
                 <div class="window-controls">
-                    <button class="window-control-button close" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Close" tabindex="0"></button>
-                    <button class="window-control-button minimize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Minimize" tabindex="0"></button>
-                    <button class="window-control-button maximize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Maximize" tabindex="0"></button>
+                    <button type="button" class="window-control-button close" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Close" tabindex="0"></button>
+                    <button type="button" class="window-control-button minimize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Minimize" tabindex="0"></button>
+                    <button type="button" class="window-control-button maximize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Maximize" tabindex="0"></button>
                 </div>
                 <div class="window-title bg-dark container">${title}</div>
                 <div style="width: 48px;"></div>
@@ -37,6 +37,14 @@
             </div>
         `;
         document.getElementById('desktop').appendChild(windowEl);
+
+        // Attach event listeners for control buttons
+        const closeBtn = windowEl.querySelector('.window-control-button.close');
+        if (closeBtn) closeBtn.addEventListener('click', () => windowEl.style.display = 'none');
+        const minBtn = windowEl.querySelector('.window-control-button.minimize');
+        if (minBtn) minBtn.addEventListener('click', () => windowEl.style.display = 'none');
+        const maxBtn = windowEl.querySelector('.window-control-button.maximize');
+        if (maxBtn) maxBtn.addEventListener('click', () => window.Charlex.WindowManager.maximizeWindow(windowEl.id));
         return windowEl;
     };
 
