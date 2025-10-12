@@ -594,3 +594,30 @@ body {
         max-height: calc(100vh - 80px);
     }
 }
+
+/* WebDisk responsiveness */
+#webdiskWindow {
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%);
+}
+#webdiskContent {
+    overflow-x: auto;
+}
+#webdiskContent table {
+    min-width: 100%;
+    white-space: nowrap;
+}
+@media (max-width: 768px) {
+    #webdiskContent table {
+        font-size: 12px;
+    }
+    #webdiskContent table th,
+    #webdiskContent table td {
+        padding: 2px 4px;
+    }
+    #webdiskContent .btn {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+}

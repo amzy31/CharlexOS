@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
                 <tbody class="bg-dark text-light"></tbody>
             </table>
         </div>
-    `, '350px', '350px', 'none');
+    `, '50%', '50%', 'none');
 
     // Re-initialize window manager after creating windows
     if (window.Charlex && window.Charlex.WindowManager && typeof window.Charlex.WindowManager.initWindowManager === 'function') {
