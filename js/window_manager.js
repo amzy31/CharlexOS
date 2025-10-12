@@ -123,12 +123,13 @@
             // Restore using stored values
             const prev = win._prevRect;
             if (prev) {
-                win.style.left = prev.left + 'px';
-                win.style.top = prev.top + 'px';
-                win.style.width = prev.width + 'px';
-                win.style.height = prev.height + 'px';
+                win.style.left = prev.left;
+                win.style.top = prev.top;
+                win.style.width = prev.width;
+                win.style.height = prev.height;
                 win.style.maxWidth = '';
                 win.style.maxHeight = '';
+                win.style.transform = prev.transform || '';
             }
             win.classList.remove('maximized');
             // Show dock if mobile
@@ -138,11 +139,14 @@
         } else {
             // Store previous geometry
             win._prevRect = {
-                left: win.offsetLeft,
-                top: win.offsetTop,
-                width: win.offsetWidth,
-                height: win.offsetHeight
+                left: win.style.left,
+                top: win.style.top,
+                width: win.style.width || win.offsetWidth + 'px',
+                height: win.style.height || win.offsetHeight + 'px',
+                transform: win.style.transform
             };
+            // Remove transform for maximizing
+            win.style.transform = '';
             // Add smooth transition for maximizing
             win.style.transition = 'all 0.5s ease-out';
             win.style.left = '0px';
