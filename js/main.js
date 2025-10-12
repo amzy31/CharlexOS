@@ -1,4 +1,4 @@
-// DEV CTRL!!
+ // DEV CTRL!!
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 if (isMobile) {
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
     }
     // Create WebDisk Window
     Charlex.DOM.createWindow('webdiskWindow', 'WebDisk', `
-        <div id="webdiskContent" style="padding: 10px; height: 400px; display: flex; flex-direction: column;">
+        <div id="webdiskContent" style="padding: 10px; height: 100%; display: flex; flex-direction: column;">
             <div style="margin-bottom: 10px; display: flex; align-items: center;">
                 <button id="backBtn" style="padding: 5px 10px; margin-right: 5px;" disabled>Back</button>
                 <button id="openDirBtn" style="padding: 5px 10px; margin-right: 5px;">Open Directory</button>
