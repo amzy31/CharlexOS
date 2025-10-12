@@ -227,6 +227,23 @@
                     lastTap = now;
                 }
             });
+
+            // Control buttons with specific listeners
+            const closeBtn = win.querySelector('.window-control-button.close');
+            if (closeBtn) closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                win.style.display = 'none';
+            });
+            const minBtn = win.querySelector('.window-control-button.minimize');
+            if (minBtn) minBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                win.style.display = 'none'; // minimize by hiding
+            });
+            const maxBtn = win.querySelector('.window-control-button.maximize');
+            if (maxBtn) maxBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.Charlex.WindowManager.maximizeWindow(win.id);
+            });
         });
 
         // Keyboard shortcuts for focused window
