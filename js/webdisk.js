@@ -187,21 +187,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const isDir = stats.type === 'dir';
             // Colorize rows: directories get a blue tint, files a neutral tint
             if (isDir) {
-                row.classList.add('table-primary');
+                row.classList.add('table-dark');
             } else {
         // row.classList.add('table-light');
             }
             const iconCell = document.createElement('td');
             iconCell.style.padding = '5px';
             iconCell.textContent = isDir ? '📁' : '📄';
+            iconCell.classList.add('text-info','bg-dark')
 
             const nameCell = document.createElement('td');
             nameCell.style.padding = '5px';
+            nameCell.classList.add('bg-dark');
+
+
             const nameSpan = document.createElement('span');
             nameSpan.textContent = name;
-            if (isDir) nameSpan.classList.add('text-primary');
+            nameSpan.classList.add('bg-dark');
+            if (isDir) nameSpan.classList.add('text-info', 'bg-dark');
             nameCell.appendChild(nameSpan);
-
+            
             const sizeCell = document.createElement('td');
             sizeCell.style.padding = '5px';
             sizeCell.textContent = stats.size;

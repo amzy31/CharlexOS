@@ -1,10 +1,10 @@
-
 function loadURL(url) {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
         url = 'https://' + url;
     }
     const browserFrame = document.getElementById('browserFrame');
     const urlInput = document.getElementById('urlInput');
+    urlInput.classList.add('bg-dark');
     browserFrame.src = url;
     urlInput.value = url;
 }
