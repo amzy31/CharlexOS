@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isDir) {
                 row.classList.add('table-primary');
             } else {
-                row.classList.add('table-light');
+        // row.classList.add('table-light');
             }
             const iconCell = document.createElement('td');
             iconCell.style.padding = '5px';
