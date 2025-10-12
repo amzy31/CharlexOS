@@ -132,10 +132,9 @@
                 win.style.setProperty('transform', prev.transform || '', 'important');
             }
             win.classList.remove('maximized');
-            // Show dock if mobile
-            if (isMobile && dock) {
-                dock.style.display = '';
-            }
+            // Show dock
+            if (dock) dock.style.display = '';
+            win.style.zIndex = '';
         } else {
             // Store previous geometry
             win._prevRect = {
@@ -153,18 +152,11 @@
             win.style.setProperty('top', '0px', 'important');
             win.style.width = window.innerWidth + 'px';
             win.style.maxWidth = '100vw';
-            // Adjust height for mobile and desktop separately, considering orientation
-            if (isMobile) {
-                // On mobile, maximize to full height minus dock (touch friendly), adjust for orientation
-                let adjustedDockHeight = isLandscape ? 60 : 80; // smaller dock space in landscape
-                win.style.height = (window.innerHeight - adjustedDockHeight) + 'px';
-                win.style.maxHeight = `calc(100vh - ${adjustedDockHeight}px)`;
-                // Do not hide dock, ensure window does not cover it
-            } else {
-                // On desktop, leave space for dock
-                win.style.height = (window.innerHeight - 40) + 'px';
-                win.style.maxHeight = 'calc(100vh - 40px)';
-            }
+            win.style.height = window.innerHeight + 'px';
+            win.style.maxHeight = '100vh';
+            win.style.zIndex = '10002';
+            // Hide dock for maximized windows
+            if (dock) dock.style.display = 'none';
             win.classList.add('maximized');
         }
         focusWindow(win);
