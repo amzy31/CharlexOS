@@ -29,7 +29,6 @@ if (isMobile) {
       orientationMsg.style.display = 'none';
     }
   };
-
   window.addEventListener('load', checkOrientation);
   window.matchMedia("(orientation: portrait)").addEventListener('change', checkOrientation);
 }
@@ -38,9 +37,9 @@ if (isMobile) {
 
 document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists and is centered before creating icons
     if (window.Charlex && window.Charlex.DOM && typeof window.Charlex.DOM.createModernDock === 'function') {
-        try { window.Charlex.DOM.createModernDock(); } catch (err) { /* ignore */ }
+        try { window.Charlex.DOM.createModernDock(); } catch (err) {/* ignore */}
     }
-    // Create Welcome Window
+    // Create Welcome Window (Window1)
     Charlex.DOM.createWindow('window1', 'Welcome', `
         Welcome to the <span class="text-info"> CharleX WebOS!</span>`, '50px', '50px');
 
@@ -55,10 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
         </form>
     `, '100px', '100px', 'none');
 
-    // Create CPU Monitor Window
+    // Create SysInfo Window
     Charlex.DOM.createWindow('sysInfo', 'SYSINFO', `
         <div id="sysContent">
-            <h3>CPU Usage</h3>
+            <h3>System information: </h3>
             <pre id="topOutput">Loading...</pre>
         </div>
     `, '150px', '150px', 'none');
@@ -75,10 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
     Charlex.DOM.createWindow('browserWindow', 'CharleX Browser', `
         <div id="browserContent" style="display: flex; flex-direction: column; height: 400px;">
             <div style="margin-bottom: 10px; display: flex; gap: 5px;">
-                <button id="backBtn">←</button>
-                <button id="forwardBtn">→</button>
-                <button id="refreshBtn">↻</button>
-                <input id="urlInput" type="text" placeholder="Enter URL" style="flex: 1; padding: 5px;" />
+                <input type="text" id="urlInput" placeholder="Enter URL" style="flex: 1; padding: 5px;" />
                 <button id="goBtn" style="padding: 5px 10px;">Go</button>
             </div>
             <iframe id="browserFrame" src="" style="flex: 1; border: 1px solid #ccc;"></iframe>
@@ -90,7 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
     }
     // Create WebDisk Window
     Charlex.DOM.createWindow('webdiskWindow', 'WebDisk', `
-        <div id="webdiskContent" style="padding: 10px; height: 100%; display: flex; flex-direction: column;">
+        <div id="webdiskContent" style="padding: 10px; height: 100%; display: flex; flex-direction: column;"
+        class="bg-dark text-white">
             <div style="margin-bottom: 10px; display: flex; align-items: center;">
                 <button id="backBtn" style="padding: 5px 10px; margin-right: 5px;" disabled>Back</button>
                 <button id="openDirBtn" style="padding: 5px 10px; margin-right: 5px;">Open Directory</button>
@@ -98,9 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
                 <button id="newFolderBtn" style="padding: 5px 10px; margin-right: 5px;">New Folder</button>
                 <button id="deleteBtn" style="padding: 5px 10px;">Delete</button>
             </div>
-            <div id="currentDir" style="margin-bottom: 10px; font-weight: bold; padding: 5px; background: #f0f0f0;"></div>
+            <div   id="currentDir" style="margin-bottom: 10px; font-weight: bold; padding: 5px;" class="bg-dark"></div>
             <table id="fileList" class="table table-dark" style="width: 100%; border-collapse: collapse;">
-                <thead>
+                <thead class="bg-dark">
                     <tr class="table-header">
                         <th style="padding: 5px; text-align: left; width: 50px;"></th>
                         <th style="padding: 5px; text-align: left;">Name</th>
@@ -108,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
                         <th style="padding: 5px; text-align: left;">Modified</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody class="container bg-dark  text-white" ></tbody>
             </table>
         </div>
     `, '50%', '50%', 'none');
@@ -131,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
         Charlex.DOM.showWindow('libertarianWindow');
         console.log('Libertarian window shown');
     }, '<i class="fas fa-balance-scale" style="font-size: 32px;"></i>', {tooltip: 'Libertarian Project'});
-    Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('sysInfo'), '<i class="fas fa-chart-line" style="font-size: 32px;"></i>', {tooltip: 'SYSTEM INFO'});
+    Charlex.DOM.createDockIcon('SysInfo', () => Charlex.DOM.showWindow('sysInfo'), '<i class="fas fa-chart-line" style="font-size: 32px;"></i>', {tooltip: 'SYSTEM INFO'});
     Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<i class="fas fa-terminal" style="font-size: 32px;"></i>', {tooltip: 'Shell'});
     Charlex.DOM.createDockIcon('CharleX Browser', () => Charlex.DOM.showWindow('browserWindow'), '<i class="fas fa-globe" style="font-size: 32px;"></i>', {tooltip: 'CharleX Browser'});
     Charlex.DOM.createDockIcon('WebDisk', () => Charlex.DOM.showWindow('webdiskWindow'), '<i class="fas fa-hdd" style="font-size: 32px;"></i>', {tooltip: 'WebDisk'});
