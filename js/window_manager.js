@@ -123,13 +123,13 @@
             // Restore using stored values
             const prev = win._prevRect;
             if (prev) {
-                win.style.left = prev.left;
-                win.style.top = prev.top;
+                win.style.setProperty('left', prev.left, 'important');
+                win.style.setProperty('top', prev.top, 'important');
                 win.style.width = prev.width;
                 win.style.height = prev.height;
                 win.style.maxWidth = '';
                 win.style.maxHeight = '';
-                win.style.transform = prev.transform || '';
+                win.style.setProperty('transform', prev.transform || '', 'important');
             }
             win.classList.remove('maximized');
             // Show dock if mobile
@@ -146,11 +146,11 @@
                 transform: win.style.transform
             };
             // Remove transform for maximizing
-            win.style.transform = '';
+            win.style.setProperty('transform', '', 'important');
             // Add smooth transition for maximizing
             win.style.transition = 'all 0.5s ease-out';
-            win.style.left = '0px';
-            win.style.top = '0px';
+            win.style.setProperty('left', '0px', 'important');
+            win.style.setProperty('top', '0px', 'important');
             win.style.width = window.innerWidth + 'px';
             win.style.maxWidth = '100vw';
             // Adjust height for mobile and desktop separately, considering orientation

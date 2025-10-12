@@ -453,7 +453,7 @@ body {
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
+@media (max-width: 768px) and (orientation: portrait) {
     #desktop {
         padding: clamp(5px, 3vw, 15px);
     }
@@ -463,6 +463,18 @@ body {
         max-width: 90vw;
         top: 20px !important;
         left: 5vw !important;
+    }
+}
+@media (max-width: 768px) and (orientation: landscape) {
+    #desktop {
+        padding: clamp(5px, 3vw, 15px);
+    }
+    .window {
+        width: 85vw;
+        min-width: 200px;
+        max-width: 85vw;
+        top: 10px !important;
+        left: 7.5vw !important;
     }
     .window-content {
         padding: clamp(40px, 10vh, 60px) 12px 12px;
