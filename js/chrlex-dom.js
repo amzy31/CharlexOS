@@ -25,9 +25,9 @@
         windowEl.innerHTML = `
             <div class="window-header">
                 <div class="window-controls">
-                    <div class="window-control-button close" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Close" role="button" tabindex="0"></div>
-                    <div class="window-control-button minimize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Minimize" role="button" tabindex="0"></div>
-                    <div class="window-control-button maximize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Maximize" role="button" tabindex="0"></div>
+                    <button class="window-control-button close" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Close" tabindex="0"></button>
+                    <button class="window-control-button minimize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Minimize" tabindex="0"></button>
+                    <button class="window-control-button maximize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Maximize" tabindex="0"></button>
                 </div>
                 <div class="window-title bg-dark container">${title}</div>
                 <div style="width: 48px;"></div>

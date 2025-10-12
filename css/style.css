@@ -271,6 +271,9 @@ body {
     margin: 0 6px;
     flex: 0 0 auto;
     -webkit-app-region: no-drag;
+    border: none;
+    background: none;
+    padding: 0;
 }
 
 .window-control-button.minimize {
@@ -487,9 +490,9 @@ body {
     }
     /* Improve touch targets on mobile */
     .window-control-button {
-        width: 20px;
-        height: 20px;
-        border-radius: 6px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
     }
     .window-controls [role="button"] {
         padding: 12px;
