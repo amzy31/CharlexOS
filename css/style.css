@@ -36,6 +36,7 @@ body {
     display: flex;
     flex-direction: column;
     background: linear-gradient(180deg, var(--macos-bg-primary), var(--macos-bg-secondary));
+    font-size: clamp(14px, 2vw, 16px);
 }
 
 /* Added styles for window titlebar and controls for mobile and touchpad friendliness */
@@ -43,7 +44,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px 12px;
+    padding: clamp(6px, 2vw, 12px);
     border-bottom: 1px solid var(--macos-border);
     border-radius: 12px 12px 0 0;
     cursor: grab;
@@ -60,21 +61,6 @@ body {
     align-items: center;
     margin-right: auto;
     margin-left: 6px;
-}
-
-.window-control-button {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    box-shadow: 0 0 2px rgba(0,0,0,0.3);
-    cursor: pointer;
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 6px;
-    flex: 0 0 auto;
-    -webkit-app-region: no-drag;
 }
 
 .window-control-button.minimize {
@@ -107,7 +93,7 @@ body {
     .window-header {
         flex-direction: column;
         align-items: flex-start;
-        padding: 8px 10px;
+        padding: clamp(8px, 3vw, 12px);
     }
     .window-controls {
         width: 100%;
@@ -128,7 +114,7 @@ body {
 
 #desktop {
     flex: 1;
-    padding: 20px;
+    padding: clamp(10px, 5vw, 30px);
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -207,9 +193,9 @@ body {
     border: 1px solid var(--macos-border);
     border-radius: 12px;
     box-shadow: 0 4px 16px var(--macos-shadow);
-    min-width: 320px;
-    min-height: 160px;
-    width: auto;
+    min-width: clamp(280px, 50vw, 320px);
+    min-height: clamp(140px, 30vh, 200px);
+    width: clamp(320px, 70vw, 800px);
     max-width: calc(100vw - 40px);
     overflow: hidden; /* keep children inside */
     color: var(--macos-text-primary);
@@ -256,20 +242,11 @@ body {
     border-radius: 12px 12px 0 0;
 }
 
-.window-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-    border-radius: 12px 12px 0 0;
-    cursor: grab;
-    user-select: none;
-}
+
 
 .window-title {
     font-weight: 600;
-    font-size: 14px;
+    font-size: clamp(12px, 2.5vw, 16px);
     color: white;
 }
 
@@ -282,15 +259,18 @@ body {
 }
 
 .window-control-button {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+    width: clamp(16px, 2vw, 24px);
+    height: clamp(16px, 2vw, 24px);
+    border-radius: clamp(6px, 1vw, 8px);
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
     cursor: pointer;
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin: 0 6px;
     flex: 0 0 auto;
+    -webkit-app-region: no-drag;
 }
 
 .window-control-button.minimize {
@@ -437,10 +417,42 @@ body {
     outline: none;
 }
 
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .window {
+        width: clamp(400px, 60vw, 700px);
+        max-width: calc(100vw - 60px);
+    }
+    .dock-icon {
+        width: 72px;
+        height: 72px;
+    }
+    .dock-icon img {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Large screen styles */
+@media (min-width: 1201px) {
+    .window {
+        width: clamp(500px, 50vw, 1000px);
+        min-height: 250px;
+    }
+    .dock-icon {
+        width: 80px;
+        height: 80px;
+    }
+    .dock-icon img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     #desktop {
-        padding: 10px;
+        padding: clamp(5px, 3vw, 15px);
     }
     .window {
         width: 90vw;
@@ -448,6 +460,9 @@ body {
         max-width: 90vw;
         top: 20px !important;
         left: 5vw !important;
+    }
+    .window-content {
+        padding: clamp(40px, 10vh, 60px) 12px 12px;
     }
     .window.maximized .window-header {
         height: 48px;
@@ -470,13 +485,49 @@ body {
         width: 24px;
         height: 24px;
     }
+    /* Improve touch targets on mobile */
+    .window-control-button {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+    }
+    .window-controls [role="button"] {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 320px) {
+    .window {
+        width: 98vw;
+        max-width: 98vw;
+        min-width: 150px;
+    }
+    .window-header {
+        padding: clamp(6px, 2vw, 10px);
+    }
+    .window-control-button {
+        width: 28px;
+        height: 28px;
+    }
+    .dock-container {
+        height: 40px;
+        gap: 4px;
+    }
+    .dock-icon {
+        width: 30px;
+        height: 30px;
+    }
+    .dock-icon img {
+        width: 18px;
+        height: 18px;
+    }
 }
 
 @media (max-width: 480px) {
     .window {
         width: 95vw;
         max-width: 95vw;
-        padding: 5px;
+        padding: clamp(2px, 2vw, 8px);
     }
     .window.maximized .window-header {
         height: 52px;
@@ -486,10 +537,10 @@ body {
         padding-top: 60px;
     }
     .window-header {
-        padding: 4px 8px;
+        padding: clamp(8px, 3vw, 12px);
     }
     .window-title {
-        font-size: 12px;
+        font-size: clamp(10px, 3vw, 14px);
     }
     .dock-container {
         height: 45px;
@@ -503,12 +554,21 @@ body {
         width: 20px;
         height: 20px;
     }
+    /* Further improve touch targets */
+    .window-control-button {
+        width: 24px;
+        height: 24px;
+        border-radius: 8px;
+    }
+    .window-controls [role="button"] {
+        padding: 10px;
+    }
 }
 
 /* Orientation-specific adjustments for mobile */
 @media (orientation: landscape) and (max-width: 768px) {
     .window {
-        max-width: 85vw;
+        max-width: clamp(80vw, 90vw, 85vw);
         max-height: 75vh;
     }
     .window.maximized {
@@ -525,7 +585,7 @@ body {
 
 @media (orientation: portrait) and (max-width: 768px) {
     .window {
-        max-width: 90vw;
+        max-width: clamp(85vw, 95vw, 90vw);
     }
     .window.maximized {
         max-height: calc(100vh - 80px);
