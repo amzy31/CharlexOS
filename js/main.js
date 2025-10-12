@@ -99,9 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
                 <button id="deleteBtn" style="padding: 5px 10px;">Delete</button>
             </div>
             <div id="currentDir" style="margin-bottom: 10px; font-weight: bold; padding: 5px; background: #f0f0f0;"></div>
-            <table id="fileList" style="width: 100%; border-collapse: collapse;"
+            <table id="fileList" style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr lclass="table-header">
+                    <tr class="table-header">
                         <th style="padding: 5px; text-align: left; width: 50px;"></th>
                         <th style="padding: 5px; text-align: left;">Name</th>
                         <th style="padding: 5px; text-align: left;">Size</th>
