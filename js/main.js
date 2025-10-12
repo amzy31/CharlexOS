@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
     `, '200px', '200px', 'none');
 
     // Create Browser Window
-    Charlex.DOM.createWindow('browserWindow', 'Web Browser', `
+    Charlex.DOM.createWindow('browserWindow', 'CharleX Browser', `
         <div id="browserContent" style="display: flex; flex-direction: column; height: 400px;">
             <div style="margin-bottom: 10px; display: flex; gap: 5px;">
                 <button id="backBtn">←</button>
@@ -133,6 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {    // Ensure dock exists a
     }, '<i class="fas fa-balance-scale" style="font-size: 32px;"></i>', {tooltip: 'Libertarian Project'});
     Charlex.DOM.createDockIcon('CPU Monitor', () => Charlex.DOM.showWindow('sysInfo'), '<i class="fas fa-chart-line" style="font-size: 32px;"></i>', {tooltip: 'SYSTEM INFO'});
     Charlex.DOM.createDockIcon('Linux Shell', () => Charlex.DOM.showWindow('shellWindow'), '<i class="fas fa-terminal" style="font-size: 32px;"></i>', {tooltip: 'Shell'});
-    Charlex.DOM.createDockIcon('Web Browser', () => Charlex.DOM.showWindow('browserWindow'), '<i class="fas fa-globe" style="font-size: 32px;"></i>', {tooltip: 'Browser'});
+    Charlex.DOM.createDockIcon('CharleX Browser', () => Charlex.DOM.showWindow('browserWindow'), '<i class="fas fa-globe" style="font-size: 32px;"></i>', {tooltip: 'CharleX Browser'});
     Charlex.DOM.createDockIcon('WebDisk', () => Charlex.DOM.showWindow('webdiskWindow'), '<i class="fas fa-hdd" style="font-size: 32px;"></i>', {tooltip: 'WebDisk'});
 });
