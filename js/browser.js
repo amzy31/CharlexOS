@@ -84,3 +84,10 @@ window.Charlex = window.Charlex || {};
 window.Charlex.Browser = {
     init: initBrowser
 };
+
+// Initialize browser if window is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBrowser);
+} else {
+    initBrowser();
+}
