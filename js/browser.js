@@ -27,7 +27,7 @@ function initBrowser() {
     };
 
     // Load default page
-    loadURL('https://www.google.com');
+    loadURL('https://www.fsf.org');
 }
 
 // Function to open Browser window

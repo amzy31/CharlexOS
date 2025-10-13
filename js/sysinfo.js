@@ -6,9 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const cookieEnabled = navigator.cookieEnabled;
     const onLine = navigator.onLine;
     const hardwareConcurrency = navigator.hardwareConcurrency || 'Unknown';
-
+    const browser =navigator.userAgentData.brands[0].brand;
     const info = `
 System Information:
+-Browser: ${browser}
 - User-Agent: ${ua}
 - Platform: ${platform}
 - Language: ${language}
