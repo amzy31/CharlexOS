@@ -331,6 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Function to open WebDisk window
-function openWebDiskWindow() {
+const openWebDiskWindow = () => {
     Charlex.DOM.showWindow('webdiskWindow');
 }
+
