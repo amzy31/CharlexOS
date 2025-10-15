@@ -124,7 +124,6 @@ body {
     width: auto;
     background-attachment: fixed;
     margin: 0;
-    animation: shuffleBackground 20s ease infinite;
     background-attachment: fixed;
 }
 
@@ -150,7 +149,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 12px;
-    height: auto;
+    height: 50px;
     min-height: 64px;
     padding: 10px 16px;
     width: auto;
@@ -194,9 +193,9 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 16px var(--macos-shadow);
     min-width: clamp(280px, 50vw, 320px);
-    min-height: clamp(140px, 30vh, 200px);
+    min-height: clamp(140px, 16vh, 200px);
     width: clamp(320px, 70vw, 800px);
-    max-width: calc(100vw - 40px);
+        -width: calc(100vw - 40px);
     overflow: hidden; /* keep children inside */
     color: var(--macos-text-primary);
     transition: all 0.3s ease;
@@ -596,6 +595,8 @@ body {
         padding-top: 50px;
     }
     .dock-container {
+        position: fixed;
+
         bottom: 5px;
         z-index: 10001; /* ensure dock is above maximized windows */
     }
