@@ -14,13 +14,9 @@
         try {
             const dock = document.getElementById('dock');
             const dockHeight = dock ? (parseInt(window.getComputedStyle(dock).height) || 80) : 80;
-            // Remove inline width and height styles to use Bootstrap responsiveness
-            // windowEl.style.width = '80%';
-            // windowEl.style.maxWidth = Math.max(360, Math.min(window.innerWidth - 40, 1100)) + 'px';
-            // windowEl.style.height = Math.floor((window.innerHeight - dockHeight) / 2) + 'px';
         } catch (err) {
             // Fallback to CSS defaults if anything fails
-            // windowEl.style.width = '80%';
+            windowEl.style.width = '80%';
         }
         windowEl.innerHTML = `
             <div class="window-header">
@@ -29,7 +25,7 @@
                     <button type="button" class="window-control-button minimize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Minimize" tabindex="0"></button>
                     <button type="button" class="window-control-button maximize" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" title="Maximize" tabindex="0"></button>
                 </div>
-                <div class="window-title bg-primary text-light rounded container">${title}</div>
+                <div class="window-title text-light rounded container">${title}</div>
                 <div style="width: 48px;"></div>
             </div>
             <div class="window-content container p-5">
