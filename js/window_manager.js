@@ -5,8 +5,10 @@
     let dragData = {
         dragging: false,
         targetId: null,
-        offsetX: 0,
-        offsetY: 0,
+        startX: 0,
+        startY: 0,
+        startLeft: 0,
+        startTop: 0,
         mouseX: 0,
         mouseY: 0,
         rafId: null,
@@ -35,18 +37,18 @@
         el.classList.add('focused');
     }
 
-    // Smooth reposition using requestAnimationFrame to avoid layout thrash
+    // Smooth reposition using requestAnimationFrame on fixed window coordinates
     function dragFrame() {
         if (!dragData.dragging) return;
         const target = document.getElementById(dragData.targetId);
         if (!target) return;
-        let newX = dragData.mouseX - dragData.offsetX;
-        let newY = dragData.mouseY - dragData.offsetY;
+        let newX = dragData.startLeft + (dragData.mouseX - dragData.startX);
+        let newY = dragData.startTop + (dragData.mouseY - dragData.startY);
         // Keep window inside viewport
         newX = Math.max(0, Math.min(newX, window.innerWidth - target.offsetWidth));
         newY = Math.max(0, Math.min(newY, window.innerHeight - target.offsetHeight - 80)); // 80 for dock height + margin
-        target.style.left = newX + 'px';
-        target.style.top = newY + 'px';
+        target.style.left = `${newX}px`;
+        target.style.top = `${newY}px`;
         dragData.rafId = window.requestAnimationFrame(dragFrame);
     }
 
@@ -56,22 +58,30 @@
         if (e.target.closest('.window-controls')) return;
         const target = document.getElementById(id);
         if (!target) return;
+        e.preventDefault();
         focusWindow(target);
         dragData.dragging = true;
         dragData.targetId = id;
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        dragData.offsetX = clientX - (target.offsetLeft || 0);
-        dragData.offsetY = clientY - (target.offsetTop || 0);
+        dragData.startX = clientX;
+        dragData.startY = clientY;
+        dragData.startLeft = target.offsetLeft || 0;
+        dragData.startTop = target.offsetTop || 0;
         dragData.mouseX = clientX;
         dragData.mouseY = clientY;
+        target.style.transition = 'none';
+        target.style.willChange = 'left, top';
+        target.classList.add('dragging');
         document.body.style.userSelect = 'none';
+        document.body.style.cursor = 'grabbing';
         // start rAF loop
         if (!dragData.rafId) dragData.rafId = window.requestAnimationFrame(dragFrame);
     };
 
     // pointer / mouse / touch moves update mouseX/mouseY only
     function onPointerMove(e) {
+        if (!dragData.dragging) return;
         if (e.touches && e.touches.length) {
             dragData.mouseX = e.touches[0].clientX;
             dragData.mouseY = e.touches[0].clientY;
@@ -82,19 +92,28 @@
     }
 
     function endDrag() {
+        if (dragData.dragging) {
+            const target = document.getElementById(dragData.targetId);
+            if (target) {
+                target.classList.remove('dragging');
+                target.style.willChange = '';
+                target.style.transition = '';
+            }
+        }
         dragData.dragging = false;
         dragData.targetId = null;
         document.body.style.userSelect = 'auto';
+        document.body.style.cursor = '';
         if (dragData.rafId) {
             window.cancelAnimationFrame(dragData.rafId);
             dragData.rafId = null;
         }
     }
 
-    window.addEventListener('mousemove', onPointerMove, {passive: true});
-    window.addEventListener('touchmove', onPointerMove, {passive: true});
-    window.addEventListener('mouseup', endDrag);
-    window.addEventListener('touchend', endDrag);
+    window.addEventListener('pointermove', onPointerMove, {passive: true});
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+    window.addEventListener('blur', endDrag);
 
     window.Charlex.WindowManager.closeWindow = function(id) {
         const win = document.getElementById(id);
@@ -116,55 +135,41 @@
         if (!win || win._maximizing) return;
         win._maximizing = true;
         setTimeout(() => win._maximizing = false, 300); // prevent multiple calls
-        const dock = document.getElementById('dock');
         const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-        const isLandscape = window.innerWidth > window.innerHeight;
         if (win.classList.contains('maximized')) {
-            // Restore using stored values
             const prev = win._prevRect;
             if (prev) {
                 win.style.setProperty('left', prev.left, 'important');
                 win.style.setProperty('top', prev.top, 'important');
                 win.style.width = prev.width;
                 win.style.height = prev.height;
-                win.style.maxWidth = '';
-                win.style.maxHeight = '';
-                win.style.transform = prev.transform;
+                win.style.maxWidth = prev.maxWidth || '';
+                win.style.maxHeight = prev.maxHeight || '';
+                win.style.transform = prev.transform || 'none';
             }
             win.classList.remove('maximized');
-            // Show dock if mobile
-            if (isMobile && dock) {
-                dock.style.display = '';
+            if (isMobile) {
+                const dock = document.getElementById('dock');
+                if (dock) dock.style.display = '';
             }
         } else {
-            // Store previous geometry
             win._prevRect = {
-                left: win.style.left,
-                top: win.style.top,
-                width: win.style.width || win.offsetWidth + 'px',
-                height: win.style.height || win.offsetHeight + 'px',
-                transform: getComputedStyle(win).transform
+                left: win.style.left || `${win.offsetLeft}px`,
+                top: win.style.top || `${win.offsetTop}px`,
+                width: win.style.width || `${win.offsetWidth}px`,
+                height: win.style.height || `${win.offsetHeight}px`,
+                maxWidth: win.style.maxWidth || '',
+                maxHeight: win.style.maxHeight || '',
+                transform: getComputedStyle(win).transform || 'none'
             };
-            // Remove transform for maximizing
-            win.style.transform = 'none';
-            // Add smooth transition for maximizing
             win.style.transition = 'all 0.5s ease-out';
+            win.style.transform = 'none';
             win.style.setProperty('left', '0px', 'important');
             win.style.setProperty('top', '0px', 'important');
             win.style.width = window.innerWidth + 'px';
             win.style.maxWidth = '100vw';
-            // Adjust height for mobile and desktop separately, considering orientation
-            if (isMobile) {
-                // On mobile, maximize to full height minus dock (touch friendly), adjust for orientation
-                let adjustedDockHeight = isLandscape ? 60 : 80; // smaller dock space in landscape
-                win.style.height = (window.innerHeight - adjustedDockHeight) + 'px';
-                win.style.maxHeight = `calc(100vh - ${adjustedDockHeight}px)`;
-                // Do not hide dock, ensure window does not cover it
-            } else {
-                // On desktop, leave space for dock
-                win.style.height = (window.innerHeight - 40) + 'px';
-                win.style.maxHeight = 'calc(100vh - 40px)';
-            }
+            win.style.height = window.innerHeight + 'px';
+            win.style.maxHeight = '100vh';
             win.classList.add('maximized');
         }
         focusWindow(win);
@@ -182,15 +187,11 @@
         document.querySelectorAll('.window').forEach(win => {
             const header = win.querySelector('.window-header');
             if (!header) return;
-            // Mouse down on header starts drag
-            header.addEventListener('mousedown', (ev) => {
-                // only left button
-                if (ev.button !== 0) return;
+            // Pointer down on header starts drag
+            header.addEventListener('pointerdown', (ev) => {
+                if (ev.button !== 0 || win.classList.contains('maximized')) return;
                 window.Charlex.WindowManager.startDrag(ev, win.id);
-            });
-            header.addEventListener('touchstart', (ev) => {
-                window.Charlex.WindowManager.startDrag(ev, win.id);
-            }, {passive: true});
+            }, {passive: false});
             // Allow touch drag when touching near the top of the window (helps mobile UX when header is small)
             win.addEventListener('touchstart', (ev) => {
                 try {
@@ -203,12 +204,6 @@
                     }
                 } catch (err) {
                     // ignore
-                }
-            }, {passive: true});
-            // Add touchmove listener to enable dragging on mobile
-            win.addEventListener('touchmove', (ev) => {
-                if (dragData.dragging && dragData.targetId === win.id) {
-                    window.Charlex.WindowManager.startDrag(ev, win.id);
                 }
             }, {passive: true});
             // Double-click header toggles maximize

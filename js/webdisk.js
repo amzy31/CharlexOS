@@ -26,8 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
     Charlex.FS = {
         fs: JSON.parse(localStorage.getItem('charlexFS') || '{"/":{"type":"dir","children":{}}}'),
         currentDir: '/',
+        listeners: [],
         saveFS: function() {
             localStorage.setItem('charlexFS', JSON.stringify(this.fs));
+            this.notifyChange();
+        },
+        addChangeListener: function(callback) {
+            if (typeof callback === 'function') this.listeners.push(callback);
+        },
+        removeChangeListener: function(callback) {
+            this.listeners = this.listeners.filter(fn => fn !== callback);
+        },
+        notifyChange: function() {
+            this.listeners.forEach(fn => {
+                try { fn(); } catch (e) { /* ignore listener errors */ }
+            });
         },
         getDir: function(path) {
             const parts = path.split('/').filter(p => p);
@@ -326,6 +339,15 @@ document.addEventListener('DOMContentLoaded', () => {
     newFolderBtn.onclick = createFolder;
     deleteBtn.onclick = deleteItem;
     renameBtn.onclick = renameItem;
+
+    const refreshWebDisk = () => {
+        const current = Charlex.FS.currentDir;
+        loadFiles();
+        backBtn.disabled = current === '/';
+    };
+
+    Charlex.FS.addChangeListener(refreshWebDisk);
+    window.addEventListener('beforeunload', () => Charlex.FS.removeChangeListener(refreshWebDisk));
 
     loadFiles();
 });

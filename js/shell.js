@@ -91,34 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     output = 'cat: missing operand';
                 }
                 break;
-            case 'ssh':
-                if (args.length > 0) {
-                    output = `Connecting to ${args[0]}... Connected. (Simulated SSH)`;
-                    connected = true;
-                } else {
-                    output = 'ssh: missing host';
-                }
-                break;
-            case 'exit':
-                if (connected) {
-                    output = 'Disconnected from SSH.';
-                    connected = false;
-                } else {
-                    output = 'Not connected.';
-                }
-                break;
+
             case 'top':
                 output = Charlex.topOutput;
                 break;
             case 'uname':
-                output = 'Linux charlex-webos 5.15.0-91-generic #101-Ubuntu SMP Tue Nov 14 13:30:33 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux';
+                output = navigator.platform;
                 break;
             case 'ps':
                 output = 'PID TTY          TIME CMD\n  1 ?        00:00:00 systemd\n  2 ?        00:00:00 kthreadd\n  3 ?        00:00:00 rcu_gp\n  4 ?        00:00:00 rcu_par_gp';
                 break;
-            case 'df':
-                output = 'Filesystem     1K-blocks    Used Available Use% Mounted on\n/dev/sda1       10000000 5000000  5000000  50% /';
-                break;
+           
             case 'clear':
                 shellContent.innerHTML = '<div>$ <input id="shellInput" type="text" style="background: transparent; border: none; color: green; outline: none; width: 90%;" /></div>';
                 const newShellInput = document.getElementById('shellInput');

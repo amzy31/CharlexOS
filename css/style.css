@@ -25,6 +25,7 @@
 
 body {
     margin: 0;
+    padding-top: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     color: var(--macos-text-primary);
@@ -39,6 +40,179 @@ body {
     font-size: clamp(14px, 2vw, 16px);
 }
 
+.mac-menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    z-index: 10001;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    background: rgba(18, 18, 20, 0.54);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.mac-menu-left,
+.mac-menu-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.mac-menu-item {
+    color: rgba(255,255,255,0.9);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    cursor: default;
+    user-select: none;
+}
+
+.mac-menu-logo {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+#desktop {
+    padding-top: 0;
+}
+
+#dock, .dock-container {
+    position: fixed !important;
+    left: 50% !important;
+    bottom: 20px !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 12px 18px !important;
+    z-index: 10000 !important;
+    width: auto !important;
+    min-height: 68px !important;
+    background: rgba(255,255,255,0.08) !important;
+    border-radius: 34px !important;
+    border: 1px solid rgba(255,255,255,0.16) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.16) !important;
+    backdrop-filter: blur(22px) !important;
+    -webkit-backdrop-filter: blur(22px) !important;
+}
+
+.dock-icon {
+    width: 68px !important;
+    height: 68px !important;
+    border-radius: 18px !important;
+    padding: 10px !important;
+    background: rgba(255,255,255,0.14) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),
+                0 18px 40px rgba(0,0,0,0.18) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.dock-icon:hover {
+    transform: translateY(-6px) scale(1.08) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),
+                0 24px 56px rgba(0,0,0,0.22) !important;
+}
+
+.dock-icon img {
+    width: 36px !important;
+    height: 36px !important;
+}
+
+.window {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.32) !important;
+    border-radius: 20px !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+}
+
+.window:hover {
+    transform: translateY(-2px) !important;
+}
+
+.window-header {
+    background: rgba(255,255,255,0.06) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.14) !important;
+    padding: 10px 16px !important;
+    min-height: 48px !important;
+    position: relative !important;
+    align-items: center !important;
+}
+
+.window-controls {
+    margin-left: 14px !important;
+    gap: 10px !important;
+}
+
+.window-control-button {
+    width: 14px !important;
+    height: 14px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.08) !important;
+}
+
+.window-title {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    text-align: center !important;
+    color: rgba(255,255,255,0.92) !important;
+    font-size: 14px !important;
+    pointer-events: none !important;
+}
+
+.window-content {
+    background: rgba(255,255,255,0.04) !important;
+    padding: 18px !important;
+}
+
+.window.maximized {
+    width: 100vw !important;
+    height: calc(100vh - 44px) !important;
+    top: 44px !important;
+    left: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.window.maximized .window-header {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+}
+
+@media (max-width: 768px) {
+    .dock-icon {
+        width: 54px !important;
+        height: 54px !important;
+    }
+    .dock-icon img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    .window {
+        width: calc(100vw - 24px) !important;
+        min-width: auto !important;
+    }
+    .window-title {
+        font-size: 13px !important;
+    }
+}
+
 /* Added styles for window titlebar and controls for mobile and touchpad friendliness */
 .window-header {
     display: flex;
@@ -48,11 +222,40 @@ body {
     border-bottom: 1px solid var(--macos-border);
     border-radius: 12px 12px 0 0;
     cursor: grab;
+    touch-action: none;
     user-select: none;
     -webkit-user-select: none;
     -webkit-app-region: drag;
     background-color: var(--macos-bg-secondary);
     color: var(--macos-text-primary);
+}
+
+.window.dragging {
+    cursor: grabbing;
+}
+
+/* Hide the window titlebar visually while preserving drag support */
+.window-header {
+    background: transparent !important;
+    border-bottom: none !important;
+    padding: 0 !important;
+    min-height: 40px !important;
+    height: 40px !important;
+    margin: 0 !important;
+    width: 100%;
+}
+.window-header .window-title {
+    display: none !important;
+}
+.window-controls {
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    margin: 0 !important;
+}
+.window-control-button {
+    width: 18px !important;
+    height: 18px !important;
 }
 
 .window-controls {
@@ -61,6 +264,7 @@ body {
     align-items: center;
     margin-right: auto;
     margin-left: 6px;
+    z-index: 10;
 }
 
 .window-control-button.minimize {
@@ -75,18 +279,6 @@ body {
     background-color: #ff5f57; /* red */
 }
 
-.window-control-button:hover::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
 
 /* Responsive adjustments for mobile */
 @media (max-width: 600px) {
@@ -215,22 +407,6 @@ body {
     padding-top: 40px;
 }
 
-.window.maximized .window-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    z-index: 10001;
-    border-radius: 0;
-    cursor: grab;
-    background-color: #222;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 12px;
-}
-
 .window-content {
     padding: 60px 12px 12px;
     flex: 1 1 auto;
@@ -248,6 +424,14 @@ body {
     font-weight: 600;
     font-size: clamp(12px, 2.5vw, 16px);
     color: white;
+}
+
+.window.dragging .window-header {
+    cursor: grabbing;
+}
+
+.window.dragging {
+    transition: none !important;
 }
 
 .window-controls {
@@ -299,22 +483,10 @@ body {
     text-align: center;
 }
 
-.window-control-button:hover::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
-
 .dock-icon {
     width: 64px;
     height: 64px;
+    flex: 0 0 auto;
     border-radius: 14px; /* squircle-ish for skeuomorphic look */
     background: linear-gradient(180deg, rgba(0,255,255,0.1), rgba(255,0,255,0.05), rgba(0,255,255,0.02));
     display: inline-flex;
@@ -348,13 +520,23 @@ body {
     flex-direction: row !important;
     justify-content: center !important;
     align-items: center !important;
+    flex-wrap: nowrap !important;
     gap: 12px !important;
     padding: 8px 14px !important;
     z-index: 9999 !important;
     width: auto !important;
+    max-width: calc(100vw - 16px) !important;
     min-height: 56px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
     background: rgba(33, 132, 143, 0.04) !important;
     border-radius: 28px !important;
+}
+
+#dock::-webkit-scrollbar, .dock-container::-webkit-scrollbar {
+    display: none !important;
 }
 
 /* accessible focus styles for dock icons */
@@ -482,13 +664,11 @@ body {
     .window.maximized .window-header {
         height: 48px;
         padding: 8px 12px;
+        display: flex;
     }
-.window.maximized .window-header {
-    display: none;
-}
-.window.maximized .window-content {
-    padding: 0;
-}
+    .window.maximized .window-content {
+        padding: 0;
+    }
     .dock-container {
         bottom: 10px;
         height: 50px;
@@ -560,17 +740,40 @@ body {
     .window-title {
         font-size: clamp(10px, 3vw, 14px);
     }
-    .dock-container {
-        height: 45px;
-        gap: 6px;
+    #dock, .dock-container {
+        left: 8px !important;
+        right: 8px !important;
+        width: calc(100vw - 16px) !important;
+        max-width: calc(100vw - 16px) !important;
+        min-height: 52px !important;
+        bottom: max(10px, env(safe-area-inset-bottom)) !important;
+        transform: none !important;
+        justify-content: flex-start !important;
+        padding: 8px 10px !important;
+        gap: 8px !important;
+        border-radius: 999px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x !important;
     }
     .dock-icon {
-        width: 35px;
-        height: 35px;
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        border-radius: 16px !important;
+        padding: 7px !important;
+        flex: 0 0 auto !important;
     }
     .dock-icon img {
-        width: 20px;
-        height: 20px;
+        width: 22px !important;
+        height: 22px !important;
+    }
+    .dock-icon .badge {
+        font-size: 10px;
+        padding: 1px 5px;
+        top: -4px;
+        right: -4px;
     }
     /* Further improve touch targets */
     .window-control-button {
@@ -634,4 +837,197 @@ body {
 }
 .window.maximized #webdiskContent::-webkit-scrollbar-thumb:hover {
     background: rgba(255,255,255,0.5);
+}
+
+/* macOS-inspired global overrides */
+html, body {
+    min-height: 100%;
+}
+
+body {
+    background: radial-gradient(circle at top, rgba(255,255,255,0.12), transparent 25%),
+                radial-gradient(circle at bottom right, rgba(0,122,255,0.14), transparent 22%),
+                linear-gradient(180deg, #0f1724 0%, #111827 100%);
+}
+
+#desktop {
+    background-image: url('img/bg.jpg');
+    background-color: rgba(17,24,39,0.9);
+    background-blend-mode: overlay;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.window {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    border-radius: 20px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.window:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 34px 85px rgba(0,0,0,0.4);
+}
+
+.window-header {
+    background: rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    padding: 12px 16px;
+    min-height: 48px;
+    position: relative;
+    align-items: center;
+}
+
+.window-controls {
+    gap: 10px;
+    margin-left: 14px;
+    -webkit-app-region: no-drag;
+}
+
+.window-control-button {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+    cursor: pointer;
+    -webkit-app-region: no-drag;
+    pointer-events: auto;
+    border: none;
+    outline: none;
+}
+
+.window-control-button.close { background-color: #ff5f57; }
+.window-control-button.minimize { background-color: #ffbd2e; }
+.window-control-button.maximize { background-color: #28c840; }
+
+.window-control-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.28), 0 0 0 2px rgba(255,255,255,0.08);
+}
+
+.window-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: rgba(255,255,255,0.92);
+    max-width: 50%;
+    text-align: center;
+    pointer-events: none;
+}
+
+.window-content {
+    background: rgba(255,255,255,0.04);
+    padding: 18px;
+    color: rgba(255,255,255,0.95);
+}
+
+.window.maximized {
+    width: 100vw !important;
+    height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+#dock, .dock-container {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    padding: 12px 20px !important;
+    min-height: 70px !important;
+    -webkit-app-region: no-drag;
+    border-radius: 32px !important;
+    gap: 16px !important;
+}
+
+.dock-icon {
+    width: 68px !important;
+    height: 68px !important;
+    border-radius: 18px !important;
+    padding: 10px !important;
+    background: rgba(255,255,255,0.12) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 18px 40px rgba(0,0,0,0.18) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.dock-icon:hover {
+    transform: translateY(-6px) scale(1.1) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 24px 56px rgba(0,0,0,0.25) !important;
+}
+
+.dock-icon img {
+    width: 36px !important;
+    height: 36px !important;
+}
+
+.window.dragging {
+    box-shadow: 0 40px 90px rgba(0,0,0,0.45) !important;
+}
+
+.window-header {
+    cursor: grab;
+}
+
+.window.dragging .window-header {
+    cursor: grabbing;
+}
+
+@media (max-width: 768px) {
+    .dock-icon {
+        width: 52px !important;
+        height: 52px !important;
+        padding: 8px !important;
+    }
+    .dock-icon img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    .window {
+        width: calc(100vw - 24px) !important;
+        min-width: auto !important;
+    }
+    .window-title {
+        max-width: 65%;
+        font-size: 13px;
+    }
+}
+
+.dock-container {
+    flex-wrap: wrap;
+    max-width: calc(100% - 28px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+}
+
+@media (max-width: 640px) {
+    .dock-container {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        transform: none;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px !important;
+    }
+    .dock-icon {
+        min-width: 48px;
+    }
 }
