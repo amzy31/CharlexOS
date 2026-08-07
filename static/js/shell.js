@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 output = 'Opening WebDisk...';
                 break;
             case 'help':
-                output = 'Available commands: ls, pwd, whoami, date, echo, mkdir, touch, rm, cd, cat, ssh, exit, top, uname, ps, df, clear, webdisk, help';
+                output = 'Available commands: ls, pwd, whoami, date, echo, mkdir, touch, rm, cd, cat, top, uname, ps, df, clear, webdisk, help';
                 break;
             default:
                 output = `Command not found: ${cmd}`;

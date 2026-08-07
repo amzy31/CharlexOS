@@ -1,0 +1,28 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Charlex Web OS</title>
+    <link rel="icon" type="image/jpeg" href="{% static 'img/logo.jpg' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script src="{% static 'js/crypto.js' %}" defer></script>
+</head>
+<body>
+    <div id="desktop" style="background-image: url('{% static 'img/bg.jpg' %}');"></div>
+    <div id="dock" class="container"></div>
+    <script src="{% static 'js/chrlex-dom.js' %}"></script>
+    <script src="{% static 'js/dock.js' %}"></script>
+    <script src="{% static 'js/window_manager.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/note.js' %}"></script>
+    <!-- Windows mode removed to keep macOS-like theme consistent -->
+    <script src="{% static 'js/sysinfo.js' %}"></script>
+    <script src="{% static 'js/shell.js' %}"></script>
+    <script src="{% static 'js/reboot.js' %}"></script>
+    <script src="{% static 'js/browser.js' %}"></script>
+    <script class="container-fuild" src="{% static 'js/libertarian.js' %}"></script>
+    <script src="{% static 'js/webdisk.js' %}"></script>
+</body>
+</html>

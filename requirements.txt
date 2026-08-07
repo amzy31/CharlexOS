@@ -1,0 +1,6 @@
+Django==4.2.7
+djangorestframework==3.14.0
+python-decouple==3.8
+psutil==5.9.6
+gunicorn==21.2.0
+whitenoise==6.6.0
