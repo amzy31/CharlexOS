@@ -88,4 +88,5 @@ Thumbs.db
 # Local Development
 localhost.key
 localhost.crt
+db.sqlite*
 
