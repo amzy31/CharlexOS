@@ -1,43 +1,70 @@
-# Charlex WebOS; Zero-Trust WEBPAGE as an Operating System!
+# 🖥️ CharleX WebOS — Zero-Trust Webpage as an Operating System!
 
-A fun web-based operating system simulation built with **Vanilla JavaScript** (no frameworks. I'm a ([Googler](https://g.dev/amzy31) who loves JavaScript for its simplicity and power in the browser.
+A web-based operating system project built with Vanilla JavaScript ⚡.
+
+I'm a [Googler](https://g.dev/amzy31) who loves JavaScript for its simplicity and power in the browser.
 
 ![screenshot](./screenshots/1.png)
 
+## 🚀 Quick Start
 
-## Quick Start
+```bash
+git clone https://github.com/amzy31/charlexwebos.git
+cd charlexwebos
+xdg-open index.html
+```
 
-1. Download or clone this repo.
-2. Open `index.html` in your favorite browser (BRAVE/Chrome works best).
-3. Enjoy your mini OS!
 
-## What You Can Do
+## 🖥️ Features
 
-- **Drag windows** around the desktop.
-- **Click dock icons** to open apps like Notes, CPU Monitor, Shell, etc.
-- **Take encrypted notes** and save/load them.
-- **Simulate a Linux shell** with basic commands.
-- **Toggle between macOS and Windows styles**.
-- **Power controls** (reboot, halt - simulated).
-- **File explorer** for your encrypted files.
+* 🪟 Desktop and draggable windows
+* 🚀 Application dock
+* 📁 WebDisk / file explorer
+* 📝 Notes
+* 🔐 Encryption support
+* 📊 System information
+* 🌐 Browser application
+* 🍎 macOS Theme
+* 🔄 Dynamic WebOS functionality
+* ⚡ Simulated reboot and halt
 
-## Tech Stuff
 
-- **Backendless System**: Runs entirely in the browser - no server, no backend, no dependencies!
-- Pure JavaScript (Vanilla JS all the way!)
-- CSS for styling
-- Uses modern web APIs forencryption and storage
+```text
+Browser
+   │
+   ▼
+/<PATH>/CharleXWebOS/index.html
+   │
+   ▼
+   │
+   ├── WebOS
+```
 
-## Why Vanilla JS?
+## ⚡ Vanilla JavaScript
+
 #### First I'm Googler but dont do java when I can do JavaScript! - No frameworks, no build!
-- const JavaScript = require('javascript');
-- const CSS = require('css');
-- const HTML = require('html');
 
+* `const JavaScript = require('javascript');`
+* `const CSS = require('css');`
+* `const HTML = require('html');`
 
-## License
+No React.
+No Vue.
+No Angular.
 
-MIT - Feel free to fork and play around!
+Just **HTML + CSS + JavaScript **.
 
-© 2020-2025 AMZY31
+## 🔐 Zero-Trust
+
+CharleX WebOS follows a **Zero-Trust-inspired architecture**, BACKEND LESS & trusting the browser.
+
+## 🎯 Project
+
+CharleX WebOS is an experimental **web-based operating system project** focused on building a lightweight, extensible and secure OS-like environment using **Vanilla JavaScript**.
+
+## 📜 License
+
+MIT License.
+
+© 2020–2026 **AMZY31**
 

@@ -61,26 +61,6 @@
         donateBar.style.gap = '10px';
         donateBar.style.fontWeight = 'bold';
 
-        const donateText = document.createElement('span');
-        donateText.textContent = 'Bitcoin Address - 1GeJAAGxiuRyzw7byVhgBGripYEeE9UWzM';
-        donateBar.appendChild(donateText);
-
-        const copyBtn = document.createElement('button');
-        copyBtn.textContent = 'Copy Address';
-        copyBtn.style.marginLeft = '10px';
-        copyBtn.className = 'btn btn-light btn-sm';
-        copyBtn.style.cursor = 'pointer';
-        copyBtn.onclick = () => {
-            const address = 'bc1qyzxhz6pzptheca8al3c7nj2ksptc3hasqgz34j';
-            navigator.clipboard.writeText(address).then(() => {
-                alert('Bitcoin address copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        };
-        donateBar.appendChild(copyBtn);
-
-        container.appendChild(donateBar);
 
         return container;
     }

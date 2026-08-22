@@ -1,637 +1,2152 @@
-   :root {
-    --macos-blue: #007aff;
-    --macos-gray: #8e8e93;
-    --macos-light-gray: #c7c7cc;
-    --macos-dark-gray: #1c1c1e;
-    --macos-white: #ffffff;
+/* ============================================================
+   CharleX macOS 26
+   Complete OS Theme
+   Liquid Glass + Skeuomorphic + Metro + CharleX Neon
+   ============================================================ */
+
+:root {
+    /* --------------------------------------------------------
+       Apple / macOS inspired palette
+       -------------------------------------------------------- */
+    --macos-blue: #0a84ff;
+    --macos-blue-light: #64b5ff;
+    --macos-blue-dark: #0066cc;
+
+    --macos-red: #ff453a;
+    --macos-orange: #ff9f0a;
+    --macos-yellow: #ffd60a;
+    --macos-green: #30d158;
+    --macos-teal: #64d2ff;
+    --macos-cyan: #00e5ff;
+    --macos-indigo: #5e5ce6;
+    --macos-purple: #bf5af2;
+    --macos-pink: #ff375f;
+
+    /* --------------------------------------------------------
+       Backgrounds
+       -------------------------------------------------------- */
+
     --macos-black: #000000;
-    --macos-red: #ff3b30;
-    --macos-green: #34c759;
-    --macos-yellow: #ffcc00;
-    --macos-orange: #ff9500;
-    --macos-purple: #af52de;
-    --macos-pink: #ff2d55;
-    --macos-teal: #5ac8fa;
-    --macos-indigo: #5856d6;
-    --macos-accent: var(--macos-blue);
-    --macos-bg-primary: #000000;
-    --macos-bg-secondary: #1c1c1e;
-    --macos-text-primary: #ffffff;
-    --macos-text-secondary: #8e8e93;
-    --macos-border: rgba(255,255,255,0.2);
-    --macos-shadow: rgba(0, 0, 0, 0.6);
-    --macos-blur: blur(20px);
+    --macos-bg-primary: #050507;
+    --macos-bg-secondary: #111113;
+    --macos-bg-tertiary: #1c1c1e;
+
+    --macos-surface: rgba(30, 30, 32, 0.72);
+    --macos-surface-light: rgba(255, 255, 255, 0.08);
+    --macos-surface-medium: rgba(255, 255, 255, 0.12);
+    --macos-surface-heavy: rgba(20, 20, 22, 0.90);
+
+    /* --------------------------------------------------------
+       Text
+       -------------------------------------------------------- */
+
+    --macos-white: #ffffff;
+    --macos-text-primary: rgba(255,255,255,0.96);
+    --macos-text-secondary: rgba(255,255,255,0.62);
+    --macos-text-tertiary: rgba(255,255,255,0.38);
+    --macos-text-disabled: rgba(255,255,255,0.22);
+
+    /* --------------------------------------------------------
+       Borders
+       -------------------------------------------------------- */
+
+    --macos-border: rgba(255,255,255,0.14);
+    --macos-border-light: rgba(255,255,255,0.20);
+    --macos-border-dark: rgba(0,0,0,0.40);
+
+    /* --------------------------------------------------------
+       CharleX accents
+       -------------------------------------------------------- */
+
+    --charlex-cyan: #00f0ff;
+    --charlex-blue: #007aff;
+    --charlex-purple: #9b5cff;
+    --charlex-magenta: #ff00d4;
+
+    /* --------------------------------------------------------
+       Glass
+       -------------------------------------------------------- */
+
+    --glass-blur: blur(28px) saturate(160%);
+    --glass-blur-heavy: blur(45px) saturate(180%);
+
+    /* --------------------------------------------------------
+       Shadows
+       -------------------------------------------------------- */
+
+    --shadow-window:
+        0 30px 80px rgba(0,0,0,0.55),
+        0 10px 30px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+
+    --shadow-soft:
+        0 10px 30px rgba(0,0,0,0.35);
+
+    --shadow-dock:
+        0 25px 70px rgba(0,0,0,0.65);
+
+    /* --------------------------------------------------------
+       Radius
+       -------------------------------------------------------- */
+
+    --radius-window: 18px;
+    --radius-large: 16px;
+    --radius-medium: 12px;
+    --radius-small: 9px;
+    --radius-pill: 999px;
+
+    /* --------------------------------------------------------
+       Motion
+       -------------------------------------------------------- */
+
+    --ease-macos: cubic-bezier(.22,.61,.36,1);
+    --ease-spring: cubic-bezier(.2,.8,.2,1);
+}
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
 }
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
     color: var(--macos-text-primary);
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(0,122,255,0.12),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(175,82,222,0.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(0,229,255,0.08),
+            transparent 35%
+        ),
+        #050507;
+
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
     user-select: none;
     overflow: hidden;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(180deg, var(--macos-bg-primary), var(--macos-bg-secondary));
-    font-size: clamp(14px, 2vw, 16px);
+
+    min-height: 100vh;
+
+    font-size: 14px;
+    line-height: 1.4;
 }
 
-/* Added styles for window titlebar and controls for mobile and touchpad friendliness */
-.window-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: clamp(6px, 2vw, 12px);
-    border-bottom: 1px solid var(--macos-border);
-    border-radius: 12px 12px 0 0;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-app-region: drag;
-    background-color: var(--macos-bg-secondary);
-    color: var(--macos-text-primary);
+
+/* ============================================================
+   SCROLLBARS
+   ============================================================ */
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
 }
 
-.window-controls {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-right: auto;
-    margin-left: 6px;
+::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.window-control-button.minimize {
-    background-color: #ffbd2e; /* yellow */
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.18);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
-.window-control-button.maximize {
-    background-color: #28c840; /* green */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.28);
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
-.window-control-button.close {
-    background-color: #ff5f57; /* red */
-}
 
-.window-control-button:hover::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 600px) {
-    .window-header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: clamp(8px, 3vw, 12px);
-    }
-    .window-controls {
-        width: 100%;
-        justify-content: space-around;
-        margin-bottom: 6px;
-    }
-    .window-control-button {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        margin: 0 4px;
-    }
-    .window-title {
-        font-size: 1.1em;
-        padding-left: 4px;
-    }
-}
+/* ============================================================
+   DESKTOP
+   ============================================================ */
 
 #desktop {
-    flex: 1;
-    padding: clamp(10px, 5vw, 30px);
-    box-sizing: border-box;
     position: relative;
+
+    flex: 1;
+
+    width: 100%;
+    height: 100vh;
+
+    padding: 28px;
+
     overflow: hidden;
+
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    width: auto;
-    background-attachment: fixed;
-    margin: 0;
-    animation: shuffleBackground 20s ease infinite;
-    background-attachment: fixed;
+
+    isolation: isolate;
 }
 
-@keyframes shuffleBackground {
+/*
+   Ambient CharleX lighting.
+*/
+
+#desktop::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(0,122,255,0.10),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(191,90,242,0.08),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(0,240,255,0.06),
+            transparent 35%
+        );
+
+    mix-blend-mode: screen;
+}
+
+
+/* ============================================================
+   DESKTOP BACKGROUND MOTION
+   ============================================================ */
+
+@keyframes desktopAmbient {
     0% {
-        background-position: 0% 50%;
-    }50% {
-        background-position: 100% 50%;
+        background-position: 48% 50%;
     }
+
+    50% {
+        background-position: 52% 48%;
+    }
+
     100% {
-        background-position: 0% 50%;
+        background-position: 48% 50%;
     }
 }
 
-.dock-container, #dock {
-    /* macOS Sci-Fi Neon Dock: glossy, beveled, neon glow */
-    position: fixed;
-    left: 50%;
-    bottom: 20px;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    height: 50px;
-    min-height: 64px;
-    padding: 10px 16px;
-    width: auto;
-    overflow: visible;
-    user-select: none;
-    z-index: 1000;
-    transition: all 0.3s cubic-bezier(.2,.8,.2,1);
 
-    /* neon background with glassy reflection */
-    background: linear-gradient(180deg, rgba(0,255,255,0.1), rgba(255,0,255,0.05), rgba(0,255,255,0.02));
-    border-radius: 36px;
-    box-shadow:
-        inset 0 2px 6px rgba(0,255,255,0.2), /* top inner cyan highlight */
-        inset 0 -8px 18px rgba(255,0,255,0.3),     /* bottom inner magenta shadow */
-        0 0 20px rgba(0,255,255,0.5),           /* cyan outer glow */
-        0 0 40px rgba(255,0,255,0.3),           /* magenta outer glow */
-        0 12px 30px rgba(0,0,0,0.55);           /* outer drop shadow */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    animation: fadeIn 0.45s ease;
-    border: 1px solid rgba(0,255,255,0.3);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+/* ============================================================
+   WINDOWS
+   ============================================================ */
 
 .window {
     position: absolute;
+
     display: flex;
     flex-direction: column;
-    background: var(--macos-bg-secondary);
-    border: 1px solid var(--macos-border);
-    border-radius: 12px;
-    box-shadow: 0 4px 16px var(--macos-shadow);
-    min-width: clamp(280px, 50vw, 320px);
-    min-height: clamp(140px, 30vh, 200px);
-    width: clamp(320px, 70vw, 800px);
+
+    min-width: 320px;
+    min-height: 180px;
+
+    width: clamp(420px, 65vw, 900px);
+    height: clamp(280px, 65vh, 700px);
+
     max-width: calc(100vw - 40px);
-    overflow: hidden; /* keep children inside */
+    max-height: calc(100vh - 40px);
+
+    overflow: hidden;
+
     color: var(--macos-text-primary);
-    transition: all 0.3s ease;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(45,45,48,0.84),
+            rgba(20,20,22,0.90)
+        );
+
+    border: 1px solid rgba(255,255,255,0.16);
+
+    border-radius: var(--radius-window);
+
+    box-shadow: var(--shadow-window);
+
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+
+    transform-origin: center;
+
+    transition:
+        width .28s var(--ease-macos),
+        height .28s var(--ease-macos),
+        transform .25s var(--ease-spring),
+        opacity .2s ease,
+        box-shadow .25s ease;
+
+    isolation: isolate;
 }
+
+
+/*
+   Subtle glass highlight.
+*/
+
+.window::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.075),
+            transparent 18%
+        );
+
+    opacity: .65;
+}
+
+
+/*
+   Bottom color reflection.
+*/
+
+.window::after {
+    content: "";
+
+    position: absolute;
+
+    width: 60%;
+    height: 160px;
+
+    left: 20%;
+    bottom: -130px;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(0,122,255,0.10),
+            transparent 70%
+        );
+
+    filter: blur(35px);
+}
+
+
+/* ============================================================
+   WINDOW ACTIVE STATE
+   ============================================================ */
+
+.window.active {
+    box-shadow:
+        0 35px 100px rgba(0,0,0,0.65),
+        0 10px 30px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+
+/* ============================================================
+   WINDOW MAXIMIZED
+   ============================================================ */
 
 .window.maximized {
     width: 100vw !important;
     height: 100vh !important;
+
+    max-width: none;
+    max-height: none;
+
     top: 0 !important;
     left: 0 !important;
+
     border-radius: 0 !important;
+
     box-shadow: none !important;
 }
 
-.window.maximized .window-content {
-    padding-top: 40px;
-}
 
-.window.maximized .window-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    z-index: 10001;
-    border-radius: 0;
-    cursor: grab;
-    background-color: #222;
-    color: white;
+/* ============================================================
+   WINDOW HEADER
+   ============================================================ */
+
+.window-header {
+    position: relative;
+
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 6px 12px;
+
+    flex: 0 0 46px;
+
+    height: 46px;
+
+    padding: 0 14px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.075),
+            rgba(255,255,255,0.025)
+        );
+
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+
+    cursor: grab;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-app-region: drag;
+
+    z-index: 20;
 }
 
-.window-content {
-    padding: 60px 12px 12px;
-    flex: 1 1 auto;
-    overflow: auto; /* scroll inside window */
-    box-sizing: border-box;
-}
-
-.window .window-header {
-    border-radius: 12px 12px 0 0;
+.window-header:active {
+    cursor: grabbing;
 }
 
 
-
-.window-title {
-    font-weight: 600;
-    font-size: clamp(12px, 2.5vw, 16px);
-    color: white;
-}
+/* ============================================================
+   WINDOW CONTROLS
+   ============================================================ */
 
 .window-controls {
     display: flex;
-    gap: 8px;
+
     align-items: center;
-    margin-right: auto; /* push title to center */
-    margin-left: 6px; /* left-side controls like macOS */
+
+    gap: 8px;
+
+    width: 90px;
+
+    flex-shrink: 0;
+
+    margin: 0;
 }
+
+
+/*
+   macOS traffic light buttons.
+*/
 
 .window-control-button {
-    width: clamp(16px, 2vw, 24px);
-    height: clamp(16px, 2vw, 24px);
-    border-radius: clamp(6px, 1vw, 8px);
-    box-shadow: 0 0 2px rgba(0,0,0,0.3);
-    cursor: pointer;
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 6px;
-    flex: 0 0 auto;
-    -webkit-app-region: no-drag;
-    border: none;
-    background: none;
+
+    width: 13px;
+    height: 13px;
+
     padding: 0;
+    margin: 0;
+
+    flex: 0 0 13px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    -webkit-app-region: no-drag;
+
+    box-shadow:
+        inset 0 0 0 0.5px rgba(0,0,0,0.30),
+        inset 0 1px 1px rgba(255,255,255,0.35),
+        0 1px 2px rgba(0,0,0,0.30);
+
+    transition:
+        transform .16s var(--ease-spring),
+        filter .16s ease;
 }
+
+.window-control-button:hover {
+    filter: brightness(1.12);
+    transform: scale(1.08);
+}
+
+.window-control-button:active {
+    transform: scale(.88);
+}
+
+
+/* close */
+
+.window-control-button.close {
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ff8b84,
+            #ff453a 65%
+        );
+}
+
+
+/* minimize */
 
 .window-control-button.minimize {
-    background-color: #ffbd2e; /* yellow */
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffe98a,
+            #ffbd2e 65%
+        );
 }
+
+
+/* maximize */
 
 .window-control-button.maximize {
-    background-color: #28c840; /* green */
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #7cf59b,
+            #30d158 65%
+        );
 }
 
-.window-control-button.close { background-color: #ff5f57; }
 
-/* larger hit targets for touch */
-.window-controls [role="button"] {
-    padding: 8px;
-    margin: 0 2px;
-    border-radius: 50%;
-}
+/*
+   Traffic-light symbols.
+*/
 
-/* center title and reserve space on the right */
-.window-header .window-title {
-    margin: 0 auto;
-    text-align: center;
-}
+.window-control-button.close::after {
+    content: "×";
 
-.window-control-button:hover::after {
-    content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
 
-.dock-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 14px; /* squircle-ish for skeuomorphic look */
-    background: linear-gradient(180deg, rgba(0,255,255,0.1), rgba(255,0,255,0.05), rgba(0,255,255,0.02));
-    display: inline-flex;
+    inset: 0;
+
+    display: flex;
+
     align-items: center;
     justify-content: center;
-    transition: all 0.3s cubic-bezier(.2,.8,.2,1);
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(0,255,255,0.3), 0 0 20px rgba(255,0,255,0.2), 0 10px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(0,255,255,0.1);
-    padding: 8px;
-    border: 1px solid rgba(0,255,255,0.2);
-    overflow: visible;
-    position: relative;
-    color: #00ffff; /* cyan text for icons */
+
+    color: rgba(80,0,0,0);
+
+    font-size: 10px;
+    font-weight: 700;
 }
+
+.window-control-button.minimize::after {
+    content: "";
+
+    position: absolute;
+
+    left: 3px;
+    right: 3px;
+    top: 6px;
+
+    height: 1px;
+
+    background: rgba(70,50,0,0);
+}
+
+.window-control-button.maximize::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 3px;
+
+    border: 1px solid rgba(0,80,30,0);
+    border-radius: 2px;
+}
+
+
+/* ============================================================
+   WINDOW TITLE
+   ============================================================ */
+
+.window-title {
+    position: absolute;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    max-width: 45%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    letter-spacing: -.1px;
+
+    color: rgba(255,255,255,0.90);
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   WINDOW CONTENT
+   ============================================================ */
+
+.window-content {
+    position: relative;
+
+    z-index: 2;
+
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    padding: 16px;
+
+    overflow: auto;
+
+    color: var(--macos-text-primary);
+}
+
+
+/* ============================================================
+   MAXIMIZED WINDOW
+   ============================================================ */
+
+.window.maximized .window-header {
+    border-radius: 0;
+
+    flex-basis: 46px;
+
+    width: 100%;
+}
+
+.window.maximized .window-content {
+    padding: 16px;
+}
+
+
+/* ============================================================
+   DOCK
+   ============================================================ */
+
+#dock,
+.dock-container {
+    position: fixed !important;
+
+    left: 50% !important;
+    bottom: 18px !important;
+
+    transform: translateX(-50%) !important;
+
+    display: flex !important;
+
+    flex-direction: row !important;
+
+    align-items: flex-end !important;
+    justify-content: center !important;
+
+    gap: 7px !important;
+
+    width: max-content !important;
+    max-width: calc(100vw - 24px);
+
+    min-height: 72px !important;
+
+    padding: 8px 12px !important;
+
+    z-index: 99999 !important;
+
+    border-radius: 24px !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.13),
+            rgba(255,255,255,0.055)
+        ) !important;
+
+    border: 1px solid rgba(255,255,255,0.18) !important;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.65),
+        0 8px 25px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(255,255,255,0.16) !important;
+
+    backdrop-filter:
+        blur(32px)
+        saturate(180%) !important;
+
+    -webkit-backdrop-filter:
+        blur(32px)
+        saturate(180%) !important;
+
+    transition:
+        width .3s var(--ease-spring),
+        height .3s var(--ease-spring);
+}
+
+
+/*
+   Dock top reflection.
+*/
+
+#dock::before,
+.dock-container::before {
+    content: "";
+
+    position: absolute;
+
+    left: 8px;
+    right: 8px;
+    top: 5px;
+
+    height: 28px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.13),
+            rgba(255,255,255,0)
+        );
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* ============================================================
+   DOCK ICON
+   ============================================================ */
+
+.dock-icon {
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    flex: 0 0 58px;
+
+    padding: 7px;
+
+    border-radius: 15px;
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.14),
+            rgba(255,255,255,0.045)
+        );
+
+    color: white;
+
+    cursor: pointer;
+
+    overflow: visible;
+
+    box-shadow:
+        0 7px 15px rgba(0,0,0,0.30),
+        inset 0 1px 0 rgba(255,255,255,0.14);
+
+    transition:
+        transform .25s var(--ease-spring),
+        margin .25s var(--ease-spring),
+        filter .2s ease,
+        box-shadow .2s ease;
+}
+
+
+/*
+   Dock hover.
+*/
+
+.dock-icon:hover {
+    transform:
+        translateY(-14px)
+        scale(1.18);
+
+    filter: brightness(1.12);
+
+    box-shadow:
+        0 20px 35px rgba(0,0,0,0.45),
+        0 0 22px rgba(0,122,255,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.20);
+
+    z-index: 20;
+}
+
+
+/*
+   Adjacent icons get a slight lift.
+*/
+
+.dock-icon:hover + .dock-icon {
+    transform:
+        translateY(-6px)
+        scale(1.07);
+}
+
+
+/* ============================================================
+   DOCK IMAGE
+   ============================================================ */
 
 .dock-icon img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+
+    object-fit: contain;
+
     pointer-events: none;
     user-select: none;
-    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.45));
+
+    filter:
+        drop-shadow(0 5px 7px rgba(0,0,0,0.45));
+
+    transition:
+        transform .25s var(--ease-spring);
 }
 
-/* Strong override to ensure dock is horizontal and centered (helps if other styles conflict) */
-#dock, .dock-container {
-    position: fixed !important;
-    left: 50% !important;
-    bottom: 20px !important;
-    transform: translateX(-50%) !important;
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 8px 14px !important;
-    z-index: 9999 !important;
-    width: auto !important;
-    min-height: 56px !important;
-    background: rgba(33, 132, 143, 0.04) !important;
-    border-radius: 28px !important;
+.dock-icon:hover img {
+    transform: scale(1.05);
 }
 
-/* accessible focus styles for dock icons */
-.dock-icon:focus {
-    outline: 2px solid rgba(255,255,255,0.2);
-    outline-offset: 3px;
-}
+
+/* ============================================================
+   DOCK BADGE
+   ============================================================ */
 
 .dock-icon .badge {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    background: #ff3b30;
-    color: white;
-    font-size: 11px;
-    padding: 2px 6px;
+
+    top: -5px;
+    right: -5px;
+
+    min-width: 18px;
+    height: 18px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 5px;
+
     border-radius: 999px;
+
+    background: var(--macos-red);
+
+    border: 2px solid rgba(20,20,22,0.8);
+
+    color: white;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.4);
 }
 
-.dock-icon:hover {
-    transform: translateY(-8px) scale(1.14);
-    background: linear-gradient(180deg, rgba(0,255,255,0.2), rgba(255,0,255,0.1), rgba(0,255,255,0.05));
-    box-shadow: 0 0 15px rgba(0,255,255,0.5), 0 0 30px rgba(255,0,255,0.3), 0 18px 36px rgba(0,0,0,0.6), inset 0 1px 0 rgba(0,255,255,0.1);
-    z-index: 11;
-}
 
-/* subtle glossy reflection for the dock - uses pseudo-element */
-.dock-container::before, #dock::before {
-    content: '';
+/* ============================================================
+   DOCK ACTIVE INDICATOR
+   ============================================================ */
+
+.dock-icon.active::after {
+    content: "";
+
     position: absolute;
-    left: 6px;
-    right: 6px;
-    top: 6px;
-    height: 24px;
-    border-radius: 28px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
-    pointer-events: none;
-    mix-blend-mode: overlay;
-    opacity: 0.9;
+
+    bottom: -7px;
+
+    left: 50%;
+
+    width: 5px;
+    height: 5px;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 0 8px rgba(255,255,255,0.8);
 }
+
+
+/* ============================================================
+   WEB DISK / FINDER
+   ============================================================ */
+
+#webdiskWindow {
+    min-width: 520px;
+    min-height: 380px;
+}
+
+
+/*
+   Main WebDisk container.
+*/
+
+#webdiskContent {
+    position: relative;
+
+    padding: 0 !important;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(28,28,30,0.80),
+            rgba(14,14,16,0.92)
+        );
+}
+
+
+/* ============================================================
+   WEB DISK TOOLBAR
+   ============================================================ */
+
+#webdiskContent > div:first-child {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 52px;
+
+    padding: 8px 12px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.075),
+            rgba(255,255,255,0.025)
+        );
+
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+}
+
+
+/*
+   WebDisk buttons.
+*/
+
+#webdiskContent button,
+#webdiskContent .btn {
+    appearance: none;
+
+    border: 1px solid rgba(255,255,255,0.13) !important;
+
+    border-radius: 8px !important;
+
+    padding: 6px 11px !important;
+
+    min-height: 30px;
+
+    color: rgba(255,255,255,0.92) !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.12),
+            rgba(255,255,255,0.055)
+        ) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        0 2px 5px rgba(0,0,0,0.22);
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    transition:
+        background .15s ease,
+        transform .15s var(--ease-spring),
+        box-shadow .15s ease;
+}
+
+#webdiskContent button:hover,
+#webdiskContent .btn:hover {
+    background:
+        rgba(255,255,255,0.16) !important;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.15),
+        0 4px 10px rgba(0,0,0,0.25);
+}
+
+#webdiskContent button:active,
+#webdiskContent .btn:active {
+    transform: scale(.96);
+}
+
+
+/*
+   Semantic button colors.
+*/
+
+#webdiskContent .btn-primary {
+    background:
+        linear-gradient(
+            180deg,
+            #1687ff,
+            #007aff
+        ) !important;
+
+    border-color: rgba(255,255,255,0.16) !important;
+}
+
+#webdiskContent .btn-success {
+    background:
+        linear-gradient(
+            180deg,
+            #35d96a,
+            #28b957
+        ) !important;
+}
+
+#webdiskContent .btn-danger {
+    background:
+        linear-gradient(
+            180deg,
+            #ff5b52,
+            #e9352e
+        ) !important;
+}
+
+#webdiskContent .btn-warning {
+    color: #151000 !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffd84d,
+            #ffbd2e
+        ) !important;
+}
+
+#webdiskContent .btn-info {
+    background:
+        linear-gradient(
+            180deg,
+            #62d4ff,
+            #32aee8
+        ) !important;
+}
+
+
+/* ============================================================
+   CURRENT DIRECTORY
+   ============================================================ */
+
+#currentDir {
+    display: flex;
+
+    align-items: center;
+
+    min-height: 36px;
+
+    padding: 0 14px;
+
+    color: rgba(255,255,255,0.55);
+
+    font-size: 12px;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Mono",
+        "JetBrains Mono",
+        monospace;
+
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+
+    background:
+        rgba(0,0,0,0.15);
+}
+
+
+/* ============================================================
+   WEB DISK FILE TABLE
+   ============================================================ */
+
+#fileList {
+    width: 100%;
+
+    border-collapse: separate;
+    border-spacing: 0;
+
+    color: rgba(255,255,255,0.90);
+
+    font-size: 13px;
+}
+
+
+/*
+   Header.
+*/
+
+#fileList thead {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 4;
+}
+
+#fileList thead th {
+    padding: 8px 10px;
+
+    color: rgba(255,255,255,0.45);
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-align: left;
+
+    background:
+        rgba(30,30,32,0.90);
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.10);
+
+    backdrop-filter: blur(20px);
+}
+
+
+/*
+   File rows.
+*/
+
+#fileList tbody tr {
+    cursor: pointer;
+
+    transition:
+        background .12s ease,
+        transform .12s ease;
+}
+
+#fileList tbody tr td {
+    padding: 9px 10px !important;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.045);
+
+    background: transparent !important;
+
+    color: rgba(255,255,255,0.84);
+
+    vertical-align: middle;
+}
+
+
+/*
+   Hover.
+*/
+
+#fileList tbody tr:hover td {
+    background:
+        rgba(255,255,255,0.065) !important;
+}
+
+
+/*
+   Selected row.
+
+   JS currently uses backgroundColor directly,
+   but these rules make the rest of the row feel native.
+*/
+
+#fileList tbody tr[style*="background"] td,
+#fileList tbody tr.selected td {
+    background:
+        rgba(10,132,255,0.28) !important;
+}
+
+
+/*
+   File icon.
+*/
+
+#fileList tbody td:first-child {
+    width: 42px;
+
+    font-size: 17px;
+
+    text-align: center;
+
+    color: var(--macos-blue);
+}
+
+
+/*
+   File names.
+*/
+
+#fileList tbody td:nth-child(2) {
+    font-weight: 500;
+}
+
+#fileList tbody td:nth-child(3),
+#fileList tbody td:nth-child(4) {
+    color: rgba(255,255,255,0.42);
+
+    font-size: 11px;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Mono",
+        monospace;
+}
+
+
+/*
+   Override old Bootstrap dark backgrounds.
+*/
+
+#fileList .bg-dark {
+    background: transparent !important;
+}
+
+#fileList .table-dark {
+    background: transparent !important;
+}
+
+#fileList .text-info {
+    color: var(--macos-blue-light) !important;
+}
+
+
+/* ============================================================
+   WEB DISK EMPTY STATE
+   ============================================================ */
+
+#fileList tbody:empty::after {
+    content: "This folder is empty";
+
+    display: block;
+
+    padding: 50px;
+
+    text-align: center;
+
+    color: rgba(255,255,255,0.35);
+}
+
+
+/* ============================================================
+   NOTE EDITOR
+   ============================================================ */
 
 #noteFileName {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px;
-    font-size: 14px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    user-select: text;
+    width: 100%;
+
+    padding: 9px 12px;
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    border-radius: 9px;
+
     outline: none;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: box-shadow 0.3s ease;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,0.075);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.05);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Text",
+        sans-serif;
+
+    font-size: 13px;
+
+    user-select: text;
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
 }
 
 #noteFileName:focus {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    border-color:
+        rgba(10,132,255,0.75);
+
+    background:
+        rgba(10,132,255,0.08);
+
+    box-shadow:
+        0 0 0 3px rgba(10,132,255,0.15);
+}
+
+
+/*
+   Note textarea if present.
+*/
+
+#noteContent {
+    width: 100%;
+
+    min-height: 300px;
+
+    resize: none;
+
+    padding: 14px;
+
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    border-radius: 12px;
+
     outline: none;
+
+    color: rgba(255,255,255,0.92);
+
+    background:
+        rgba(0,0,0,0.30);
+
+    font-family:
+        "SF Mono",
+        "JetBrains Mono",
+        Consolas,
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.65;
+
+    user-select: text;
+
+    box-shadow:
+        inset 0 1px 5px rgba(0,0,0,0.35);
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
 
-/* Tablet styles */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .window {
-        width: clamp(400px, 60vw, 700px);
-        max-width: calc(100vw - 60px);
-    }
-    .dock-icon {
-        width: 72px;
-        height: 72px;
-    }
-    .dock-icon img {
-        width: 36px;
-        height: 36px;
-    }
+#noteContent:focus {
+    border-color:
+        rgba(10,132,255,0.55);
+
+    box-shadow:
+        0 0 0 3px rgba(10,132,255,0.12),
+        inset 0 1px 5px rgba(0,0,0,0.35);
 }
 
-/* Large screen styles */
-@media (min-width: 1201px) {
-    .window {
-        width: clamp(500px, 50vw, 1000px);
-        min-height: 250px;
-    }
-    .dock-icon {
-        width: 80px;
-        height: 80px;
-    }
-    .dock-icon img {
-        width: 40px;
-        height: 40px;
-    }
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+
+input,
+textarea,
+select {
+    font-family: inherit;
 }
 
-/* Responsive design */
-@media (max-width: 768px) and (orientation: portrait) {
-    #desktop {
-        padding: clamp(5px, 3vw, 15px);
-    }
-    .window {
-        width: 90vw;
-        min-width: 200px;
-        max-width: 90vw;
-        top: 20px !important;
-        left: 5vw !important;
-    }
-}
-@media (max-width: 768px) and (orientation: landscape) {
-    #desktop {
-        padding: clamp(5px, 3vw, 15px);
-    }
-    .window {
-        width: 85vw;
-        min-width: 200px;
-        max-width: 85vw;
-        top: 10px !important;
-        left: 7.5vw !important;
-    }
-    .window-content {
-        padding: clamp(40px, 10vh, 60px) 12px 12px;
-    }
-    .window.maximized .window-header {
-        height: 48px;
-        padding: 8px 12px;
-    }
-.window.maximized .window-header {
-    display: none;
-}
-.window.maximized .window-content {
-    padding: 0;
-}
-    .dock-container {
-        bottom: 10px;
-        height: 50px;
-        padding: 0 10px;
-        gap: 8px;
-    }
-    .dock-icon {
-        width: 40px;
-        height: 40px;
-    }
-    .dock-icon img {
-        width: 24px;
-        height: 24px;
-    }
-    /* Improve touch targets on mobile */
-    .window-control-button {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-    }
-    .window-controls [role="button"] {
-        padding: 12px;
-    }
+input,
+select {
+    color: white;
+
+    background:
+        rgba(255,255,255,0.07);
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
 
-@media (max-width: 320px) {
-    .window {
-        width: 98vw;
-        max-width: 98vw;
-        min-width: 150px;
-    }
-    .window-header {
-        padding: clamp(6px, 2vw, 10px);
-    }
-    .window-control-button {
-        width: 28px;
-        height: 28px;
-    }
-    .dock-container {
-        height: 40px;
-        gap: 4px;
-    }
-    .dock-icon {
-        width: 30px;
-        height: 30px;
-    }
-    .dock-icon img {
-        width: 18px;
-        height: 18px;
-    }
+input:focus,
+select:focus {
+    border-color:
+        rgba(10,132,255,0.70);
+
+    box-shadow:
+        0 0 0 3px rgba(10,132,255,0.13);
 }
 
-@media (max-width: 480px) {
-    .window {
-        width: 95vw;
-        max-width: 95vw;
-        padding: clamp(2px, 2vw, 8px);
-    }
-    .window.maximized .window-header {
-        height: 52px;
-        padding: 10px 12px;
-    }
-    .window.maximized .window-content {
-        padding-top: 60px;
-    }
-    .window-header {
-        padding: clamp(8px, 3vw, 12px);
-    }
-    .window-title {
-        font-size: clamp(10px, 3vw, 14px);
-    }
-    .dock-container {
-        height: 45px;
-        gap: 6px;
-    }
-    .dock-icon {
-        width: 35px;
-        height: 35px;
-    }
-    .dock-icon img {
-        width: 20px;
-        height: 20px;
-    }
-    /* Further improve touch targets */
-    .window-control-button {
-        width: 24px;
-        height: 24px;
-        border-radius: 8px;
-    }
-    .window-controls [role="button"] {
-        padding: 10px;
-    }
+
+/* ============================================================
+   GENERIC BUTTONS
+   ============================================================ */
+
+button {
+    font-family: inherit;
 }
 
-/* Orientation-specific adjustments for mobile */
-@media (orientation: landscape) and (max-width: 768px) {
-    .window {
-        max-width: clamp(80vw, 90vw, 85vw);
-        max-height: 75vh;
-    }
-    .window.maximized {
-        max-height: calc(100vh - 60px); /* leave more space for dock */
-    }
-    .window.maximized .window-content {
-        padding-top: 50px;
-    }
-    .dock-container {
-        position: fixed;
+button:not(.window-control-button) {
+    appearance: none;
 
-        bottom: 5px;
-        z-index: 10001; /* ensure dock is above maximized windows */
-    }
+    border: 1px solid rgba(255,255,255,0.13);
+
+    border-radius: 9px;
+
+    color: rgba(255,255,255,0.92);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.12),
+            rgba(255,255,255,0.05)
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 2px 6px rgba(0,0,0,0.20);
+
+    cursor: pointer;
+
+    transition:
+        transform .15s var(--ease-spring),
+        background .15s ease,
+        box-shadow .15s ease;
 }
 
-@media (orientation: portrait) and (max-width: 768px) {
-    .window {
-        max-width: clamp(85vw, 95vw, 90vw);
-    }
-    .window.maximized {
-        max-height: calc(90vh - 80px);
-    }
+button:not(.window-control-button):hover {
+    background:
+        rgba(255,255,255,0.15);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.13),
+        0 5px 12px rgba(0,0,0,0.25);
 }
 
-/* WebDisk responsiveness */
-#webdiskWindow {}
+button:not(.window-control-button):active {
+    transform: scale(.96);
+}
 
-/* Ensure horizontal scroll on narrow maximized views */
+
+/* ============================================================
+   SELECTION
+   ============================================================ */
+
+::selection {
+    background: rgba(10,132,255,0.45);
+    color: white;
+}
+
+
+/* ============================================================
+   FOCUS
+   ============================================================ */
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline:
+        2px solid rgba(10,132,255,0.75);
+
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   GENERIC GLASS PANEL
+   ============================================================ */
+
+.glass,
+.glass-panel {
+    background:
+        rgba(30,30,32,0.62);
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    border-radius:
+        var(--radius-large);
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.07);
+
+    backdrop-filter:
+        blur(28px)
+        saturate(160%);
+
+    -webkit-backdrop-filter:
+        blur(28px)
+        saturate(160%);
+}
+
+
+/* ============================================================
+   CONTEXT MENUS
+   ============================================================ */
+
+.context-menu,
+.dropdown-menu,
+.menu {
+    background:
+        rgba(35,35,38,0.88) !important;
+
+    border:
+        1px solid rgba(255,255,255,0.13) !important;
+
+    border-radius: 12px !important;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.60),
+        inset 0 1px 0 rgba(255,255,255,0.07) !important;
+
+    backdrop-filter:
+        blur(30px)
+        saturate(160%);
+
+    -webkit-backdrop-filter:
+        blur(30px)
+        saturate(160%);
+}
+
+
+/* ============================================================
+   TOOLTIPS
+   ============================================================ */
+
+[title] {
+    --tooltip-transition: opacity .15s ease;
+}
+
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+
+.badge {
+    border-radius: 999px;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   STATUS DOTS
+   ============================================================ */
+
+.status-dot {
+    display: inline-block;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: var(--macos-green);
+
+    box-shadow:
+        0 0 8px rgba(48,209,88,0.65);
+}
+
+
+/* ============================================================
+   DIVIDERS
+   ============================================================ */
+
+hr {
+    height: 1px;
+
+    margin: 12px 0;
+
+    border: 0;
+
+    background:
+        rgba(255,255,255,0.09);
+}
+
+
+/* ============================================================
+   WEB DISK SCROLL
+   ============================================================ */
+
 .window.maximized #webdiskContent {
     overflow-x: auto;
     overflow-y: auto;
 }
+
+#webdiskContent::-webkit-scrollbar,
 .window.maximized #webdiskContent::-webkit-scrollbar {
-    height: 8px;
     width: 8px;
+    height: 8px;
 }
+
+#webdiskContent::-webkit-scrollbar-track,
 .window.maximized #webdiskContent::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.1);
-    border-radius: 4px;
+    background: transparent;
 }
+
+#webdiskContent::-webkit-scrollbar-thumb,
 .window.maximized #webdiskContent::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.3);
-    border-radius: 4px;
+    background:
+        rgba(255,255,255,0.18);
+
+    border-radius: 999px;
 }
+
+#webdiskContent::-webkit-scrollbar-thumb:hover,
 .window.maximized #webdiskContent::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.5);
+    background:
+        rgba(255,255,255,0.30);
 }
+
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes charlexWindowOpen {
+    from {
+        opacity: 0;
+        transform:
+            scale(.94)
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            scale(1)
+            translateY(0);
+    }
+}
+
+@keyframes charlexFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes charlexPulse {
+    0%,
+    100% {
+        opacity: .65;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/*
+   Apply opening animation only when the window
+   is not explicitly hidden.
+*/
+
+.window:not([style*="display: none"]) {
+    animation:
+        charlexWindowOpen .28s var(--ease-spring);
+}
+
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1200px) {
+
+    .window {
+        width: clamp(520px, 58vw, 1000px);
+        height: clamp(360px, 65vh, 760px);
+    }
+
+    .dock-icon {
+        width: 62px;
+        height: 62px;
+        flex-basis: 62px;
+    }
+
+    .dock-icon img {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 769px) and (max-width: 1199px) {
+
+    .window {
+        width: 70vw;
+        height: 65vh;
+
+        max-width: calc(100vw - 40px);
+    }
+
+    #webdiskWindow {
+        min-width: 450px;
+    }
+
+    .dock-icon {
+        width: 56px;
+        height: 56px;
+        flex-basis: 56px;
+    }
+
+    .dock-icon img {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    body {
+        font-size: 13px;
+    }
+
+    #desktop {
+        padding: 8px;
+    }
+
+    .window {
+        width: 94vw;
+
+        min-width: 0;
+
+        max-width: 94vw;
+
+        height: 78vh;
+
+        max-height: 82vh;
+
+        top: 4vh !important;
+        left: 3vw !important;
+
+        border-radius: 16px;
+    }
+
+    .window-header {
+        height: 48px;
+
+        flex-basis: 48px;
+
+        padding: 0 12px;
+    }
+
+    .window-title {
+        font-size: 12px;
+        max-width: 45%;
+    }
+
+    .window-controls {
+        width: 80px;
+        gap: 8px;
+    }
+
+    .window-control-button {
+        width: 15px;
+        height: 15px;
+        flex-basis: 15px;
+    }
+
+    .window-content {
+        padding: 12px;
+    }
+
+    #webdiskWindow {
+        min-width: 0;
+        width: 96vw;
+        max-width: 96vw;
+    }
+
+    #webdiskContent > div:first-child {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    #webdiskContent button,
+    #webdiskContent .btn {
+        white-space: nowrap;
+    }
+
+    #fileList {
+        min-width: 500px;
+    }
+
+
+    /*
+       Smaller Dock.
+    */
+
+    #dock,
+    .dock-container {
+        bottom: 9px !important;
+
+        max-width: calc(100vw - 12px);
+
+        min-height: 58px !important;
+
+        padding: 6px 8px !important;
+
+        gap: 4px !important;
+
+        border-radius: 20px !important;
+    }
+
+    .dock-icon {
+        width: 45px;
+        height: 45px;
+
+        flex-basis: 45px;
+
+        border-radius: 12px;
+    }
+
+    .dock-icon img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .dock-icon:hover {
+        transform:
+            translateY(-7px)
+            scale(1.10);
+    }
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .window {
+        width: 96vw;
+
+        max-width: 96vw;
+
+        left: 2vw !important;
+
+        top: 2vh !important;
+
+        height: 82vh;
+
+        max-height: 86vh;
+
+        border-radius: 14px;
+    }
+
+    .window-header {
+        height: 44px;
+
+        flex-basis: 44px;
+    }
+
+    .window-content {
+        padding: 10px;
+    }
+
+    .window-title {
+        font-size: 11px;
+    }
+
+    .window-controls {
+        width: 70px;
+        gap: 6px;
+    }
+
+    .window-control-button {
+        width: 13px;
+        height: 13px;
+
+        flex-basis: 13px;
+    }
+
+    #dock,
+    .dock-container {
+        bottom: 6px !important;
+
+        min-height: 52px !important;
+
+        padding: 5px 6px !important;
+
+        gap: 3px !important;
+    }
+
+    .dock-icon {
+        width: 40px;
+        height: 40px;
+
+        flex-basis: 40px;
+
+        border-radius: 11px;
+    }
+
+    .dock-icon img {
+        width: 27px;
+        height: 27px;
+    }
+
+    #webdiskContent > div:first-child {
+        gap: 5px;
+        padding: 7px;
+    }
+
+    #currentDir {
+        padding: 0 10px;
+
+        min-height: 32px;
+
+        font-size: 10px;
+    }
+}
+
+
+/* ============================================================
+   VERY SMALL DEVICES
+   ============================================================ */
+
+@media (max-width: 320px) {
+
+    .window {
+        width: 98vw;
+
+        max-width: 98vw;
+
+        left: 1vw !important;
+
+        height: 84vh;
+    }
+
+    .window-title {
+        display: none;
+    }
+
+    .dock-icon {
+        width: 35px;
+        height: 35px;
+
+        flex-basis: 35px;
+    }
+
+    .dock-icon img {
+        width: 23px;
+        height: 23px;
+    }
+}
+
+
+/* ============================================================
+   LANDSCAPE MOBILE
+   ============================================================ */
+
+@media (orientation: landscape) and (max-width: 768px) {
+
+    .window {
+        width: 88vw;
+
+        max-width: 88vw;
+
+        height: 78vh;
+
+        max-height: 82vh;
+
+        left: 6vw !important;
+
+        top: 3vh !important;
+    }
+
+    .window-content {
+        padding: 10px;
+    }
+
+    #dock,
+    .dock-container {
+        bottom: 5px !important;
+
+        min-height: 48px !important;
+    }
+
+    .dock-icon {
+        width: 38px;
+        height: 38px;
+
+        flex-basis: 38px;
+    }
+
+    .dock-icon img {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* ============================================================
+   TOUCH DEVICES
+   ============================================================ */
+
+@media (hover: none) {
+
+    .dock-icon:hover {
+        transform: none;
+    }
+
+    .dock-icon:active {
+        transform:
+            translateY(-7px)
+            scale(1.08);
+    }
+
+    #webdiskContent button:hover,
+    #webdiskContent .btn:hover {
+        transform: none;
+    }
+}
+
+
+/* ============================================================
+   SAFE AREA
+   ============================================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+
+    #dock,
+    .dock-container {
+        bottom:
+            calc(10px + env(safe-area-inset-bottom)) !important;
+    }
+}
+
+
+/* ============================================================
+   CHARLEX ACCENT UTILITIES
+   ============================================================ */
+
+.charlex-cyan {
+    color: var(--charlex-cyan);
+}
+
+.charlex-blue {
+    color: var(--charlex-blue);
+}
+
+.charlex-purple {
+    color: var(--charlex-purple);
+}
+
+.charlex-magenta {
+    color: var(--charlex-magenta);
+}
+
+.glow-cyan {
+    text-shadow:
+        0 0 8px rgba(0,240,255,0.55);
+}
+
+.glow-blue {
+    text-shadow:
+        0 0 8px rgba(0,122,255,0.55);
+}
+
+.glow-purple {
+    text-shadow:
+        0 0 8px rgba(155,92,255,0.55);
+}
+
+
+/* ============================================================
+   END — CharleX macOS 26
+   ============================================================ */
